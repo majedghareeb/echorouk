@@ -12,3 +12,4 @@ composer.json
 composer.lock
 Dockerfile
 xdebug.log
+wp-config.php
