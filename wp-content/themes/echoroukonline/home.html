@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الشروق - Bootstrap 5.3 Mockup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --page-bg:#eef6fb;
+      --brand:#2e537b;
+      --brand-dark:#183d62;
+      --gold:#d7ad55;
+      --muted:#7c8a95;
+      --line:#d7e3ec;
+    }
+    body{background:var(--page-bg);font-family:Tahoma,Arial,sans-serif;color:#1f2a33;font-size:14px;}
+    a{text-decoration:none;color:inherit}.top-line{height:4px;background:var(--brand)}
+    .site-wrap{max-width:1040px;margin:auto}.logo{font-size:34px;font-weight:800;color:var(--brand);letter-spacing:-1px}
+    .date-text{font-size:12px;color:#7b8790}.navbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:white!important}.nav-link{font-size:13px;font-weight:700;color:#293744!important;padding:.85rem .55rem!important}.search-btn{color:var(--brand)}
+    .ad-box{min-height:115px;background:#dfeaf2;color:#92a2ae;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .section-title{font-weight:800;color:#111;border-bottom:2px solid var(--line);padding-bottom:.55rem;margin-bottom:1rem}.section-title span{border-bottom:3px solid var(--brand);padding-bottom:.65rem}.tag{position:absolute;top:8px;right:8px;background:var(--gold);color:white;font-size:11px;padding:.18rem .45rem}.card{border:0;border-radius:0;background:transparent}.news-card img{width:100%;height:130px;object-fit:cover}.overlay-card{position:relative;color:white;background:#123}.overlay-card img{height:320px;object-fit:cover;filter:brightness(.68)}.overlay-card .card-img-overlay{display:flex;align-items:end}.headline{font-weight:800;line-height:1.6}.small-headline{font-size:13px;font-weight:700;line-height:1.55}.summary{font-size:12px;color:#62717c;line-height:1.9}.side-list li{border-bottom:1px solid var(--line);padding:.55rem 0;font-size:13px;font-weight:700}.side-list i{color:var(--gold);font-size:10px}.most-read{background:white;border-top:3px solid var(--brand);padding:12px}.most-read .item{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:.55rem 0}.most-read img{width:72px;height:54px;object-fit:cover}.blue-panel{background:var(--brand-dark);color:white;padding:22px}.blue-panel .section-title{color:white;border-color:#5b7897}.blue-panel .section-title span{border-color:var(--gold)}.blue-panel .news-card img{height:145px}.opinion-card{background:#254d76;padding:14px;color:white;min-height:150px}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid white}.newsletter{background:#f5efd9;padding:24px;border:1px solid #eadfbf}.footer{background:var(--brand-dark);color:white;margin-top:70px}.footer h5{font-weight:800}.footer a,.footer p{color:#d7e3ec;font-size:13px}.footer-bottom{background:#f5f7f9;color:#607080;font-size:12px}.placeholder{background:#dae7f0;min-height:190px;display:flex;align-items:center;justify-content:center;color:#8da0ad}.grid-border{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:26px}
+    .hero{background:#f8fbfd;border-top:1px solid #e4edf4;border-bottom:1px solid var(--line);padding:16px 0 22px}.hero .section-title{font-size:14px;margin-bottom:.75rem}.hero-live{background:white;border-top:3px solid var(--gold);padding:12px 14px;box-shadow:0 1px 0 rgba(24,61,98,.06)}.hero-live-title{display:flex;align-items:center;gap:7px;color:#102d4b;font-weight:800;font-size:14px;margin-bottom:8px}.hero-live-title i{color:var(--gold)}.hero-live ul{margin:0;padding:0;list-style:none}.hero-live li{position:relative;padding:.48rem 0 .48rem 16px;border-bottom:1px solid #edf2f6;font-size:12.5px;font-weight:700;line-height:1.65}.hero-live li:before{content:"";position:absolute;right:0;top:17px;width:5px;height:5px;background:var(--gold);border-radius:50%}.hero-live li:last-child{border-bottom:0}.hero-lead{background:white;padding:10px 10px 14px;border:1px solid #e0e9f1;box-shadow:0 1px 0 rgba(24,61,98,.06);text-align:center}.hero-lead img{height:238px;width:100%;object-fit:cover}.hero-lead h1{font-size:24px;margin:.7rem 0 .55rem;color:#102d4b}.hero-actions{display:flex;justify-content:center;gap:8px;margin-bottom:10px}.hero-action-btn{border:1px solid #d8e2ea;background:#f4f8fb;color:#2e537b;font-size:11px;font-weight:700;padding:.28rem .55rem}.hero-action-btn i{font-size:12px;color:var(--gold)}.hero-side-card{display:block;border-bottom:1px solid var(--line);padding:0 0 12px;margin-bottom:12px}.hero-side-card img{width:100%;height:82px;object-fit:cover;margin-bottom:7px}.hero-side-card h3{font-size:12.5px;margin:0;line-height:1.55}.hero-side-card:last-child{border-bottom:0;margin-bottom:0}.hero-meta{font-size:11px;color:var(--gold);font-weight:700}.hero-mini-title{font-size:13px;font-weight:800;color:var(--brand);margin-bottom:.75rem}.hero-feature{background:white;padding:9px;border:1px solid #e0e9f1}.hero-feature img{height:105px;width:100%;object-fit:cover}.hero-feature h3{font-size:13px;font-weight:800;line-height:1.65;margin:.55rem 0 0}.hero-topline{display:inline-block;background:#f6ecd3;color:#9b741f;font-size:11px;font-weight:800;padding:.18rem .45rem;margin-bottom:.4rem}
+    .ech-header{background:#fff}
+    .ech-header-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 4px;font-size:12px;color:#8a97a5}
+    .ech-meta-date{white-space:nowrap}
+    .ech-meta-tools{display:flex;align-items:center;gap:15px}
+    .ech-alert-link{display:inline-flex;align-items:center;gap:5px;color:#8a97a5}
+    .ech-home-pill{display:inline-flex;align-items:center;background:#d8b464;color:#fff;padding:2px 10px;border-radius:4px;font-size:12px}
+    .ech-header-logo{text-align:center;padding:8px 0 14px}
+    .ech-brand{font-weight:800;font-size:56px;line-height:1;color:#2f537a;letter-spacing:-1px}
+    .ech-main-nav{border-top:1px solid #e2e9ef;border-bottom:1px solid #e2e9ef}
+    .ech-main-nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;direction:ltr}
+    .ech-nav-wrap{flex:1;display:flex;justify-content:center}
+    .ech-nav-menu{display:flex;align-items:center;gap:24px;list-style:none;padding:0;margin:0;direction:rtl;white-space:nowrap}
+    .ech-nav-menu a{position:relative;display:inline-block;padding:14px 0 12px;font-size:16px;font-weight:700;color:#273746}
+    .ech-nav-menu .is-active a{color:#2f537a}
+    .ech-nav-menu .is-active a:after{content:"";position:absolute;right:0;left:0;bottom:-1px;height:4px;border-radius:2px;background:#355f89}
+    .ech-menu-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:0;background:transparent;color:#5c6874;font-size:21px}
+    .ech-footer{margin-top:70px}
+    .ech-footer-shell{background:#3a5f89;color:#dbe7f3}
+    .ech-footer-main{padding:34px 18px 28px}
+    .ech-footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1.3fr;gap:0}
+    .ech-footer-col{padding:0 20px}
+    .ech-footer-col + .ech-footer-col{border-right:1px solid rgba(215,227,238,.4)}
+    .ech-footer-brand{font-size:42px;font-weight:800;line-height:1;color:#f0f4f8;margin-bottom:14px}
+    .ech-footer-about p{margin:0 0 16px;line-height:1.8;font-size:15px}
+    .ech-footer-more{display:inline-flex;align-items:center;gap:6px;color:#dfbe79;font-size:16px;font-weight:700}
+    .ech-footer-sections{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+    .ech-footer-links-col{list-style:none;margin:0;padding:0}
+    .ech-footer-links-col li{margin:0 0 11px}
+    .ech-footer-links-col a{color:#dfebf7;font-size:18px}
+    .ech-footer-contact{background:#597b9f;padding:20px;border-radius:4px}
+    .ech-footer-contact h6{font-size:24px;color:#f3f7fb;margin:0 0 8px;font-weight:700}
+    .ech-footer-contact p{margin:0;font-size:16px;line-height:1.8;color:#e6f1fb}
+    .ech-footer-page-links{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px}
+    .ech-footer-page-links a{display:inline-flex;align-items:center;gap:6px;color:#dfbe79;font-size:16px}
+    .ech-footer-sub{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#dbe2ea;color:#4a6787;padding:10px 14px}
+    .ech-footer-social{display:flex;align-items:center;gap:9px}
+    .ech-footer-social a{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border:2px solid #4a6787;border-radius:50%;color:#4a6787;font-size:14px}
+    .ech-footer-copy{font-size:16px}
+    .ech-footer-network{display:flex;justify-content:center;flex-wrap:wrap;gap:26px;padding:16px 0 12px;color:#3a5f89;font-size:16px;font-weight:700}
+    .ech-footer-rule{height:4px;background:#2f5a84}
+    @media(max-width:767px){.hero-lead img,.overlay-card img{height:220px}.hero-lead h1{font-size:19px}.logo{font-size:28px}.nav-scroll{overflow-x:auto;white-space:nowrap}.news-card img{height:190px}.hero-side-card{display:grid;grid-template-columns:110px 1fr;gap:10px}.hero-side-card img{width:110px;height:76px;margin-bottom:0}.ech-header-meta{flex-direction:column;align-items:flex-start}.ech-meta-date{white-space:normal}.ech-brand{font-size:38px}.ech-main-nav-inner{direction:rtl;padding:0 4px}.ech-nav-wrap{overflow:auto;justify-content:flex-start}.ech-nav-menu{gap:14px;padding-inline:12px}.ech-nav-menu a{font-size:14px;padding:12px 0}.ech-footer-main{padding:20px 16px}.ech-footer-grid{grid-template-columns:1fr;gap:20px}.ech-footer-col{padding:0}.ech-footer-col + .ech-footer-col{border-right:0;border-top:1px solid rgba(215,227,238,.4);padding-top:20px}.ech-footer-brand{font-size:36px}.ech-footer-about p{font-size:16px}.ech-footer-more{font-size:20px}.ech-footer-sections{grid-template-columns:1fr 1fr;gap:16px}.ech-footer-links-col a{font-size:16px}.ech-footer-contact h6{font-size:20px}.ech-footer-contact p{font-size:15px}.ech-footer-page-links a{font-size:15px}.ech-footer-sub{flex-direction:column}.ech-footer-copy{font-size:14px;text-align:center}.ech-footer-network{font-size:14px;gap:14px}}
+  </style>
+</head>
+<body>
+  <div class="top-line"></div>
+
+  <header class="ech-header">
+    <div class="site-wrap">
+      <div class="ech-header-meta">
+        <div class="ech-meta-date">أبريل 2026، الموافق لـ 13 شوال 1447هـ 02:44</div>
+        <div class="ech-meta-tools">
+          <a class="ech-alert-link" href="#"><i class="bi bi-bell"></i>تفعيل الإشعارات</a>
+          <a class="ech-home-pill" href="#">البث الحي (0)</a>
+        </div>
+      </div>
+      <div class="ech-header-logo">
+        <a class="ech-brand" href="#">الشروق</a>
+      </div>
+    </div>
+    <nav class="ech-main-nav">
+      <div class="site-wrap ech-main-nav-inner">
+        <button class="ech-menu-btn" type="button" aria-label="القائمة">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="ech-nav-wrap">
+          <ul class="ech-nav-menu">
+            <li class="is-active"><a href="#">الرئيسية</a></li>
+            <li><a href="#">الجزائر</a></li>
+            <li><a href="#">العالم</a></li>
+            <li><a href="#">اقتصاد</a></li>
+            <li><a href="#">رياضة</a></li>
+            <li><a href="#">الرأي</a></li>
+            <li><a href="#">جواهر</a></li>
+            <li><a href="#">منوعات</a></li>
+            <li><a href="#">إنفوغرافيك</a></li>
+            <li><a href="#">قناة الشروق</a></li>
+            <li><a href="#">العامة</a></li>
+            <li><a href="#">ألعاب</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="site-wrap py-4">
+    <section class="hero grid-border">
+      <div class="row g-4 align-items-start">
+        <aside class="col-lg-3 order-2 order-lg-1">
+          <div class="hero-live">
+            <div class="hero-live-title"><i class="bi bi-lightning-charge-fill"></i>تغطية حية</div>
+            <ul>
+              <li>متابعة لحظة بلحظة لتطورات الأحداث في المنطقة</li>
+              <li>مصادر دبلوماسية تكشف تفاصيل الاتصالات الجارية</li>
+              <li>ردود فعل دولية متواصلة وتحركات سياسية عاجلة</li>
+              <li>تحديثات مستمرة حول الموقف الميداني والإنساني</li>
+              <li>تحليل سريع لأبرز السيناريوهات خلال الساعات المقبلة</li>
+            </ul>
+          </div>
+          <article class="hero-feature mt-3">
+            <span class="hero-topline">فيديو</span>
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=500&q=80" alt="live video">
+            <h3>شاهد ملخص أبرز التصريحات في المؤتمر الصحفي الأخير</h3>
+          </article>
+        </aside>
+
+        <section class="col-lg-6 order-1 order-lg-2">
+          <article class="hero-lead">
+            <div class="position-relative">
+              <span class="tag">الأبرز</span>
+              <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=900&q=80" alt="main news">
+            </div>
+            <div class="hero-meta mt-3">عاجل · سياسة · منذ ٣٠ دقيقة</div>
+            <h1 class="headline">الرئيس يبحث ملفات المنطقة خلال اجتماع موسع</h1>
+            <div class="hero-actions" aria-label="article actions">
+              <a href="#" class="hero-action-btn"><i class="bi bi-bookmark ms-1"></i>حفظ</a>
+              <a href="#" class="hero-action-btn"><i class="bi bi-share ms-1"></i>مشاركة</a>
+              <a href="#" class="hero-action-btn"><i class="bi bi-chat-dots ms-1"></i>تعليق</a>
+            </div>
+            <p class="summary mb-0 px-md-3">متابعة مستمرة لأبرز التطورات المحلية والعربية والدولية، مع رصد سريع لخلفيات الحدث وتداعياته المتوقعة.</p>
+          </article>
+        </section>
+
+        <aside class="col-lg-3 order-3 order-lg-3">
+          <h6 class="section-title"><span>آخر الأخبار</span></h6>
+          <article class="hero-side-card">
+            <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=500&q=80" alt="meeting">
+            <div><div class="hero-meta">محليات</div><h3>اجتماعات سياسية تناقش آخر المستجدات وخطط المرحلة المقبلة</h3></div>
+          </article>
+          <article class="hero-side-card">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=500&q=80" alt="governorates">
+            <div><div class="hero-meta">محافظات</div><h3>مبادرات خدمية جديدة وتحرك واسع لتحسين الخدمات اليومية</h3></div>
+          </article>
+          <article class="hero-side-card">
+            <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=500&q=80" alt="newspaper">
+            <div><div class="hero-meta">عاجل</div><h3>مصادر: بيان مهم خلال ساعات بشأن تطورات إقليمية</h3></div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <div class="ad-box my-4">مساحة إعلانية</div>
+
+    <section class="row g-4 grid-border">
+      <div class="col-lg-8">
+        <article class="card overlay-card mb-4">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80" class="card-img" alt="city">
+          <div class="card-img-overlay"><h2 class="h4 headline">جهود حكومية لتحسين الخدمات في العاصمة</h2></div>
+        </article>
+        <div class="row g-3">
+          <div class="col-md-4"><article class="news-card"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">البورصة تواصل مكاسبها</h3></article></div>
+          <div class="col-md-4"><article class="news-card"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">مشروعات صغيرة وفرص عمل</h3></article></div>
+          <div class="col-md-4"><article class="news-card"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">برنامج جديد لدعم الشباب</h3></article></div>
+        </div>
+      </div>
+      <aside class="col-lg-4">
+        <div class="most-read">
+          <h6 class="section-title"><span>الأكثر قراءة</span></h6>
+          <div class="item"><img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=200&q=80"><b>عاجل: بيان مهم خلال ساعات</b></div>
+          <div class="item"><img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=200&q=80"><b>تفاصيل قرارات اقتصادية جديدة</b></div>
+          <div class="item"><img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=200&q=80"><b>المنتخب يستعد لمواجهة حاسمة</b></div>
+          <div class="item"><img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=200&q=80"><b>طقس الأسبوع وتحذيرات الأرصاد</b></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid-border">
+      <h5 class="section-title"><span>آخر الأخبار</span></h5>
+      <div class="row g-3">
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">لقاء وزاري لبحث التعاون</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">تقرير حول سوق العمل</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">تطوير شبكة الطرق</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">مؤتمر صحفي مرتقب</h3></article></div>
+      </div>
+    </section>
+
+    <section class="blue-panel mb-4">
+      <h5 class="section-title"><span>رياضة</span></h5>
+      <div class="row g-4">
+        <div class="col-lg-8"><article class="card overlay-card"><img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=900&q=80"><div class="card-img-overlay"><h2 class="h4 headline">مدرب الفريق يعلن قائمة المباراة المقبلة</h2></div></article></div>
+        <div class="col-lg-4"><article class="news-card mb-3"><img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80"><h3 class="small-headline mt-2">نجوم الكرة في تدريبات قوية</h3></article><article class="news-card"><img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80"><h3 class="small-headline mt-2">نتائج الجولة المحلية</h3></article></div>
+      </div>
+    </section>
+
+    <section class="grid-border">
+      <h5 class="section-title"><span>اقتصاد</span></h5>
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-4"><h2 class="h5 headline">توقعات بنمو قطاعات حيوية خلال العام الحالي</h2><p class="summary">خبراء يؤكدون أن إجراءات الإصلاح ودعم الاستثمار تساهم في تحريك النشاط الاقتصادي.</p></div>
+        <div class="col-lg-8"><img src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=80" class="img-fluid" alt="economy"></div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">أسعار العملات اليوم</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">خطة لجذب الاستثمارات</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">التمويل العقاري يتصدر</h3></article></div>
+        <div class="col-6 col-md-3"><article class="news-card"><img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=500&q=80"><h3 class="small-headline mt-2">مؤشرات إيجابية للتجارة</h3></article></div>
+      </div>
+    </section>
+
+    <section class="blue-panel mb-5">
+      <h5 class="section-title"><span>مقالات الرأي</span></h5>
+      <div class="row g-3">
+        <div class="col-md-3 col-6"><div class="opinion-card"><img class="avatar mb-2" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80"><h3 class="small-headline">مستقبل الإعلام الرقمي</h3><p class="summary text-white-50 mb-0">بقلم كاتب</p></div></div>
+        <div class="col-md-3 col-6"><div class="opinion-card"><img class="avatar mb-2" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80"><h3 class="small-headline">قراءة في المشهد الدولي</h3><p class="summary text-white-50 mb-0">بقلم كاتب</p></div></div>
+        <div class="col-md-3 col-6"><div class="opinion-card"><img class="avatar mb-2" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"><h3 class="small-headline">الاقتصاد بين الفرص والتحديات</h3><p class="summary text-white-50 mb-0">بقلم كاتب</p></div></div>
+        <div class="col-md-3 col-6"><div class="opinion-card"><img class="avatar mb-2" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=100&q=80"><h3 class="small-headline">أولويات المرحلة المقبلة</h3><p class="summary text-white-50 mb-0">بقلم كاتب</p></div></div>
+      </div>
+    </section>
+
+    <section class="newsletter mb-5">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-5"><h5 class="headline mb-1">اشترك في النشرة البريدية</h5><p class="summary mb-0">تابع أهم الأخبار والتحليلات مباشرة في بريدك.</p></div>
+        <div class="col-lg-7"><form class="input-group"><input type="email" class="form-control" placeholder="البريد الإلكتروني"><button class="btn btn-warning text-white" type="button">اشتراك</button></form></div>
+      </div>
+    </section>
+
+    <div class="ad-box">مساحة إعلانية</div>
+  </main>
+
+  <footer class="ech-footer">
+    <div class="site-wrap">
+      <div class="ech-footer-shell">
+        <div class="ech-footer-main">
+          <div class="ech-footer-grid">
+            <section class="ech-footer-col ech-footer-about">
+              <div class="ech-footer-brand">الشروق</div>
+              <p>منذ سنة 2005 أطلقت مؤسسة الشروق للإعلام والنشر واحدا من أولى المواقع الإخبارية في الجزائر والعالم العربي من أجل توفير تغطية آنية ومستمرّة للأحداث على مدار الساعة بالعربية والإنجليزية والفرنسية.</p>
+              <a class="ech-footer-more" href="#">المزيد <i class="bi bi-chevron-left"></i></a>
+            </section>
+            <section class="ech-footer-col ech-footer-sections">
+              <ul class="ech-footer-links-col">
+                <li><a href="#">الجزائر</a></li>
+                <li><a href="#">العالم</a></li>
+                <li><a href="#">اقتصاد</a></li>
+                <li><a href="#">رياضة</a></li>
+                <li><a href="#">الرأي</a></li>
+              </ul>
+              <ul class="ech-footer-links-col">
+                <li><a href="#">جواهر</a></li>
+                <li><a href="#">منوعات</a></li>
+                <li><a href="#">News الشروق</a></li>
+                <li><a href="#">TV الشروق</a></li>
+                <li><a href="#">الشروق العربي</a></li>
+              </ul>
+            </section>
+            <section class="ech-footer-col">
+              <div class="ech-footer-contact">
+                <h6>تواصل معنا</h6>
+                <p>حي السعيدون محمد بلوزداد رقم 166 - القبة، الجزائر<br>023713990-023713982<br>info@echorouk.net</p>
+              </div>
+              <div class="ech-footer-page-links">
+                <a href="#">البث الحي <i class="bi bi-chevron-left"></i></a>
+                <a href="#">سياسة الخصوصية <i class="bi bi-chevron-left"></i></a>
+                <a href="#">النشرة البريدية <i class="bi bi-chevron-left"></i></a>
+                <a href="#">الإشهار <i class="bi bi-chevron-left"></i></a>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="ech-footer-sub">
+          <div class="ech-footer-social">
+            <a href="#" aria-label="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" aria-label="youtube"><i class="bi bi-youtube"></i></a>
+          </div>
+          <div class="ech-footer-copy">جميع الحقوق محفوظة لموقع الشروق أونلاين - 2026</div>
+        </div>
+      </div>
+      <div class="ech-footer-network">
+        <span>الشروق TV</span>
+        <span>الرياضي</span>
+        <span>متابعات</span>
+        <span>أخبار السوق</span>
+        <span>الشروق</span>
+      </div>
+      <div class="ech-footer-rule"></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

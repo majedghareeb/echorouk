@@ -1,0 +1,6 @@
+{
+  "name": "WordPress RSS Auto-Post Plugin",
+  "description": "A professional WordPress plugin to fetch RSS feeds from Echorouk Online, create posts, and download featured images to the media library.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

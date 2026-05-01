@@ -1,0 +1,21 @@
+model_list:
+  - model_name: claude-sonnet-4-6
+    litellm_params:
+      model: nvidia_nim/qwen/qwen3.5-122b-a10b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+
+  - model_name: claude-opus-4-6
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+
+  - model_name: claude-haiku-4-5
+    litellm_params:
+      model: nvidia_nim/mistralai/mistral-small-4-119b-2603
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+
+litellm_settings:
+  drop_params: true
+
+general_settings:
+  master_key: "sk-litellm-local"

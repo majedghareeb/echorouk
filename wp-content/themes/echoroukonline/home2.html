@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --page-bg: #eef6fb;
+            --brand: #2e537b;
+            --brand-dark: #183d62;
+            --gold: #d7ad55;
+            --muted: #7c8a95;
+            --line: #d7e3ec;
+        }
+
+        body {
+            background: var(--page-bg);
+            font-family: Tahoma, Arial, sans-serif;
+            color: #1f2a33;
+            font-size: 14px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        .top-line {
+            height: 4px;
+            background: var(--brand)
+        }
+
+        .site-wrap {
+            max-width: 1040px;
+            margin: auto
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--brand);
+            letter-spacing: -1px
+        }
+
+        .date-text {
+            font-size: 12px;
+            color: #7b8790
+        }
+
+        .navbar {
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: white !important
+        }
+
+        .nav-link {
+            font-size: 13px;
+            font-weight: 700;
+            color: #293744 !important;
+            padding: .85rem .55rem !important
+        }
+
+        .search-btn {
+            color: var(--brand)
+        }
+
+        .ad-box {
+            min-height: 115px;
+            background: #dfeaf2;
+            color: #92a2ae;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px
+        }
+
+        .section-title {
+            font-weight: 800;
+            color: #111;
+            border-bottom: 2px solid var(--line);
+            padding-bottom: .55rem;
+            margin-bottom: 1rem
+        }
+
+        .section-title span {
+            border-bottom: 3px solid var(--brand);
+            padding-bottom: .65rem
+        }
+
+        .tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--gold);
+            color: white;
+            font-size: 11px;
+            padding: .18rem .45rem
+        }
+
+        .card {
+            border: 0;
+            border-radius: 0;
+            background: transparent
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover
+        }
+
+        .overlay-card {
+            position: relative;
+            color: white;
+            background: #123
+        }
+
+        .overlay-card img {
+            height: 320px;
+            object-fit: cover;
+            filter: brightness(.68)
+        }
+
+        .overlay-card .card-img-overlay {
+            display: flex;
+            align-items: end
+        }
+
+        .headline {
+            font-weight: 800;
+            line-height: 1.6
+        }
+
+        .small-headline {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.55
+        }
+
+        .summary {
+            font-size: 12px;
+            color: #62717c;
+            line-height: 1.9
+        }
+
+        .side-list li {
+            border-bottom: 1px solid var(--line);
+            padding: .55rem 0;
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .side-list i {
+            color: var(--gold);
+            font-size: 10px
+        }
+
+        .most-read {
+            background: white;
+            border-top: 3px solid var(--brand);
+            padding: 12px
+        }
+
+        .most-read .item {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+            padding: .55rem 0
+        }
+
+        .most-read img {
+            width: 72px;
+            height: 54px;
+            object-fit: cover
+        }
+
+        .blue-panel {
+            background: var(--brand-dark);
+            color: white;
+            padding: 22px
+        }
+
+        .blue-panel .section-title {
+            color: white;
+            border-color: #5b7897
+        }
+
+        .blue-panel .section-title span {
+            border-color: var(--gold)
+        }
+
+        .blue-panel .news-card img {
+            height: 145px
+        }
+
+        .opinion-card {
+            background: #254d76;
+            padding: 14px;
+            color: white;
+            min-height: 150px
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white
+        }
+
+        .newsletter {
+            background: #f5efd9;
+            padding: 24px;
+            border: 1px solid #eadfbf
+        }
+
+        .footer {
+            background: var(--brand-dark);
+            color: white;
+            margin-top: 70px
+        }
+
+        .footer h5 {
+            font-weight: 800
+        }
+
+        .footer a,
+        .footer p {
+            color: #d7e3ec;
+            font-size: 13px
+        }
+
+        .footer-bottom {
+            background: #f5f7f9;
+            color: #607080;
+            font-size: 12px
+        }
+
+        .placeholder {
+            background: #dae7f0;
+            min-height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8da0ad
+        }
+
+        .grid-border {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 26px;
+            margin-bottom: 26px
+        }
+
+        .hero {
+            background: #f8fbfd;
+            border-top: 1px solid #e4edf4;
+            border-bottom: 1px solid var(--line);
+            padding: 16px 0 22px
+        }
+
+        .hero .section-title {
+            font-size: 14px;
+            margin-bottom: .75rem
+        }
+
+        .hero-live {
+            background: white;
+            border-top: 3px solid var(--gold);
+            padding: 12px 14px;
+            box-shadow: 0 1px 0 rgba(24, 61, 98, .06)
+        }
+
+        .hero-live-title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #102d4b;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 8px
+        }
+
+        .hero-live-title i {
+            color: var(--gold)
+        }
+
+        .hero-live ul {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        .hero-live li {
+            position: relative;
+            padding: .48rem 0 .48rem 16px;
+            border-bottom: 1px solid #edf2f6;
+            font-size: 12.5px;
+            font-weight: 700;
+            line-height: 1.65
+        }
+
+        .hero-live li:before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 17px;
+            width: 5px;
+            height: 5px;
+            background: var(--gold);
+            border-radius: 50%
+        }
+
+        .hero-live li:last-child {
+            border-bottom: 0
+        }
+
+        .hero-lead {
+            background: white;
+            padding: 10px 10px 14px;
+            border: 1px solid #e0e9f1;
+            box-shadow: 0 1px 0 rgba(24, 61, 98, .06);
+            text-align: center
+        }
+
+        .hero-lead img {
+            height: 238px;
+            width: 100%;
+            object-fit: cover
+        }
+
+        .hero-lead h1 {
+            font-size: 24px;
+            margin: .7rem 0 .55rem;
+            color: #102d4b
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px
+        }
+
+        .hero-action-btn {
+            border: 1px solid #d8e2ea;
+            background: #f4f8fb;
+            color: #2e537b;
+            font-size: 11px;
+            font-weight: 700;
+            padding: .28rem .55rem
+        }
+
+        .hero-action-btn i {
+            font-size: 12px;
+            color: var(--gold)
+        }
+
+        .hero-side-card {
+            display: block;
+            border-bottom: 1px solid var(--line);
+            padding: 0 0 12px;
+            margin-bottom: 12px
+        }
+
+        .hero-side-card img {
+            width: 100%;
+            height: 82px;
+            object-fit: cover;
+            margin-bottom: 7px
+        }
+
+        .hero-side-card h3 {
+            font-size: 12.5px;
+            margin: 0;
+            line-height: 1.55
+        }
+
+        .hero-side-card:last-child {
+            border-bottom: 0;
+            margin-bottom: 0
+        }
+
+        .hero-meta {
+            font-size: 11px;
+            color: var(--gold);
+            font-weight: 700
+        }
+
+        .hero-mini-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--brand);
+            margin-bottom: .75rem
+        }
+
+        .hero-feature {
+            background: white;
+            padding: 9px;
+            border: 1px solid #e0e9f1
+        }
+
+        .hero-feature img {
+            height: 105px;
+            width: 100%;
+            object-fit: cover
+        }
+
+        .hero-feature h3 {
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.65;
+            margin: .55rem 0 0
+        }
+
+        .hero-topline {
+            display: inline-block;
+            background: #f6ecd3;
+            color: #9b741f;
+            font-size: 11px;
+            font-weight: 800;
+            padding: .18rem .45rem;
+            margin-bottom: .4rem
+        }
+
+        @media(max-width:767px) {
+
+            .hero-lead img,
+            .overlay-card img {
+                height: 220px
+            }
+
+            .hero-lead h1 {
+                font-size: 19px
+            }
+
+            .logo {
+                font-size: 28px
+            }
+
+            .nav-scroll {
+                overflow-x: auto;
+                white-space: nowrap
+            }
+
+            .news-card img {
+                height: 190px
+            }
+
+            .hero-side-card {
+                display: grid;
+                grid-template-columns: 110px 1fr;
+                gap: 10px
+            }
+
+            .hero-side-card img {
+                width: 110px;
+                height: 76px;
+                margin-bottom: 0
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div dir="rtl">
+        <div className="top-line"></div>
+
+        <header className="bg-white">
+            <div className="site-wrap py-3 text-center position-relative">
+                <div className="date-text position-absolute start-0 top-50 translate-middle-y d-none d-md-block">
+                    الأربعاء ٢٤ أبريل ٢٠٢٤</div>
+                <div className="logo">الشروق</div>
+            </div>
+            <nav className="navbar navbar-expand-lg">
+                <div className="container site-wrap nav-scroll">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNav">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="mainNav">
+                        <ul className="navbar-nav mx-auto mb-0">
+                            <li className="nav-item"><a className="nav-link" href="#">الرئيسية</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">أخبار</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">رياضة</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">اقتصاد</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">رأي</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">فن</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">حوادث</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">محافظات</a></li>
+                            <li className="nav-item"><a className="nav-link" href="#">العالم</a></li>
+                        </ul>
+                        <a className="search-btn" href="#"><i className="bi bi-search"></i></a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main className="site-wrap py-4">
+            <section className="hero grid-border">
+                <div className="row g-4 align-items-start">
+                    <aside className="col-lg-3 order-2 order-lg-1">
+                        <div className="hero-live">
+                            <div className="hero-live-title"><i className="bi bi-lightning-charge-fill"></i>تغطية حية
+                            </div>
+                            <ul>
+                                <li>متابعة لحظة بلحظة لتطورات الأحداث في المنطقة</li>
+                                <li>مصادر دبلوماسية تكشف تفاصيل الاتصالات الجارية</li>
+                                <li>ردود فعل دولية متواصلة وتحركات سياسية عاجلة</li>
+                                <li>تحديثات مستمرة حول الموقف الميداني والإنساني</li>
+                                <li>تحليل سريع لأبرز السيناريوهات خلال الساعات المقبلة</li>
+                            </ul>
+                        </div>
+                        <article className="hero-feature mt-3">
+                            <span className="hero-topline">فيديو</span>
+                            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=500&q=80"
+                                alt="live video" />
+                            <h3>شاهد ملخص أبرز التصريحات في المؤتمر الصحفي الأخير</h3>
+                        </article>
+                    </aside>
+
+                    <section className="col-lg-6 order-1 order-lg-2">
+                        <article className="hero-lead">
+                            <div className="position-relative">
+                                <span className="tag">الأبرز</span>
+                                <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=900&q=80"
+                                    alt="main news" />
+                            </div>
+                            <div className="hero-meta mt-3">عاجل · سياسة · منذ ٣٠ دقيقة</div>
+                            <h1 className="headline">الرئيس يبحث ملفات المنطقة خلال اجتماع موسع</h1>
+                            <div className="hero-actions" aria-label="article actions">
+                                <button className="hero-action-btn"><i className="bi bi-bookmark ms-1"></i>حفظ</button>
+                                <button className="hero-action-btn"><i className="bi bi-share ms-1"></i>مشاركة</button>
+                                <button className="hero-action-btn"><i
+                                        className="bi bi-chat-dots ms-1"></i>تعليق</button>
+                            </div>
+                            <p className="summary mb-0 px-md-3">متابعة مستمرة لأبرز التطورات المحلية والعربية والدولية،
+                                مع رصد سريع لخلفيات الحدث وتداعياته المتوقعة.</p>
+                        </article>
+                    </section>
+
+                    <aside className="col-lg-3 order-3 order-lg-3">
+                        <h6 className="section-title"><span>آخر الأخبار</span></h6>
+                        <article className="hero-side-card">
+                            <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=500&q=80"
+                                alt="meeting" />
+                            <div>
+                                <div className="hero-meta">محليات</div>
+                                <h3>اجتماعات سياسية تناقش آخر المستجدات وخطط المرحلة المقبلة</h3>
+                            </div>
+                        </article>
+                        <article className="hero-side-card">
+                            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=500&q=80"
+                                alt="governorates" />
+                            <div>
+                                <div className="hero-meta">محافظات</div>
+                                <h3>مبادرات خدمية جديدة وتحرك واسع لتحسين الخدمات اليومية</h3>
+                            </div>
+                        </article>
+                        <article className="hero-side-card">
+                            <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=500&q=80"
+                                alt="newspaper" />
+                            <div>
+                                <div className="hero-meta">عاجل</div>
+                                <h3>مصادر: بيان مهم خلال ساعات بشأن تطورات إقليمية</h3>
+                            </div>
+                        </article>
+                    </aside>
+                </div>
+            </section>
+
+            <div className="ad-box my-4">مساحة إعلانية</div>
+
+            <section className="row g-4 grid-border">
+                <div className="col-lg-8">
+                    <article className="card overlay-card mb-4">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80"
+                            className="card-img" alt="city" />
+                        <div className="card-img-overlay">
+                            <h2 className="h4 headline text-white">جهود حكومية لتحسين الخدمات في العاصمة</h2>
+                        </div>
+                    </article>
+                    <div className="row g-3">
+                        <div className="col-md-4">
+                            <article className="news-card">
+                                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=80"
+                                    alt="Economy" />
+                                <h3 className="small-headline mt-2">البورصة تواصل مكاسبها</h3>
+                            </article>
+                        </div>
+                        <div className="col-md-4">
+                            <article className="news-card">
+                                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=500&q=80"
+                                    alt="Business" />
+                                <h3 className="small-headline mt-2">مشروعات صغيرة وفرص عمل</h3>
+                            </article>
+                        </div>
+                        <div className="col-md-4">
+                            <article className="news-card">
+                                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=80"
+                                    alt="Youth" />
+                                <h3 className="small-headline mt-2">برنامج جديد لدعم الشباب</h3>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+                <aside className="col-lg-4">
+                    <div className="most-read">
+                        <h6 className="section-title"><span>الأكثر قراءة</span></h6>
+                        {[
+                        "عاجل: بيان مهم خلال ساعات",
+                        "تفاصيل قرارات اقتصادية جديدة",
+                        "المنتخب يستعد لمواجهة حاسمة",
+                        "طقس الأسبوع وتحذيرات الأرصاد"
+                        ].map((text, i) => (
+                        <div key={i} className="item">
+                            <img src={`https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=200&q=80&sig=${i}`}
+                                alt="News" />
+                            <b>{text}</b>
+                        </div>
+                        ))}
+                    </div>
+                </aside>
+            </section>
+
+            <section className="grid-border">
+                <h5 className="section-title"><span>آخر الأخبار</span></h5>
+                <div className="row g-3">
+                    {[
+                    { title: "لقاء وزاري لبحث التعاون", img:
+                    "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=500&q=80" },
+                    { title: "تقرير حول سوق العمل", img:
+                    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=500&q=80" },
+                    { title: "تطوير شبكة الطرق", img:
+                    "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=500&q=80" },
+                    { title: "مؤتمر صحفي مرتقب", img:
+                    "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=500&q=80" }
+                    ].map((item, i) => (
+                    <div key={i} className="col-6 col-md-3">
+                        <article className="news-card">
+                            <img src={item.img} alt={item.title} />
+                            <h3 className="small-headline mt-2">{item.title}</h3>
+                        </article>
+                    </div>
+                    ))}
+                </div>
+            </section>
+
+            <section className="blue-panel mb-4">
+                <h5 className="section-title"><span>رياضة</span></h5>
+                <div className="row g-4">
+                    <div className="col-lg-8">
+                        <article className="card overlay-card">
+                            <img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=900&q=80"
+                                className="card-img" alt="Sports" />
+                            <div className="card-img-overlay">
+                                <h2 className="h4 headline text-white">مدرب الفريق يعلن قائمة المباراة المقبلة</h2>
+                            </div>
+                        </article>
+                    </div>
+                    <div className="col-lg-4">
+                        <article className="news-card mb-3">
+                            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80"
+                                alt="Training" />
+                            <h3 className="small-headline mt-2 text-white">نجوم الكرة في تدريبات قوية</h3>
+                        </article>
+                        <article className="news-card">
+                            <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80"
+                                alt="Results" />
+                            <h3 className="small-headline mt-2 text-white">نتائج الجولة المحلية</h3>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section className="newsletter mb-5">
+                <div className="row align-items-center g-3">
+                    <div className="col-lg-5">
+                        <h5 className="headline mb-1">اشترك في النشرة البريدية</h5>
+                        <p className="summary mb-0">تابع أهم الأخبار والتحليلات مباشرة في بريدك.</p>
+                    </div>
+                    <div className="col-lg-7">
+                        <form className="input-group">
+                            <input type="email" className="form-control" placeholder="البريد الإلكتروني" />
+                            <button className="btn btn-warning text-white" type="button">اشتراك</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div className="ad-box">مساحة إعلانية</div>
+        </main>
+
+        <footer className="footer pt-5">
+            <div className="site-wrap">
+                <div className="row g-4 pb-4">
+                    <div className="col-md-4">
+                        <h5>الشروق</h5>
+                        <p>موقع إخباري عربي يقدم تغطية شاملة للأحداث المحلية والعالمية.</p>
+                    </div>
+                    <div className="col-md-2">
+                        <h6>الأقسام</h6>
+                        <a className="d-block mb-2" href="#">أخبار</a>
+                        <a className="d-block mb-2" href="#">رياضة</a>
+                        <a className="d-block mb-2" href="#">اقتصاد</a>
+                    </div>
+                    <div className="col-md-3">
+                        <h6>روابط</h6>
+                        <a className="d-block mb-2" href="#">من نحن</a>
+                        <a className="d-block mb-2" href="#">اتصل بنا</a>
+                        <a className="d-block mb-2" href="#">سياسة الخصوصية</a>
+                    </div>
+                    <div className="col-md-3">
+                        <h6>تابعنا</h6>
+                        <div className="fs-5 d-flex gap-3">
+                            <i className="bi bi-facebook"></i>
+                            <i className="bi bi-twitter-x"></i>
+                            <i className="bi bi-instagram"></i>
+                            <i className="bi bi-youtube"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="footer-bottom py-3">
+                <div className="site-wrap text-center">© 2024 جميع الحقوق محفوظة</div>
+            </div>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
