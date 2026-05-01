@@ -1,0 +1,14 @@
+wp-includes
+wp-admin
+vendor
+nginx
+docker
+db-data
+.agent
+.vscode
+.env
+docker-compose.yml
+composer.json
+composer.lock
+Dockerfile
+xdebug.log
