@@ -1,6 +1,5 @@
 wp-includes
 wp-admin
-vendor
 nginx
 docker
 db-data
