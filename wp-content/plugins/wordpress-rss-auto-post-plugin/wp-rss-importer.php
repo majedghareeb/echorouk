@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Echorouk RSS to Post Importer
  * Description: Automatically fetches RSS feed from Echorouk Online, creates posts, and downloads images to media library.
@@ -10,14 +11,17 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Echorouk_RSS_Importer {
+class Echorouk_RSS_Importer
+{
     private $rss_url = 'https://www.echoroukonline.com/feed';
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('admin_menu', array($this, 'add_admin_menu'));
     }
 
-    public function add_admin_menu() {
+    public function add_admin_menu()
+    {
         add_menu_page(
             'RSS Importer',
             'RSS Importer',
@@ -29,27 +33,29 @@ class Echorouk_RSS_Importer {
         );
     }
 
-    public function admin_page_contents() {
-        ?>
-        <div class="wrap">
-            <h1>Echorouk RSS Importer</h1>
-            <p>Fetch the latest news from Echorouk Online and convert them to WordPress posts.</p>
-            
-            <form method="post">
-                <?php wp_nonce_field('run_echorouk_importer', 'echorouk_nonce'); ?>
-                <input type="submit" name="run_importer" class="button button-primary" value="Run Manual Sync Now">
-            </form>
+    public function admin_page_contents()
+    {
+?>
+<div class="wrap">
+    <h1>Echorouk RSS Importer</h1>
+    <p>Fetch the latest news from Echorouk Online and convert them to WordPress posts.</p>
 
-            <?php
+    <form method="post">
+        <?php wp_nonce_field('run_echorouk_importer', 'echorouk_nonce'); ?>
+        <input type="submit" name="run_importer" class="button button-primary" value="Run Manual Sync Now">
+    </form>
+
+    <?php
             if (isset($_POST['run_importer']) && check_admin_referer('run_echorouk_importer', 'echorouk_nonce')) {
                 $this->run_import();
             }
             ?>
-        </div>
-        <?php
+</div>
+<?php
     }
 
-    public function run_import() {
+    public function run_import()
+    {
         echo '<div class="notice notice-info is-dismissible"><p>Starting import process...</p></div>';
 
         $rss = fetch_feed($this->rss_url);
@@ -59,7 +65,7 @@ class Echorouk_RSS_Importer {
             return;
         }
 
-        $items = $rss->get_items(0, 10); // Get latest 10 items
+        $items = $rss->get_items(0, 50); // Get latest 10 items
         $count = 0;
 
         foreach ($items as $item) {
@@ -95,7 +101,8 @@ class Echorouk_RSS_Importer {
         echo '<div class="notice notice-success"><p>Import completed! Created ' . $count . ' new posts.</p></div>';
     }
 
-    private function post_exists($guid) {
+    private function post_exists($guid)
+    {
         $args = array(
             'post_type'  => 'post',
             'meta_key'   => '_echorouk_guid',
@@ -106,10 +113,11 @@ class Echorouk_RSS_Importer {
         return !empty($posts);
     }
 
-    private function handle_featured_image($item, $post_id) {
+    private function handle_featured_image($item, $post_id)
+    {
         // Find image in enclosures or content
         $image_url = '';
-        
+
         // Try enclosures
         $enclosures = $item->get_enclosures();
         if (!empty($enclosures)) {
@@ -134,7 +142,8 @@ class Echorouk_RSS_Importer {
         }
     }
 
-    private function upload_image_to_media($image_url, $post_id) {
+    private function upload_image_to_media($image_url, $post_id)
+    {
         require_once(ABSPATH . 'wp-admin/includes/image.php');
         require_once(ABSPATH . 'wp-admin/includes/file.php');
         require_once(ABSPATH . 'wp-admin/includes/media.php');

@@ -9,6 +9,40 @@
     });
   }
 
+  var summaryToggle = document.querySelector('[data-summary-toggle]');
+  var summaryPanel = document.getElementById('single-article-summary');
+
+  if (summaryToggle && summaryPanel) {
+    summaryToggle.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      var isHidden = summaryPanel.hidden;
+      summaryPanel.hidden = !isHidden;
+      summaryToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+
+      if (isHidden) {
+        summaryPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  var ttsToggle = document.querySelector('[data-tts-toggle]');
+  var ttsPanel = document.getElementById('single-article-ai-player-area');
+
+  if (ttsToggle && ttsPanel) {
+    ttsToggle.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      var isHidden = ttsPanel.hidden;
+      ttsPanel.hidden = !isHidden;
+      ttsToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+
+      if (isHidden) {
+        ttsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
   var progress = document.querySelector('[data-reading-progress]');
   if (!progress) {
     return;
@@ -26,4 +60,3 @@
   window.addEventListener('scroll', updateProgress, { passive: true });
   window.addEventListener('resize', updateProgress);
 })();
-

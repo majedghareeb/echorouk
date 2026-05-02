@@ -92,7 +92,9 @@ function echorouk_register_redux_options() {
 				array( 'id' => 'show_reading_time', 'type' => 'switch', 'title' => esc_html__( 'Show reading time', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'show_author_box', 'type' => 'switch', 'title' => esc_html__( 'Show author box', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'show_related_articles', 'type' => 'switch', 'title' => esc_html__( 'Show related articles', 'echoroukonline' ), 'default' => true ),
+				array( 'id' => 'show_article_most_read_widget', 'type' => 'switch', 'title' => esc_html__( 'Show Most Read widget in article sidebar', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'show_social_share', 'type' => 'switch', 'title' => esc_html__( 'Show social share', 'echoroukonline' ), 'default' => true ),
+				array( 'id' => 'disable_comment_box', 'type' => 'switch', 'title' => esc_html__( 'Disable comment box', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'enable_sticky_ad_sidebar', 'type' => 'switch', 'title' => esc_html__( 'Enable sticky ad/sidebar', 'echoroukonline' ), 'default' => true ),
 			),
 		)
@@ -126,6 +128,19 @@ function echorouk_register_redux_options() {
 				array( 'id' => 'article_middle_ad', 'type' => 'textarea', 'title' => esc_html__( 'Article middle ad', 'echoroukonline' ) ),
 				array( 'id' => 'sidebar_ad', 'type' => 'textarea', 'title' => esc_html__( 'Sidebar ad', 'echoroukonline' ) ),
 				array( 'id' => 'footer_ad', 'type' => 'textarea', 'title' => esc_html__( 'Footer ad', 'echoroukonline' ) ),
+			),
+		)
+	);
+
+	Redux::set_section(
+		$opt_name,
+		array(
+			'title'  => esc_html__( 'Footer', 'echoroukonline' ),
+			'id'     => 'footer',
+			'fields' => array(
+				array( 'id' => 'footer_contact_address', 'type' => 'textarea', 'title' => esc_html__( 'Footer address', 'echoroukonline' ) ),
+				array( 'id' => 'footer_contact_phone', 'type' => 'text', 'title' => esc_html__( 'Footer phone', 'echoroukonline' ) ),
+				array( 'id' => 'footer_contact_email', 'type' => 'text', 'title' => esc_html__( 'Footer email', 'echoroukonline' ) ),
 			),
 		)
 	);

@@ -6,8 +6,8 @@
  */
 
 get_header();
-while ( have_posts() ) :
-	the_post();
+if ( echorouk_setup_singular_post_context() ) :
 	get_template_part( 'template-parts/content/single-article', null, array( 'format' => 'document' ) );
-endwhile;
+	wp_reset_postdata();
+endif;
 get_footer();

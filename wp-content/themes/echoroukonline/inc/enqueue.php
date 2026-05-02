@@ -73,7 +73,7 @@ function echorouk_enqueue_assets() {
 		true
 	);
 
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+	if ( is_singular() && ! echorouk_get_option( 'disable_comment_box', true ) && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }

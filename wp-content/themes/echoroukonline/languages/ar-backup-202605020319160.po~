@@ -1,0 +1,819 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Echourouk Online\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-02 03:15+0000\n"
+"PO-Revision-Date: 2026-05-02 03:18+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100 >= 3 "
+"&& n%100<=10 ? 3 : n%100 >= 11 && n%100<=99 ? 4 : 5;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.4; wp-6.9.4; php-8.2.30\n"
+"X-Domain: echoroukonline"
+
+#. 1: formatted date, 2: formatted time
+#: header.php:32
+#, php-format
+msgid "%1$s - %2$s"
+msgstr ""
+
+#: inc/template-tags.php:30
+msgid "%d min read"
+msgid_plural "%d min read"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/cpts.php:75
+#, php-format
+msgid "Add New %s"
+msgstr ""
+
+#: inc/widgets.php:24
+msgid "Add news widgets or block content here."
+msgstr ""
+
+#: inc/redux.php:123
+msgid "Ads"
+msgstr ""
+
+#: inc/meta.php:12
+msgid "AI summary"
+msgstr ""
+
+#: inc/redux.php:87
+msgid "Article"
+msgstr ""
+
+#: inc/meta.php:50
+msgid "Article fields"
+msgstr ""
+
+#: inc/redux.php:128
+msgid "Article middle ad"
+msgstr ""
+
+#: inc/widgets.php:13
+msgid "Article Sidebar"
+msgstr ""
+
+#: inc/redux.php:127
+msgid "Article top ad"
+msgstr ""
+
+#: inc/cpts.php:23 inc/cpts.php:24
+#: template-parts/components/audio-player.php:17
+msgid "Audio"
+msgstr ""
+
+#: template-parts/components/breadcrumbs.php:15
+msgid "Breadcrumbs"
+msgstr ""
+
+#: template-parts/components/breaking-news.php:27
+msgid "Breaking"
+msgstr ""
+
+#: inc/meta.php:22 template-parts/components/breaking-news.php:25
+msgid "Breaking news"
+msgstr ""
+
+#: inc/widgets.php:83
+msgid "Category ID"
+msgstr ""
+
+#: inc/widgets.php:144
+msgid "Category news"
+msgstr ""
+
+#: inc/redux.php:185
+msgid "Centered"
+msgstr ""
+
+#: inc/redux.php:192
+msgid "Columns"
+msgstr ""
+
+#: comments.php:19
+#, php-format
+msgctxt "comments title"
+msgid "One comment"
+msgid_plural "%1$s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/redux.php:186 inc/redux.php:193
+msgid "Compact"
+msgstr ""
+
+#: inc/redux.php:56
+msgid "Container width"
+msgstr ""
+
+#: inc/widgets.php:87
+msgid "Count"
+msgstr ""
+
+#: inc/redux.php:41
+msgid "Dark logo"
+msgstr ""
+
+#: inc/redux.php:184
+msgid "Default"
+msgstr ""
+
+#: inc/redux.php:43
+msgid "Default post image"
+msgstr ""
+
+#: inc/redux.php:115
+msgid "Disable block library CSS when not needed"
+msgstr ""
+
+#: inc/redux.php:109
+msgid "Disable Bootstrap JS components not used"
+msgstr ""
+
+#: inc/redux.php:97
+msgid "Disable comment box"
+msgstr ""
+
+#: inc/redux.php:114
+msgid "Disable embeds"
+msgstr ""
+
+#: inc/redux.php:113
+msgid "Disable emojis"
+msgstr ""
+
+#: inc/cpts.php:28 template-parts/components/pdf-block.php:17
+msgid "Document"
+msgstr ""
+
+#: inc/cpts.php:29 template-parts/components/document-list.php:24
+msgid "Documents"
+msgstr ""
+
+#: template-parts/components/pdf-block.php:21
+msgid "Download PDF"
+msgstr ""
+
+#: inc/widgets.php:39
+msgid "Echourouk News List"
+msgstr ""
+
+#. Name of the theme
+#. Author of the theme
+#: inc/redux.php:24
+msgid "Echourouk Online"
+msgstr ""
+
+#: inc/redux.php:26
+msgid "Echourouk Online Options"
+msgstr ""
+
+#: inc/redux.php:167
+msgid ""
+"Echourouk Online uses theme defaults now. Install and activate the Redux "
+"Framework plugin only if you need the Theme Options admin panel."
+msgstr ""
+
+#: inc/cpts.php:76
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: inc/meta.php:20
+msgid "Editorial pick"
+msgstr ""
+
+#: template-parts/components/editorial-recommendations.php:27
+msgid "Editorial picks"
+msgstr ""
+
+#: inc/redux.php:76
+msgid "Editorial recommendation section"
+msgstr ""
+
+#: inc/widgets.php:143
+msgid "Editorial recommendations"
+msgstr ""
+
+#: inc/redux.php:72
+msgid "Editorial team can choose the homepage lead story."
+msgstr ""
+
+#: inc/guest-authors.php:13
+msgid "Email"
+msgstr ""
+
+#: template-parts/components/newsletter.php:14
+#: template-parts/components/newsletter.php:15
+msgid "Email address"
+msgstr ""
+
+#: inc/redux.php:60
+msgid "Enable breadcrumbs"
+msgstr ""
+
+#: inc/redux.php:112
+msgid "Enable critical CSS placeholder"
+msgstr ""
+
+#: inc/redux.php:44
+msgid "Enable dark mode"
+msgstr ""
+
+#: inc/redux.php:98
+msgid "Enable sticky ad/sidebar"
+msgstr ""
+
+#: inc/redux.php:45
+msgid "Enable sticky header"
+msgstr ""
+
+#: inc/meta.php:82
+msgid "Enabled"
+msgstr ""
+
+#: inc/guest-authors.php:14 inc/redux.php:141
+#: template-parts/components/social-share.php:15
+msgid "Facebook"
+msgstr ""
+
+#: inc/redux.php:42
+msgid "Favicon"
+msgstr ""
+
+#: inc/meta.php:21
+msgid "Featured priority"
+msgstr ""
+
+#: inc/redux.php:73
+msgid "Featured section"
+msgstr ""
+
+#: inc/redux.php:130
+msgid "Footer ad"
+msgstr ""
+
+#: inc/widgets.php:14
+msgid "Footer Column 1"
+msgstr ""
+
+#: inc/widgets.php:15
+msgid "Footer Column 2"
+msgstr ""
+
+#: inc/widgets.php:16
+msgid "Footer Column 3"
+msgstr ""
+
+#: inc/redux.php:58
+msgid "Footer layout"
+msgstr ""
+
+#: inc/setup.php:35
+msgid "Footer menu"
+msgstr ""
+
+#: inc/cpts.php:19
+msgid "Galleries"
+msgstr ""
+
+#: inc/cpts.php:18 template-parts/components/gallery-block.php:25
+msgid "Gallery"
+msgstr ""
+
+#: inc/redux.php:37
+msgid "General"
+msgstr ""
+
+#: inc/cpts.php:56
+msgid "Guest Author"
+msgstr ""
+
+#: inc/guest-authors.php:65
+msgid "Guest author"
+msgstr ""
+
+#: inc/guest-authors.php:55
+msgid "Guest author details"
+msgstr ""
+
+#: inc/cpts.php:56
+msgid "Guest Authors"
+msgstr ""
+
+#: inc/redux.php:126
+msgid "Header ad"
+msgstr ""
+
+#: inc/redux.php:57
+msgid "Header layout"
+msgstr ""
+
+#: inc/redux.php:71
+msgid "Hero layout"
+msgstr ""
+
+#: inc/redux.php:72
+msgid "Hero lead story"
+msgstr ""
+
+#: template-parts/components/breadcrumbs.php:17
+msgid "Home"
+msgstr ""
+
+#: inc/redux.php:68
+msgid "Homepage"
+msgstr ""
+
+#. Name of the template
+#: page-templates/homepage-mockup.php:2
+msgid "Homepage Mockup"
+msgstr ""
+
+#: front-page.php:38
+msgid "Homepage sidebar"
+msgstr ""
+
+#. URI of the theme
+msgid "https://www.echoroukonline.com/"
+msgstr ""
+
+#: inc/guest-authors.php:16 inc/redux.php:143
+msgid "Instagram"
+msgstr ""
+
+#: inc/guest-authors.php:12
+msgid "Job title"
+msgstr ""
+
+#: single-templates/guest-author.php:38
+msgid "Latest articles"
+msgstr ""
+
+#: inc/widgets.php:141 template-parts/components/latest-news.php:26
+msgid "Latest news"
+msgstr ""
+
+#: inc/redux.php:79
+msgid "Latest news count"
+msgstr ""
+
+#: inc/redux.php:74
+msgid "Latest news section"
+msgstr ""
+
+#: inc/redux.php:53
+msgid "Layout"
+msgstr ""
+
+#: inc/redux.php:110
+msgid "Lazy-load images"
+msgstr ""
+
+#: inc/redux.php:71
+msgid "Lead grid"
+msgstr ""
+
+#: inc/redux.php:59
+msgid "Left"
+msgstr ""
+
+#: template-parts/components/tts-player.php:17
+msgid "Listen to article"
+msgstr ""
+
+#: inc/meta.php:16
+msgid "Main audio URL"
+msgstr ""
+
+#: inc/widgets.php:12
+msgid "Main Sidebar"
+msgstr ""
+
+#: inc/meta.php:15
+msgid "Main video URL"
+msgstr ""
+
+#: header.php:97
+msgid "Menu"
+msgstr ""
+
+#: inc/widgets.php:142 template-parts/components/most-read.php:38
+msgid "Most read"
+msgstr ""
+
+#: inc/redux.php:75
+msgid "Most read section"
+msgstr ""
+
+#: inc/cpts.php:77
+#, php-format
+msgid "New %s"
+msgstr ""
+
+#: template-parts/components/newsletter.php:11
+msgid "Newsletter"
+msgstr ""
+
+#: inc/redux.php:78
+msgid "Newsletter block"
+msgstr ""
+
+#: inc/widgets.php:147
+msgid "Newsletter subscription"
+msgstr ""
+
+#: inc/template-tags.php:66
+msgid "Next"
+msgstr ""
+
+#: inc/cpts.php:81
+msgid "No items found in Trash."
+msgstr ""
+
+#: inc/cpts.php:80
+msgid "No items found."
+msgstr ""
+
+#: inc/redux.php:59
+msgid "None"
+msgstr ""
+
+#: template-parts/content/none.php:11
+msgid "Nothing found"
+msgstr ""
+
+#: 404.php:13
+msgid "Page not found"
+msgstr ""
+
+#: inc/meta.php:17
+msgid "PDF file URL"
+msgstr ""
+
+#: inc/widgets.php:146
+msgid "PDF/document list"
+msgstr ""
+
+#: inc/redux.php:106
+msgid "Performance"
+msgstr ""
+
+#: inc/template-tags.php:67
+msgid "Posts navigation"
+msgstr ""
+
+#: inc/redux.php:111
+msgid "Preload main font"
+msgstr ""
+
+#: inc/template-tags.php:65
+msgid "Previous"
+msgstr ""
+
+#: header.php:101 inc/setup.php:34
+msgid "Primary menu"
+msgstr ""
+
+#: inc/meta.php:14
+msgid "Reading time"
+msgstr ""
+
+#: template-parts/components/related-articles.php:17
+msgid "Related articles"
+msgstr ""
+
+#: inc/widgets.php:40
+msgid ""
+"Reusable latest, most-read, editorial, category, video, PDF, or newsletter "
+"block."
+msgstr ""
+
+#: inc/redux.php:59
+msgid "Right"
+msgstr ""
+
+#: inc/redux.php:148
+msgid "RSS"
+msgstr ""
+
+#. Description of the theme
+msgid ""
+"RTL-first news theme scaffold for Echourouk Online with reusable article "
+"templates, media CPTs, optional Redux plugin options, and native meta "
+"fallbacks."
+msgstr ""
+
+#: searchform.php:12 searchform.php:15
+#: template-parts/components/breadcrumbs.php:34
+msgid "Search"
+msgstr ""
+
+#: inc/cpts.php:79
+#, php-format
+msgid "Search %s"
+msgstr ""
+
+#: searchform.php:11
+msgid "Search for:"
+msgstr ""
+
+#: search.php:17
+#, php-format
+msgid "Search results for: %s"
+msgstr ""
+
+#. Name of the template
+#: inc/template-routing.php:71 page-templates/section-landing.php:2
+msgid "Section Landing Page"
+msgstr ""
+
+#: template-parts/components/category-block.php:25
+msgid "Sections"
+msgstr ""
+
+#: template-parts/components/social-share.php:14
+msgid "Share"
+msgstr ""
+
+#: template-parts/components/social-share.php:13
+msgid "Share article"
+msgstr ""
+
+#: inc/redux.php:90
+msgid "Show AI summary"
+msgstr ""
+
+#: inc/redux.php:93
+msgid "Show author box"
+msgstr ""
+
+#: inc/redux.php:95
+msgid "Show Most Read widget in article sidebar"
+msgstr ""
+
+#: inc/redux.php:92
+msgid "Show reading time"
+msgstr ""
+
+#: inc/redux.php:94
+msgid "Show related articles"
+msgstr ""
+
+#: inc/redux.php:96
+msgid "Show social share"
+msgstr ""
+
+#: inc/redux.php:91
+msgid "Show TTS player"
+msgstr ""
+
+#: sidebar.php:20
+msgid "Sidebar"
+msgstr ""
+
+#: inc/redux.php:129
+msgid "Sidebar ad"
+msgstr ""
+
+#: inc/redux.php:59
+msgid "Sidebar position"
+msgstr ""
+
+#: inc/redux.php:71
+msgid "Single lead"
+msgstr ""
+
+#: inc/redux.php:40
+msgid "Site logo"
+msgstr ""
+
+#: header.php:22
+msgid "Skip to content"
+msgstr ""
+
+#: inc/redux.php:138
+msgid "Social"
+msgstr ""
+
+#: inc/setup.php:36
+msgid "Social links menu"
+msgstr ""
+
+#: inc/meta.php:18
+msgid "Source name"
+msgstr ""
+
+#: inc/meta.php:19
+msgid "Source URL"
+msgstr ""
+
+#: template-parts/content/single-article.php:146
+msgid "Source:"
+msgstr ""
+
+#: inc/meta.php:23
+msgid "Sponsored label"
+msgstr ""
+
+#: template-parts/components/newsletter.php:16
+msgid "Subscribe"
+msgstr ""
+
+#: inc/redux.php:147
+msgid "Telegram"
+msgstr ""
+
+#: 404.php:14
+msgid ""
+"The requested page could not be found. Try searching or browse the latest "
+"stories."
+msgstr ""
+
+#: inc/redux.php:25
+msgid "Theme Options"
+msgstr ""
+
+#: inc/redux.php:145
+msgid "TikTok"
+msgstr ""
+
+#: inc/widgets.php:71
+msgid "Title"
+msgstr ""
+
+#: template-parts/content/none.php:12
+msgid "Try another search or browse the latest news."
+msgstr ""
+
+#: template-parts/components/tts-player.php:21
+msgid "TTS audio placeholder"
+msgstr ""
+
+#: inc/meta.php:13
+msgid "TTS URL"
+msgstr ""
+
+#: inc/widgets.php:75
+msgid "Type"
+msgstr ""
+
+#: inc/guest-authors.php:90
+msgid "Use the featured image as this guest author avatar."
+msgstr ""
+
+#: inc/guest-authors.php:108
+msgid "Use WordPress author"
+msgstr ""
+
+#: inc/cpts.php:13 template-parts/components/video-embed.php:19
+msgid "Video"
+msgstr ""
+
+#: inc/widgets.php:145
+msgid "Video list"
+msgstr ""
+
+#: inc/redux.php:77
+msgid "Video section"
+msgstr ""
+
+#: inc/cpts.php:14 template-parts/components/video-list.php:24
+msgid "Videos"
+msgstr ""
+
+#: inc/cpts.php:78
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: template-parts/components/voting-placeholder.php:11
+msgid "Voting module placeholder"
+msgstr ""
+
+#: inc/redux.php:146 template-parts/components/social-share.php:17
+msgid "WhatsApp"
+msgstr ""
+
+#: template-parts/components/social-share.php:16
+msgid "X"
+msgstr ""
+
+#: inc/guest-authors.php:15 inc/redux.php:142
+msgid "X/Twitter"
+msgstr ""
+
+#: inc/guest-authors.php:17 inc/redux.php:144
+msgid "YouTube"
+msgstr ""
+
+#: template-parts/content/single-article.php:86
+msgid "استمع"
+msgstr ""
+
+#: footer.php:68
+msgid "اقتصاد"
+msgstr ""
+
+#: footer.php:98
+msgid "الإشهار"
+msgstr ""
+
+#: header.php:63 footer.php:89
+msgid "البث الحي"
+msgstr ""
+
+#: footer.php:66
+msgid "الجزائر"
+msgstr ""
+
+#: footer.php:72
+msgid "الرأي"
+msgstr ""
+
+#: footer.php:65
+msgid "الرئيسية"
+msgstr ""
+
+#: footer.php:67
+msgid "العالم"
+msgstr ""
+
+#: footer.php:76
+msgid "العامة"
+msgstr ""
+
+#: footer.php:24
+msgid "المزيد"
+msgstr ""
+
+#: template-parts/content/single-article.php:101
+msgid "الملخص"
+msgstr ""
+
+#: footer.php:95
+msgid "النشرة البريدية"
+msgstr ""
+
+#: header.php:40
+msgid "تفعيل الإشعارات"
+msgstr ""
+
+#: footer.php:83
+msgid "تواصل معنا"
+msgstr ""
+
+#: footer.php:127
+msgid "جميع الحقوق محفوظة لموقع الشروق أونلاين"
+msgstr ""
+
+#: footer.php:73
+msgid "جواهر"
+msgstr ""
+
+#: footer.php:84
+msgid "حي السعيدون محمد بلوزداد رقم 166 - القبة، الجزائر"
+msgstr ""
+
+#: footer.php:69
+msgid "رياضة"
+msgstr ""
+
+#: footer.php:92
+msgid "سياسة الخصوصية"
+msgstr ""
+
+#: template-parts/content/single-article.php:79
+msgid "شارك"
+msgstr ""
+
+#: footer.php:75
+msgid "قناة الشروق"
+msgstr ""
+
+#: template-parts/content/single-article.php:126
+msgid "لا يوجد ملخص متاح حالياً."
+msgstr ""
+
+#: template-parts/content/single-article.php:122
+msgid "ملخص"
+msgstr ""
+
+#: footer.php:21
+msgid ""
+"منذ سنة 2005 أطلقت مؤسسة الشروق للإعلام والنشر واحدا من أولى المواقع "
+"الإخبارية في الجزائر والعالم العربي من أجل توفير تغطية آنية ومستمرّة للأحداث "
+"على مدار الساعة بالعربية والإنجليزية والفرنسية."
+msgstr ""
+
+#: footer.php:74
+msgid "منوعات"
+msgstr ""

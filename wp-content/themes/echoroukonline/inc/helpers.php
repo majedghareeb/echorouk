@@ -34,7 +34,9 @@ function echorouk_theme_default_options() {
 		'show_reading_time'            => true,
 		'show_author_box'              => true,
 		'show_related_articles'        => true,
+		'show_article_most_read_widget' => true,
 		'show_social_share'            => true,
+		'disable_comment_box'          => true,
 		'enable_sticky_ad_sidebar'     => true,
 		'disable_bootstrap_js'         => true,
 		'lazy_load_images'             => true,
@@ -48,6 +50,9 @@ function echorouk_theme_default_options() {
 		'article_middle_ad'            => '',
 		'sidebar_ad'                   => '',
 		'footer_ad'                    => '',
+		'footer_contact_address'       => '',
+		'footer_contact_phone'         => '023713990-023713982',
+		'footer_contact_email'         => 'info@echorouk.net',
 		'facebook'                     => '',
 		'twitter'                      => '',
 		'instagram'                    => '',
@@ -259,6 +264,32 @@ function echorouk_current_url() {
 	$uri    = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	return esc_url_raw( $scheme . $host . $uri );
+}
+
+/**
+ * Set up global post data for singular templates from the queried object ID.
+ *
+ * This bypasses loop index assumptions when a filtered main query contains
+ * non-zero-based keys.
+ *
+ * @return bool True when a valid post context is prepared.
+ */
+function echorouk_setup_singular_post_context() {
+	$post_id = get_queried_object_id();
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	$post = get_post( $post_id );
+
+	if ( ! ( $post instanceof WP_Post ) ) {
+		return false;
+	}
+
+	setup_postdata( $post );
+
+	return true;
 }
 
 function echorouk_svg_icon( $name, $class = '' ) {
