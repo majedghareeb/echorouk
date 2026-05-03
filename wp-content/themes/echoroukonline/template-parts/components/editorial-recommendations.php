@@ -7,16 +7,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$posts = echorouk_get_cached_posts(
-	'editorial_recommendations',
+$posts = echorouk_homepage_section_posts(
+	'opinion',
+	4,
 	array(
 		'post_type'      => echorouk_news_post_types(),
 		'posts_per_page' => 4,
 		'meta_key'       => 'editorial_pick',
 		'meta_value'     => 1,
 		'orderby'        => 'date',
-	),
-	300
+	)
 );
 
 if ( empty( $posts ) ) {
@@ -31,4 +31,3 @@ if ( empty( $posts ) ) {
 		<?php endforeach; ?>
 	</div>
 </section>
-

@@ -110,7 +110,7 @@ function echorouk_save_article_meta( $post_id ) {
 		return;
 	}
 
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+	if ( ! echorouk_can_edit_post( $post_id ) ) {
 		return;
 	}
 

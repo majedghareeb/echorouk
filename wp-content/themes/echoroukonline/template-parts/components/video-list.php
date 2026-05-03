@@ -7,13 +7,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$posts = echorouk_get_cached_posts(
-	'video_list',
+$posts = echorouk_homepage_section_posts(
+	'video',
+	4,
 	array(
 		'post_type'      => 'video',
 		'posts_per_page' => 4,
-	),
-	300
+	)
 );
 
 if ( empty( $posts ) ) {
@@ -28,4 +28,3 @@ if ( empty( $posts ) ) {
 		<?php endforeach; ?>
 	</div>
 </section>
-

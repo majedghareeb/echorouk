@@ -132,7 +132,7 @@ function echorouk_save_guest_author_meta( $post_id ) {
 		return;
 	}
 
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+	if ( ! echorouk_can_edit_post( $post_id ) ) {
 		return;
 	}
 
@@ -165,7 +165,7 @@ function echorouk_save_guest_author_relation( $post_id ) {
 		return;
 	}
 
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+	if ( ! echorouk_can_edit_post( $post_id ) ) {
 		return;
 	}
 
@@ -214,4 +214,3 @@ function echorouk_get_post_author_data( $post_id = 0 ) {
 		'avatar'    => get_avatar( $user_id, 96, '', '', array( 'class' => 'author-box__avatar' ) ),
 	);
 }
-

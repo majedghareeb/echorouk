@@ -6,87 +6,32 @@
  * @package EchouroukOnline
  */
 
-$hero_section = function_exists('echorouk_homepage_get_section') ? echorouk_homepage_get_section('hero') : null;
-$hero_meta    = is_array($hero_section) && isset($hero_section['meta']) && is_array($hero_section['meta']) ? $hero_section['meta'] : array();
-
-$hero_main = null;
-if (! empty($hero_meta['main_post_id'])) {
-    $hero_main = get_post(absint($hero_meta['main_post_id']));
-}
-if (! $hero_main || 'publish' !== $hero_main->post_status) {
-    $hero_main = null;
-}
-
-$hero_feed = function_exists('echorouk_homepage_get_posts_for_section') ? echorouk_homepage_get_posts_for_section('hero', 4) : array();
-if (! $hero_main && ! empty($hero_feed)) {
-    $hero_main = $hero_feed[0];
-}
-
-$live_enabled = ! empty($hero_meta['live_coverage_enabled']);
-$live_id      = ! empty($hero_meta['live_post_id']) ? absint($hero_meta['live_post_id']) : 0;
-$live_post    = ($live_enabled && $live_id) ? get_post($live_id) : null;
-$side_ids     = ! empty($hero_meta['side_post_ids']) && is_array($hero_meta['side_post_ids']) ? array_map('absint', $hero_meta['side_post_ids']) : array();
-$fallback_ids = ! empty($hero_meta['fallback_post_ids']) && is_array($hero_meta['fallback_post_ids']) ? array_map('absint', $hero_meta['fallback_post_ids']) : array();
-$right_ids    = ($live_post && 'publish' === $live_post->post_status) ? $side_ids : $fallback_ids;
-$hero_right   = ! empty($right_ids) ? get_posts(
-    array(
-        'post_type'      => 'post',
-        'post_status'    => 'publish',
-        'post__in'       => $right_ids,
-        'orderby'        => 'post__in',
-        'posts_per_page' => 3,
-    )
-) : array();
-
-if (empty($hero_right) && ! empty($hero_feed)) {
-    $hero_right = array_slice($hero_feed, $hero_main ? 1 : 0, 3);
-}
-
-$ticker_posts = function_exists('echorouk_homepage_get_posts_for_section') ? echorouk_homepage_get_posts_for_section('news_ticker', 6) : array();
-
-$hero_tag = '';
-if ($hero_main) {
-    $hero_categories = get_the_category($hero_main->ID);
-    $hero_tag        = ! empty($hero_categories) ? $hero_categories[0]->name : '';
-}
-
 ?>
 <main id="primary" class="site-main echorouk-homepage-mockup">
-    <div class="container-xl echorouk-homepage-wrap py-4">
+    <div class="echorouk-homepage-wrap py-4">
         <section class="hero grid-border">
             <div class="row g-4 align-items-stretch hero-layout">
                 <aside class="col-lg-3 order-2 order-lg-1 hero-col hero-col-left">
                     <div class="hero-live hero-col-card">
-                        <div class="hero-live-title"><span>تغطية
-                                حية</span><img
-                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/arrow-left-01-stroke-rounded.svg"></img>
-                        </div>
+                        <div class="hero-live-title"><i class="bi bi-chevron-left" aria-hidden="true"></i><span>تغطية
+                                حية</span></div>
                         <ul class="hero-live-timeline">
-                            <?php if (! empty($ticker_posts)) : ?>
-                                <?php foreach ($ticker_posts as $ticker_post) : ?>
-                                    <li><time class="hero-live-time"
-                                            datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time><span><a
-                                                href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <li><time class="hero-live-time" datetime="2026-05-01T14:30:00+03:00">الآن</time><span>سعيود
-                                        يعرض مشروع قانون الانتخابات أمام مجلس الأمة</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T13:22:00+03:00">13:22</time><span>فالڤيردي: توقعت طردي من ريال
-                                        مدريد بسبب لوكا زيدان (فيديو)</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T11:15:00+03:00">11:15</time><span>زوجته تعامله بشكل سيئ.. ترامب
-                                        يسخر من ماكرون مجددا!</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T10:45:00+03:00">10:45</time><span>ميناء وهران.. رسو باخرة ثالثة
-                                        محملة بـ 7 آلاف رأس غنم مستورد</span></li>
-                                <li><time class="hero-live-time" datetime="2026-05-01T09:22:00+03:00">09:22</time><span>فيفا
-                                        يرفع أسعار تذاكر نهائي كأس العالم 2026</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T09:12:00+03:00">09:12</time><span>مرشحة محتملة للرئاسة
-                                        الأمريكية تتعهد بمراجعة السياسة الخارجية</span></li>
-                            <?php endif; ?>
+                            <li><time class="hero-live-time" datetime="2026-05-01T14:30:00+03:00">الآن</time><span>سعيود
+                                    يعرض مشروع قانون الانتخابات أمام مجلس الأمة</span></li>
+                            <li><time class="hero-live-time"
+                                    datetime="2026-05-01T13:22:00+03:00">13:22</time><span>فالڤيردي: توقعت طردي من ريال
+                                    مدريد بسبب لوكا زيدان (فيديو)</span></li>
+                            <li><time class="hero-live-time"
+                                    datetime="2026-05-01T11:15:00+03:00">11:15</time><span>زوجته تعامله بشكل سيئ.. ترامب
+                                    يسخر من ماكرون مجددا!</span></li>
+                            <li><time class="hero-live-time"
+                                    datetime="2026-05-01T10:45:00+03:00">10:45</time><span>ميناء وهران.. رسو باخرة ثالثة
+                                    محملة بـ 7 آلاف رأس غنم مستورد</span></li>
+                            <li><time class="hero-live-time" datetime="2026-05-01T09:22:00+03:00">09:22</time><span>فيفا
+                                    يرفع أسعار تذاكر نهائي كأس العالم 2026</span></li>
+                            <li><time class="hero-live-time"
+                                    datetime="2026-05-01T09:12:00+03:00">09:12</time><span>مرشحة محتملة للرئاسة
+                                    الأمريكية تتعهد بمراجعة السياسة الخارجية</span></li>
                         </ul>
                     </div>
                 </aside>
@@ -94,19 +39,11 @@ if ($hero_main) {
                 <section class="col-lg-6 order-1 order-lg-2 hero-col hero-col-center">
                     <article class="hero-lead hero-col-card">
                         <div class="hero-lead-media position-relative">
-                            <?php if ($hero_main) : ?>
-                                <span class="tag"><?php echo esc_html($hero_tag ? $hero_tag : 'العالم'); ?></span>
-                                <a
-                                    href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero'); ?></a>
-                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center"
-                                    aria-label="قراءة الخبر"><i class="bi bi-play-fill"></i></a>
-                            <?php else : ?>
-                                <span class="tag">العالم</span>
-                                <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=900&q=80"
-                                    alt="main news" loading="lazy" decoding="async">
-                                <a href="#" class="hero-play-center" aria-label="تشغيل الفيديو"><i
-                                        class="bi bi-play-fill"></i></a>
-                            <?php endif; ?>
+                            <span class="tag">العالم</span>
+                            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=900&q=80"
+                                alt="main news" loading="lazy" decoding="async">
+                            <a href="#" class="hero-play-center" aria-label="تشغيل الفيديو"><i
+                                    class="bi bi-play-fill"></i></a>
                             <aside class="hero-floating-video" aria-label="نافذة فيديو عائمة">
                                 <div class="hero-floating-head">
                                     <button class="hero-floating-close" type="button"
@@ -123,21 +60,10 @@ if ($hero_main) {
 
                         <div class="hero-lead-box-wrap">
                             <div class="hero-lead-text-box">
-                                <?php if ($hero_main) : ?>
-                                    <h1 class="headline"><a
-                                            href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a>
-                                    </h1>
-                                    <div class="hero-meta-line"><?php echo esc_html(get_the_date('', $hero_main)); ?>
-                                    </div>
-                                    <p class="summary mb-0">
-                                        <?php echo esc_html(wp_trim_words(wp_strip_all_tags(get_the_excerpt($hero_main) ? get_the_excerpt($hero_main) : get_post_field('post_content', $hero_main)), 28)); ?>
-                                    </p>
-                                <?php else : ?>
-                                    <h1 class="headline">ترامب يهاجم بريطانيا وفرنسا.. هذا ما قاله</h1>
-                                    <div class="hero-meta-line">السبت 22 مارس 2026</div>
-                                    <p class="summary mb-0">قال ترامب في منشور عبر منصة "تروث سوشيال" إن بريطانيا من بين
-                                        الدول التي لم تعد قادرة على الحصول على وقود الطائرات بسبب إغلاق مضيق هرمز.</p>
-                                <?php endif; ?>
+                                <h1 class="headline">ترامب يهاجم بريطانيا وفرنسا.. هذا ما قاله</h1>
+                                <div class="hero-meta-line">السبت 22 مارس 2026</div>
+                                <p class="summary mb-0">قال ترامب في منشور عبر منصة "تروث سوشيال" إن بريطانيا من بين
+                                    الدول التي لم تعد قادرة على الحصول على وقود الطائرات بسبب إغلاق مضيق هرمز.</p>
                             </div>
                             <div class="hero-lead-icons-box" aria-label="إجراءات الخبر">
                                 <a href="#" class="hero-lead-icon"><img
@@ -155,59 +81,32 @@ if ($hero_main) {
 
                 <aside class="col-lg-3 order-3 order-lg-3 hero-col hero-col-right">
                     <div class="hero-latest-panel hero-col-card">
-                        <?php if (! empty($hero_right)) : ?>
-                            <?php $feature = $hero_right[0]; ?>
-                            <article class="hero-latest-feature">
-                                <a
-                                    href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
-                                <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?>
-                                </div>
-                                <h3><a
-                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
-                                </h3>
-                            </article>
+                        <article class="hero-latest-feature">
+                            <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=600&q=80"
+                                alt="latest big" loading="lazy" decoding="async">
+                            <div class="hero-latest-date">2026/04/01</div>
+                            <h3>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h3>
+                        </article>
 
-                            <?php foreach (array_slice($hero_right, 1, 2) as $hero_side_post) : ?>
-                                <article class="hero-latest-item">
-                                    <a
-                                        href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
-                                    <div>
-                                        <h4><a
-                                                href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
-                                        </h4>
-                                    </div>
-                                </article>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <article class="hero-latest-feature">
-                                <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=600&q=80"
-                                    alt="latest big" loading="lazy" decoding="async">
-                                <div class="hero-latest-date">2026/04/01</div>
-                                <h3>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h3>
-                            </article>
+                        <article class="hero-latest-item">
+                            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=220&q=80"
+                                alt="latest small 1" loading="lazy" decoding="async">
+                            <div>
+                                <h4>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ديربي مصر</h4>
+                            </div>
+                        </article>
 
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 1" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ديربي مصر</h4>
-                                </div>
-                            </article>
-
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 2" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>مواجهة قوية مرتقبة بين كندا وصربيا والصينية تشينغ تشيوان</h4>
-                                </div>
-                            </article>
-                        <?php endif; ?>
+                        <article class="hero-latest-item">
+                            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=220&q=80"
+                                alt="latest small 2" loading="lazy" decoding="async">
+                            <div>
+                                <h4>مواجهة قوية مرتقبة بين كندا وصربيا والصينية تشينغ تشيوان</h4>
+                            </div>
+                        </article>
                     </div>
                 </aside>
             </div>
         </section>
-
-        <div class="ad-box my-4">مساحة إعلانية</div>
 
         <section class="world-spotlight grid-border">
             <div class="row g-4 align-items-stretch world-spotlight-grid">
@@ -355,36 +254,11 @@ if ($hero_main) {
 
         <section class="daily-boxes grid-border">
             <div class="daily-boxes-grid">
-                <article class="daily-box daily-print-box">
-                    <header class="daily-box-header">
-                        <h3>الشروق اليومي - النسخة المطبوعة</h3>
-                        <div class="daily-box-link">
-                            <a href="#"> الأرشيف<img
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/archive-02-stroke-rounded.svg"></img></a>
-                        </div>
-
-                    </header>
-                    <div class="daily-box-divider"></div>
-                    <div class="daily-print-content">
-                        <div class="daily-print-meta">
-                            <div class="daily-print-date">الخميس 16 أفريل 2026</div>
-                            <div class="daily-print-downloads">تحميل 1569</div>
-                        </div>
-                        <div class="daily-print-cover-wrap">
-                            <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80"
-                                alt="newspaper cover" loading="lazy" decoding="async">
-                        </div>
-                    </div>
-                    <a href="#" class="daily-print-download" aria-label="تحميل النسخة"><i
-                            class="bi bi-download"></i></a>
-                </article>
                 <article class="daily-box daily-poll-box">
                     <header class="daily-box-header">
                         <h3>تصويت اليوم</h3>
-                        <div class="daily-box-link">
-                            <a href="#"> كل التصويتات<img
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/check-list-stroke-rounded.svg"></img></a>
-                        </div>
+                        <a href="#" class="daily-box-link">كل التصويتات <i class="bi bi-check2-square"
+                                aria-hidden="true"></i></a>
                     </header>
                     <div class="daily-box-divider"></div>
                     <form class="daily-poll-form" action="#" method="post">
@@ -403,6 +277,26 @@ if ($hero_main) {
                         </label>
                         <button class="daily-poll-submit" type="submit">تصويت</button>
                     </form>
+                </article>
+
+                <article class="daily-box daily-print-box">
+                    <header class="daily-box-header">
+                        <h3>الشروق اليومي - النسخة المطبوعة</h3>
+                        <a href="#" class="daily-box-link">الأرشيف <i class="bi bi-archive" aria-hidden="true"></i></a>
+                    </header>
+                    <div class="daily-box-divider"></div>
+                    <div class="daily-print-content">
+                        <div class="daily-print-meta">
+                            <div class="daily-print-date">الخميس 16 أفريل 2026</div>
+                            <div class="daily-print-downloads">تحميل 1569</div>
+                        </div>
+                        <div class="daily-print-cover-wrap">
+                            <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80"
+                                alt="newspaper cover" loading="lazy" decoding="async">
+                        </div>
+                    </div>
+                    <a href="#" class="daily-print-download" aria-label="تحميل النسخة"><i
+                            class="bi bi-download"></i></a>
                 </article>
             </div>
         </section>
@@ -638,14 +532,14 @@ if ($hero_main) {
     </div>
 </main>
 <script>
-    document.addEventListener('click', function(event) {
-        var closeButton = event.target.closest('.hero-floating-close');
-        if (!closeButton) {
-            return;
-        }
-        var floatingVideo = closeButton.closest('.hero-floating-video');
-        if (floatingVideo) {
-            floatingVideo.style.display = 'none';
-        }
-    });
+document.addEventListener('click', function(event) {
+    var closeButton = event.target.closest('.hero-floating-close');
+    if (!closeButton) {
+        return;
+    }
+    var floatingVideo = closeButton.closest('.hero-floating-video');
+    if (floatingVideo) {
+        floatingVideo.style.display = 'none';
+    }
+});
 </script>

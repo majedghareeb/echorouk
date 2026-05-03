@@ -8,13 +8,13 @@
 defined( 'ABSPATH' ) || exit;
 
 $count = absint( echorouk_get_option( 'latest_news_count', 8 ) );
-$posts = echorouk_get_cached_posts(
-	'latest_news_' . $count,
+$posts = echorouk_homepage_section_posts(
+	'last',
+	$count,
 	array(
 		'post_type'      => echorouk_news_post_types(),
 		'posts_per_page' => $count,
-	),
-	180
+	)
 );
 
 if ( empty( $posts ) ) {
@@ -31,4 +31,3 @@ if ( empty( $posts ) ) {
 		<?php endforeach; ?>
 	</div>
 </section>
-

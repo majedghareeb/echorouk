@@ -149,6 +149,180 @@ function echorouk_meta_auth_callback() {
 	return current_user_can( 'edit_posts' );
 }
 
+function echorouk_homepage_section( $section_id ) {
+	if ( ! function_exists( 'echorouk_homepage_get_section' ) ) {
+		return null;
+	}
+
+	$section = echorouk_homepage_get_section( $section_id );
+
+	return is_array( $section ) ? $section : null;
+}
+
+function echorouk_homepage_section_posts( $section_id, $fallback_limit = 6, $fallback_args = array() ) {
+	if ( function_exists( 'echorouk_homepage_get_posts_for_section' ) ) {
+		$posts = echorouk_homepage_get_posts_for_section( $section_id, $fallback_limit );
+		if ( is_array( $posts ) && ! empty( $posts ) ) {
+			return $posts;
+		}
+	}
+
+	$query_args = wp_parse_args(
+		$fallback_args,
+		array(
+			'post_type'      => echorouk_news_post_types(),
+			'post_status'    => 'publish',
+			'posts_per_page' => absint( $fallback_limit ),
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		)
+	);
+
+	return get_posts( $query_args );
+}
+
+function echorouk_can_edit_post( $post_id ) {
+	$post_id = absint( $post_id );
+
+	if ( ! $post_id ) {
+		return false;
+	}
+
+	$post_type = get_post_type( $post_id );
+
+	if ( ! $post_type || ! post_type_exists( $post_type ) ) {
+		return false;
+	}
+
+	return current_user_can( 'edit_post', $post_id );
+}
+
+function echorouk_replace_dashboard_activity_widget() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+	add_meta_box(
+		'dashboard_activity',
+		__( 'Activity' ),
+		'echorouk_dashboard_site_activity',
+		'dashboard',
+		'normal',
+		'core'
+	);
+}
+add_action( 'wp_dashboard_setup', 'echorouk_replace_dashboard_activity_widget', 20 );
+
+function echorouk_dashboard_site_activity() {
+	echo '<div id="activity-widget">';
+
+	$future_posts = wp_dashboard_recent_posts(
+		array(
+			'max'    => 5,
+			'status' => 'future',
+			'order'  => 'ASC',
+			'title'  => __( 'Publishing Soon' ),
+			'id'     => 'future-posts',
+		)
+	);
+	$recent_posts = wp_dashboard_recent_posts(
+		array(
+			'max'    => 5,
+			'status' => 'publish',
+			'order'  => 'DESC',
+			'title'  => __( 'Recently Published' ),
+			'id'     => 'published-posts',
+		)
+	);
+
+	$recent_comments = echorouk_dashboard_recent_comments();
+
+	if ( ! $future_posts && ! $recent_posts && ! $recent_comments ) {
+		echo '<div class="no-activity">';
+		echo '<p>' . __( 'No activity yet!' ) . '</p>';
+		echo '</div>';
+	}
+
+	echo '</div>';
+}
+
+function echorouk_dashboard_recent_comments( $total_items = 5 ) {
+	$comments = array();
+
+	$comments_query = array(
+		'number' => $total_items * 5,
+		'offset' => 0,
+	);
+
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		$comments_query['status'] = 'approve';
+	}
+
+	$comments_count = 0;
+	do {
+		$possible = get_comments( $comments_query );
+
+		if ( empty( $possible ) || ! is_array( $possible ) ) {
+			break;
+		}
+
+		foreach ( $possible as $comment ) {
+			$post_id   = (int) $comment->comment_post_ID;
+			$post_type = get_post_type( $post_id );
+
+			// Avoid map_meta_cap warnings on comments linked to unregistered post types.
+			if ( ! $post_type || ! post_type_exists( $post_type ) ) {
+				continue;
+			}
+
+			if ( ! current_user_can( 'edit_post', $post_id )
+				&& ( post_password_required( $post_id )
+					|| ! current_user_can( 'read_post', $post_id ) )
+			) {
+				continue;
+			}
+
+			$comments[]     = $comment;
+			$comments_count = count( $comments );
+
+			if ( $comments_count === $total_items ) {
+				break 2;
+			}
+		}
+
+		$comments_query['offset'] += $comments_query['number'];
+		$comments_query['number']  = $total_items * 10;
+	} while ( $comments_count < $total_items );
+
+	if ( $comments ) {
+		echo '<div id="latest-comments" class="activity-block table-view-list">';
+		echo '<h3>' . __( 'Recent Comments' ) . '</h3>';
+
+		echo '<ul id="the-comment-list" data-wp-lists="list:comment">';
+		foreach ( $comments as $comment ) {
+			_wp_dashboard_recent_comments_row( $comment );
+		}
+		echo '</ul>';
+
+		if ( current_user_can( 'edit_posts' ) ) {
+			echo '<h3 class="screen-reader-text">' .
+				__( 'View more comments' ) .
+			'</h3>';
+			_get_list_table( 'WP_Comments_List_Table' )->views();
+		}
+
+		wp_comment_reply( -1, false, 'dashboard', false );
+		wp_comment_trashnotice();
+
+		echo '</div>';
+	} else {
+		return false;
+	}
+
+	return true;
+}
+
 function echorouk_reading_time( $post_id = 0 ) {
 	$post_id = $post_id ? absint( $post_id ) : get_the_ID();
 	$stored  = absint( get_post_meta( $post_id, 'reading_time', true ) );
