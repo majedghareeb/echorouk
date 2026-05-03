@@ -13,10 +13,10 @@
   --echorouk-focus: #0a7a75;
 }
 
-/* [class*="col-"] {
+[class*="col-"] {
   background-color: rgba(255, 0, 0, 0.1);
   border: 1px dashed red;
-} */
+}
 
 body {
   color: var(--echorouk-text);
@@ -113,8 +113,8 @@ body.has-dark-mode {
 
 #echorouk-logo-dark,
 #echorouk-logo-white {
-  width: 163px;
-  height: 62px;
+  width: 100px;
+  height: 50px;
 
   background-size: contain;
   background-repeat: no-repeat;
@@ -221,82 +221,35 @@ body.has-dark-mode {
 }
 
 .breaking-bar {
-  padding-block: 12px 14px;
-  background: #eef6fb;
-  color: #162230;
+  border-block-start: 1px solid var(--echorouk-border);
+  background: var(--echorouk-primary-dark);
+  color: #fff;
 }
 
 .breaking-bar__inner {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 0;
-  min-height: 56px;
-  direction: rtl;
+  gap: 1rem;
+  min-height: 2.75rem;
 }
 
-.breaking-bar__label {
-  align-self: stretch;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 152px;
-  border-radius: 4px;
-  background: #d91515;
+.breaking-bar strong {
   color: #fff;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1;
   white-space: nowrap;
 }
 
-.breaking-bar__headline {
+.breaking-bar ul {
   display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 56px;
-  padding: 0 24px;
-  overflow: hidden;
-  border-radius: 4px 0 0 4px;
-  background: #f1e7ec;
-  color: #111820;
-  font-size: 20px;
-  font-weight: normal;
-  line-height: 1.4;
-  text-align: center;
-  text-decoration: none;
-  text-overflow: ellipsis;
+  gap: 1.25rem;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
+  list-style: none;
+}
+
+.breaking-bar a {
+  color: #fff;
   white-space: nowrap;
-}
-
-.breaking-bar__headline:hover,
-.breaking-bar__headline:focus,
-.breaking-bar__headline:visited {
-  color: #111820;
-  text-decoration: none;
-}
-
-@media (max-width: 575.98px) {
-  .breaking-bar {
-    padding-block: 8px;
-  }
-
-  .breaking-bar__inner {
-    min-height: 44px;
-  }
-
-  .breaking-bar__label {
-    flex-basis: 72px;
-    font-size: 22px;
-  }
-
-  .breaking-bar__headline {
-    min-height: 44px;
-    padding-inline: 12px;
-    font-size: 16px;
-  }
 }
 
 .site-main {
@@ -1250,8 +1203,8 @@ body.is-rtl .single-article__body {
   min-height: 3rem;
   padding: .55rem 0 .7rem;
   color: #253443;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 700;
   white-space: nowrap;
   text-decoration: none !important;
 }
@@ -1505,18 +1458,9 @@ body.is-rtl .single-article__body {
   background: #eef6fb;
 }
 
-
 .echorouk-homepage-wrap {
   margin: 0 auto;
 }
-
-@media (min-width: 1200px) {
-  .echorouk-homepage-wrap.container-xl {
-    max-width: 1311px;
-  }
-}
-
-
 
 .echorouk-homepage-mockup .ad-box {
   min-height: 115px;
@@ -1679,129 +1623,6 @@ body.is-rtl .single-article__body {
   min-height: 150px;
 }
 
-.echorouk-homepage-mockup .opinion-panel {
-  background: #355e86;
-  border: 1px solid rgba(203, 221, 238, .45);
-  padding: 16px 18px;
-}
-
-.echorouk-homepage-mockup .opinion-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid rgba(198, 214, 230, .35);
-  margin-top: 10px;
-}
-
-.echorouk-homepage-mockup .opinion-grid>[class*="col-"] {
-  width: auto;
-  max-width: none;
-  padding: 0;
-  min-width: 0;
-}
-
-.echorouk-homepage-mockup .opinion-grid .opinion-card {
-  background: transparent;
-  min-height: 0;
-  height: 100%;
-  padding: 14px 14px 16px;
-  border-inline-start: 1px solid rgba(198, 214, 230, .35);
-}
-
-.echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(4n + 1) .opinion-card {
-  border-inline-start: 0;
-}
-
-.echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(n + 5) .opinion-card {
-  border-top: 1px solid rgba(198, 214, 230, .35);
-}
-
-.echorouk-homepage-mockup .opinion-card-thumb {
-  width: 100%;
-  height: 165px;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-.echorouk-homepage-mockup .opinion-card-meta {
-  margin-top: 10px;
-}
-
-.echorouk-homepage-mockup .opinion-card-author {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: row-reverse;
-  gap: 10px;
-}
-
-.echorouk-homepage-mockup .opinion-card-author-name,
-.echorouk-homepage-mockup .opinion-card-date {
-  color: #d9b96c;
-}
-
-.echorouk-homepage-mockup .opinion-card-author-name {
-  font-size: 20px;
-  line-height: 1.35;
-}
-
-.echorouk-homepage-mockup .opinion-card .avatar {
-  width: 62px;
-  height: 62px;
-  border-color: #d9b96c;
-  flex-shrink: 0;
-}
-
-.echorouk-homepage-mockup .opinion-card-date {
-  margin-top: 2px;
-  font-size: 15px;
-}
-
-.echorouk-homepage-mockup .opinion-card-title {
-  margin: 8px 0 0;
-  color: #eaf1f8;
-  font-size: 21px;
-  font-weight: 500;
-  line-height: 1.55;
-}
-
-@media (max-width: 991px) {
-  .echorouk-homepage-mockup .opinion-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .echorouk-homepage-mockup .opinion-grid .opinion-card {
-    border-inline-start: 1px solid rgba(198, 214, 230, .35);
-  }
-
-  .echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(4n + 1) .opinion-card {
-    border-inline-start: 1px solid rgba(198, 214, 230, .35);
-  }
-
-  .echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(2n + 1) .opinion-card {
-    border-inline-start: 0;
-  }
-
-  .echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(n + 5) .opinion-card {
-    border-top: 0;
-  }
-
-  .echorouk-homepage-mockup .opinion-grid>[class*="col-"]:nth-child(n + 3) .opinion-card {
-    border-top: 1px solid rgba(198, 214, 230, .35);
-  }
-
-  .echorouk-homepage-mockup .opinion-card-thumb {
-    height: 150px;
-  }
-
-  .echorouk-homepage-mockup .opinion-card-author-name {
-    font-size: 18px;
-  }
-
-  .echorouk-homepage-mockup .opinion-card-title {
-    font-size: 19px;
-  }
-}
-
 .echorouk-homepage-mockup .avatar {
   width: 38px;
   height: 38px;
@@ -1814,289 +1635,6 @@ body.is-rtl .single-article__body {
   background: #f5efd9;
   padding: 24px;
   border: 1px solid #eadfbf;
-}
-
-.echorouk-homepage-mockup .podcast-section {
-  border-top: 2px solid #2e74aa;
-  border-bottom: 2px solid #2e74aa;
-  padding: 0 0 2px;
-}
-
-.echorouk-homepage-mockup .podcast-section-head {
-  display: flex;
-  justify-content: flex-end;
-  margin: 4px 0 8px;
-}
-
-.echorouk-homepage-mockup .podcast-section-title {
-  margin: 0;
-  font-size: 32px;
-  font-weight: 500;
-  color: #111b26;
-}
-
-.echorouk-homepage-mockup .podcast-grid {
-  display: grid;
-  direction: rtl;
-  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.45fr) minmax(0, 1fr);
-  gap: 14px;
-  align-items: start;
-}
-
-.echorouk-homepage-mockup .podcast-grid>* {
-  direction: rtl;
-  min-width: 0;
-}
-
-.echorouk-homepage-mockup .podcast-feature {
-  order: 1;
-}
-
-.echorouk-homepage-mockup .podcast-center {
-  order: 2;
-  border-inline-start: 1px solid rgba(166, 187, 205, .45);
-  padding-inline-start: 14px;
-}
-
-.echorouk-homepage-mockup .podcast-follow-card {
-  order: 3;
-  border-inline-start: 1px solid rgba(166, 187, 205, .45);
-  padding-inline-start: 24px;
-}
-
-.echorouk-homepage-mockup .podcast-follow-card {
-  position: relative;
-  background: #3d698f;
-  border: 1px solid #6f95b4;
-  border-radius: 6px;
-  padding: 16px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  height: 260px;
-  overflow: hidden;
-}
-
-.echorouk-homepage-mockup .podcast-follow-card::after {
-  content: "\F4DB";
-  font-family: "bootstrap-icons";
-  position: absolute;
-  inset-inline-start: 50%;
-  inset-block-end: 18px;
-  transform: translateX(-50%);
-  font-size: 140px;
-  line-height: 1;
-  color: rgba(137, 177, 208, .28);
-  pointer-events: none;
-}
-
-.echorouk-homepage-mockup .podcast-follow-title {
-  margin: 0;
-  color: #e6f0f8;
-  font-size: 20px;
-  line-height: 1.4;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.echorouk-homepage-mockup .podcast-follow-platforms {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-  position: relative;
-  z-index: 1;
-}
-
-.echorouk-homepage-mockup .podcast-follow-platforms a {
-  color: #d9e8f6;
-  font-size: 22px;
-  line-height: 1;
-}
-
-.echorouk-homepage-mockup .podcast-follow-more {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 150px;
-  min-height: 38px;
-  border-radius: 10px;
-  background: #f3f6f8;
-  color: #355e86;
-  font-size: 18px;
-  line-height: 1.1;
-  text-decoration: none;
-  padding: 0 0 0 12px;
-  position: relative;
-  z-index: 1;
-}
-
-.echorouk-homepage-mockup .podcast-follow-more span {
-  width: 40px;
-  align-self: stretch;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #cfb669;
-  color: #fff;
-  font-size: 18px;
-  border-radius: 0 10px 10px 0;
-}
-
-.echorouk-homepage-mockup .podcast-center {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
-  gap: 10px;
-  height: 260px;
-}
-
-.echorouk-homepage-mockup .podcast-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.echorouk-homepage-mockup .podcast-list-item {
-  border-bottom: 1px solid rgba(166, 187, 205, .4);
-  padding: 0 0 7px;
-}
-
-.echorouk-homepage-mockup .podcast-list-item:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
-.echorouk-homepage-mockup .podcast-list-item time {
-  display: block;
-  color: #94a8bc;
-  font-size: 13px;
-  line-height: 1.2;
-  margin-bottom: 4px;
-}
-
-.echorouk-homepage-mockup .podcast-list-item h3 {
-  margin: 0;
-  color: #10202f;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.echorouk-homepage-mockup .podcast-stack {
-  display: grid;
-  grid-template-rows: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.echorouk-homepage-mockup .podcast-stack-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-.echorouk-homepage-mockup .podcast-stack-item img {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  object-fit: cover;
-}
-
-.echorouk-homepage-mockup .podcast-icon {
-  position: absolute;
-  inset-inline-end: 12px;
-  inset-block-end: 10px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  background: rgba(12, 26, 39, .32);
-  font-size: 21px;
-}
-
-.echorouk-homepage-mockup .podcast-feature {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  min-height: 0;
-  height: 260px;
-  aspect-ratio: auto;
-}
-
-.echorouk-homepage-mockup .podcast-feature>img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.echorouk-homepage-mockup .podcast-feature .podcast-icon {
-  inset-inline-end: 16px;
-  inset-block-end: 14px;
-}
-
-.echorouk-homepage-mockup .podcast-feature-body {
-  position: absolute;
-  inset-inline-start: 18px;
-  inset-inline-end: 74px;
-  inset-block-end: 10px;
-  background: rgba(238, 246, 251, .95);
-  padding: 8px 12px;
-  border-radius: 6px;
-}
-
-.echorouk-homepage-mockup .podcast-feature-body time {
-  display: block;
-  color: #9bb0c3;
-  font-size: 14px;
-  margin-bottom: 4px;
-  line-height: 1.2;
-}
-
-.echorouk-homepage-mockup .podcast-feature-body h3 {
-  margin: 0;
-  color: #102130;
-  font-size: 24px;
-  line-height: 1.35;
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (max-width: 1199px) {
-  .echorouk-homepage-mockup .podcast-section-title {
-    font-size: 34px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-title {
-    font-size: 21px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item time {
-    font-size: 14px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item h3 {
-    font-size: 16px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body time {
-    font-size: 16px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body h3 {
-    font-size: 27px;
-  }
 }
 
 .echorouk-homepage-mockup .grid-border {
@@ -2176,9 +1714,9 @@ body.is-rtl .single-article__body {
   position: relative;
   padding: .2rem 4.5rem .5rem 0;
   border-bottom: 0;
-  font-size: 22px;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.55;
   text-align: right;
   flex: 1 1 auto;
 }
@@ -2406,16 +1944,14 @@ body.is-rtl .single-article__body {
 
 .echorouk-homepage-mockup .hero-meta-line {
   color: #9cafc0;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 13px;
   text-align: right;
   margin-bottom: 10px;
 }
 
 .echorouk-homepage-mockup .hero-lead-text-box .summary {
   color: #1d2a37;
-  font-size: 20px;
-  font-weight: normal;
+  font-size: 15px;
   line-height: 1.75;
 }
 
@@ -2474,9 +2010,7 @@ body.is-rtl .single-article__body {
 .echorouk-homepage-mockup .hero-latest-feature h3 {
   margin: 0;
   color: #1a2935;
-  font-size: 20px;
-  font-weight: normal;
-  letter-spacing: 0;
+  font-size: 17px;
   line-height: 1.55;
 }
 
@@ -2498,8 +2032,7 @@ body.is-rtl .single-article__body {
 
 .echorouk-homepage-mockup .hero-latest-item h4 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 13px;
   color: #1f2e3b;
   line-height: 1.55;
 }
@@ -2564,13 +2097,12 @@ body.is-rtl .single-article__body {
 .echorouk-homepage-mockup .world-mini-date {
   margin-top: 8px;
   color: #9caabb;
-  font-size: 16px;
+  font-size: 13px;
 }
 
 .echorouk-homepage-mockup .world-mini-card h3 {
   margin: 8px 0 0;
-  font-size: 20px;
-  font-weight: normal;
+  font-size: 14px;
   line-height: 1.5;
   color: #1e2c3a;
 }
@@ -2623,8 +2155,7 @@ body.is-rtl .single-article__body {
 .echorouk-homepage-mockup .world-feature-body h3 {
   margin: 0 0 12px;
   color: #fff;
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 20px;
   line-height: 1.45;
 }
 
@@ -2643,7 +2174,7 @@ body.is-rtl .single-article__body {
 .echorouk-homepage-mockup .video-showcase-grid {
   display: grid;
   direction: ltr;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  grid-template-columns: 220px minmax(0, 1fr);
   gap: 14px;
   align-items: stretch;
 }
@@ -2651,12 +2182,6 @@ body.is-rtl .single-article__body {
 .echorouk-homepage-mockup .video-showcase-side,
 .echorouk-homepage-mockup .video-showcase-main {
   direction: rtl;
-}
-
-.echorouk-homepage-mockup .video-showcase-grid>[class*="col-"] {
-  width: 100%;
-  max-width: 100%;
-  padding: 0;
 }
 
 .echorouk-homepage-mockup .video-showcase-side {
@@ -2692,7 +2217,7 @@ body.is-rtl .single-article__body {
 
 .echorouk-homepage-mockup .video-side-arrow {
   color: #596d80;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1;
 }
 
@@ -3076,93 +2601,12 @@ body.is-rtl .single-article__body {
   text-decoration: none;
 }
 
-.echorouk-homepage-mockup .economy-main-grid {
-  direction: ltr;
-}
-
-.echorouk-homepage-mockup .economy-main-grid>[class*="col-"] {
-  direction: rtl;
-}
-
-.echorouk-homepage-mockup .economy-main-media img {
-  width: 100%;
-  height: 100%;
-  min-height: 250px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.echorouk-homepage-mockup .economy-sub-grid>[class*="col-"] {
-  width: 100%;
-  max-width: 100%;
-}
-
 @media (min-width: 992px) {
   .echorouk-homepage-mockup .world-spotlight-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 1.45fr 1fr;
     gap: 14px;
     align-items: stretch;
-  }
-
-  .echorouk-homepage-mockup .video-showcase-main {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    grid-template-areas:
-      "header header"
-      "feature side";
-    column-gap: 16px;
-    align-content: start;
-  }
-
-  .echorouk-homepage-mockup .video-main-header {
-    grid-area: header;
-  }
-
-  .echorouk-homepage-mockup .video-main-feature {
-    grid-area: feature;
-  }
-
-  .echorouk-homepage-mockup .video-main-bottom {
-    grid-area: side;
-    margin-top: 16px;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    align-content: start;
-  }
-
-  .echorouk-homepage-mockup .video-bottom-card h4 {
-    font-size: 18px;
-    line-height: 1.4;
-  }
-
-  .echorouk-homepage-mockup .economy-main-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 16px;
-    align-items: center;
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .echorouk-homepage-mockup .economy-main-grid>[class*="col-"] {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid>[class*="col-"] {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
   }
 }
 
@@ -3273,10 +2717,6 @@ body.is-rtl .single-article__body {
     height: 180px;
   }
 
-  .echorouk-homepage-mockup .economy-main-media img {
-    min-height: 210px;
-  }
-
   .echorouk-homepage-mockup .video-showcase-grid {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -3284,7 +2724,6 @@ body.is-rtl .single-article__body {
   }
 
   .echorouk-homepage-mockup .video-showcase-main {
-    display: block;
     padding: 0 10px 12px;
   }
 
@@ -3360,20 +2799,6 @@ body.is-rtl .single-article__body {
 
   .echorouk-homepage-mockup .video-side-item h5 {
     font-size: 15px;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid>[class*="col-"] {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
   }
 
   .echorouk-homepage-mockup .daily-boxes-grid {
@@ -3457,94 +2882,6 @@ body.is-rtl .single-article__body {
     border-width: 2px;
     border-radius: 10px;
   }
-
-  .echorouk-homepage-mockup .podcast-section {
-    padding-bottom: 10px;
-  }
-
-  .echorouk-homepage-mockup .podcast-section-title {
-    font-size: 28px;
-  }
-
-  .echorouk-homepage-mockup .podcast-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .echorouk-homepage-mockup .podcast-center,
-  .echorouk-homepage-mockup .podcast-follow-card {
-    border-inline-start: 0;
-    padding-inline-start: 0;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-card,
-  .echorouk-homepage-mockup .podcast-feature {
-    min-height: 0;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-card {
-    padding: 16px 14px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-title {
-    font-size: 20px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-platforms a {
-    font-size: 24px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-more {
-    width: 160px;
-    min-height: 42px;
-    font-size: 18px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-more span {
-    width: 44px;
-    font-size: 20px;
-  }
-
-  .echorouk-homepage-mockup .podcast-center {
-    grid-template-columns: 1fr;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item time {
-    font-size: 20px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item h3 {
-    font-size: 24px;
-  }
-
-  .echorouk-homepage-mockup .podcast-stack {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: none;
-  }
-
-  .echorouk-homepage-mockup .podcast-stack-item img {
-    min-height: 98px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature>img {
-    min-height: 220px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body {
-    inset-inline-start: 10px;
-    inset-inline-end: 58px;
-    inset-block-end: 10px;
-    padding: 8px 10px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body time {
-    font-size: 18px;
-    margin-bottom: 4px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body h3 {
-    font-size: 22px;
-  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -3558,10 +2895,6 @@ body.is-rtl .single-article__body {
     font-size: 42px;
   }
 
-  .echorouk-homepage-mockup .video-showcase-main {
-    display: block;
-  }
-
   .echorouk-homepage-mockup .video-main-kicker {
     font-size: 18px;
   }
@@ -3572,73 +2905,6 @@ body.is-rtl .single-article__body {
 
   .echorouk-homepage-mockup .video-main-overlay h3 {
     font-size: 30px;
-  }
-
-  .echorouk-homepage-mockup .podcast-section-title {
-    font-size: 31px;
-  }
-
-  .echorouk-homepage-mockup .podcast-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .echorouk-homepage-mockup .podcast-center,
-  .echorouk-homepage-mockup .podcast-follow-card {
-    border-inline-start: 0;
-    padding-inline-start: 0;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-card {
-    min-height: 0;
-    padding: 20px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-title {
-    font-size: 23px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-more {
-    width: 170px;
-    font-size: 19px;
-  }
-
-  .echorouk-homepage-mockup .podcast-center {
-    grid-template-columns: minmax(0, 1fr) 230px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item time {
-    font-size: 22px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item h3 {
-    font-size: 27px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature {
-    min-height: 330px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body time {
-    font-size: 24px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body h3 {
-    font-size: 29px;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-right: 0;
-    margin-left: 0;
-  }
-
-  .echorouk-homepage-mockup .economy-sub-grid>[class*="col-"] {
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
   }
 
   .echorouk-homepage-mockup .video-bottom-card h4 {
@@ -3696,191 +2962,5 @@ body.is-rtl .single-article__body {
 
   .echorouk-homepage-mockup .daily-print-downloads {
     font-size: 24px;
-  }
-}
-
-@media (min-width: 992px) {
-  .echorouk-homepage-mockup .podcast-section {
-    padding-bottom: 0;
-  }
-
-  .echorouk-homepage-mockup .podcast-section-head {
-    margin: 2px 0 8px;
-  }
-
-  .echorouk-homepage-mockup .podcast-section-title {
-    font-size: 30px;
-    line-height: 1.1;
-  }
-
-  .echorouk-homepage-mockup .podcast-grid {
-    direction: ltr;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.8fr);
-    gap: 12px;
-    align-items: stretch;
-    height: 240px;
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-card {
-    grid-column: 1;
-    order: initial;
-    height: 240px !important;
-    min-height: 0 !important;
-    padding: 14px 16px !important;
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-center {
-    grid-column: 2;
-    order: initial;
-    height: 240px !important;
-    min-height: 0 !important;
-    display: block;
-    gap: 8px;
-    padding-inline: 12px;
-    border-inline: 1px solid rgba(166, 187, 205, .45);
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature {
-    grid-column: 3;
-    order: initial;
-    height: 240px !important;
-    min-height: 0 !important;
-    aspect-ratio: auto !important;
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-list {
-    display: grid;
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    gap: 10px;
-    min-height: 0;
-    padding: 0 0 8px;
-    overflow: hidden;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-thumb {
-    position: relative;
-    flex: 0 0 112px;
-    min-width: 0;
-    overflow: hidden;
-    border-radius: 6px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-thumb img {
-    display: block;
-    width: 100%;
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: 100%;
-    object-fit: cover;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-copy {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item time {
-    font-size: 12px;
-    margin-bottom: 3px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item h3 {
-    font-size: 14px;
-    line-height: 1.45;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body {
-    inset-inline-start: 14px;
-    inset-inline-end: 58px;
-    inset-block-end: 10px;
-    padding: 8px 10px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body time {
-    font-size: 13px;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature-body h3 {
-    font-size: 22px;
-    line-height: 1.3;
-  }
-
-  .echorouk-homepage-mockup .podcast-icon {
-    width: 34px;
-    height: 34px;
-    font-size: 17px;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-more {
-    width: 158px;
-    min-height: 40px;
-    padding: 0;
-    overflow: hidden;
-    border: 1px solid rgba(53, 94, 134, .18);
-    border-radius: 7px;
-    background: #f7f9fb;
-    color: #355e86;
-    font-size: 17px;
-    font-weight: 600;
-    box-shadow: 0 1px 0 rgba(13, 35, 54, .08);
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-more span {
-    order: -1;
-    width: 44px;
-    border-radius: 0;
-    background: #cfb669;
-  }
-}
-
-@media (max-width: 991px) {
-  .echorouk-homepage-mockup .podcast-grid {
-    height: auto;
-  }
-
-  .echorouk-homepage-mockup .podcast-follow-card,
-  .echorouk-homepage-mockup .podcast-center,
-  .echorouk-homepage-mockup .podcast-feature {
-    height: auto !important;
-  }
-
-  .echorouk-homepage-mockup .podcast-feature>img {
-    min-height: 180px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-item {
-    display: flex;
-    gap: 10px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-thumb {
-    position: relative;
-    flex: 0 0 110px;
-    overflow: hidden;
-    border-radius: 6px;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-thumb img {
-    width: 100%;
-    height: 78px;
-    object-fit: cover;
-  }
-
-  .echorouk-homepage-mockup .podcast-list-copy {
-    min-width: 0;
   }
 }

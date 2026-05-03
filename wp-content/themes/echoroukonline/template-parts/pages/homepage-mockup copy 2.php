@@ -55,60 +55,43 @@ if ($hero_main) {
     <div class="container-xl echorouk-homepage-wrap py-4">
         <section class="hero grid-border">
             <div class="row g-4 align-items-stretch hero-layout">
-                <aside class="col-lg-3 order-3 order-lg-3 hero-col-right">
-                    <div class="hero-latest-panel hero-col-card">
-                        <?php if (! empty($hero_right)) : ?>
-                            <?php $feature = $hero_right[0]; ?>
-                            <article class="hero-latest-feature">
-                                <a
-                                    href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
-                                <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?>
-                                </div>
-                                <h3><a
-                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
-                                </h3>
-                            </article>
-
-                            <?php foreach (array_slice($hero_right, 1, 2) as $hero_side_post) : ?>
-                                <article class="hero-latest-item">
-                                    <a
-                                        href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
-                                    <div>
-                                        <h4><a
-                                                href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
-                                        </h4>
-                                    </div>
-                                </article>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <article class="hero-latest-feature">
-                                <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=600&q=80"
-                                    alt="latest big" loading="lazy" decoding="async">
-                                <div class="hero-latest-date">2026/04/01</div>
-                                <h3>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h3>
-                            </article>
-
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 1" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ديربي مصر</h4>
-                                </div>
-                            </article>
-
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 2" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>مواجهة قوية مرتقبة بين كندا وصربيا والصينية تشينغ تشيوان</h4>
-                                </div>
-                            </article>
-                        <?php endif; ?>
+                <aside class="col-lg-3 order-2 order-lg-1 hero-col hero-col-left">
+                    <div class="hero-live hero-col-card">
+                        <div class="hero-live-title"><span>تغطية
+                                حية</span><img
+                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/arrow-left-01-stroke-rounded.svg"></img>
+                        </div>
+                        <ul class="hero-live-timeline">
+                            <?php if (! empty($ticker_posts)) : ?>
+                                <?php foreach ($ticker_posts as $ticker_post) : ?>
+                                    <li><time class="hero-live-time"
+                                            datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time><span><a
+                                                href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <li><time class="hero-live-time" datetime="2026-05-01T14:30:00+03:00">الآن</time><span>سعيود
+                                        يعرض مشروع قانون الانتخابات أمام مجلس الأمة</span></li>
+                                <li><time class="hero-live-time"
+                                        datetime="2026-05-01T13:22:00+03:00">13:22</time><span>فالڤيردي: توقعت طردي من ريال
+                                        مدريد بسبب لوكا زيدان (فيديو)</span></li>
+                                <li><time class="hero-live-time"
+                                        datetime="2026-05-01T11:15:00+03:00">11:15</time><span>زوجته تعامله بشكل سيئ.. ترامب
+                                        يسخر من ماكرون مجددا!</span></li>
+                                <li><time class="hero-live-time"
+                                        datetime="2026-05-01T10:45:00+03:00">10:45</time><span>ميناء وهران.. رسو باخرة ثالثة
+                                        محملة بـ 7 آلاف رأس غنم مستورد</span></li>
+                                <li><time class="hero-live-time" datetime="2026-05-01T09:22:00+03:00">09:22</time><span>فيفا
+                                        يرفع أسعار تذاكر نهائي كأس العالم 2026</span></li>
+                                <li><time class="hero-live-time"
+                                        datetime="2026-05-01T09:12:00+03:00">09:12</time><span>مرشحة محتملة للرئاسة
+                                        الأمريكية تتعهد بمراجعة السياسة الخارجية</span></li>
+                            <?php endif; ?>
+                        </ul>
                     </div>
                 </aside>
 
-
-                <section class="col-lg-5 order-1 order-lg-2 hero-col-center">
+                <section class="col-lg-6 order-1 order-lg-2 hero-col hero-col-center">
                     <article class="hero-lead hero-col-card">
                         <div class="hero-lead-media position-relative">
                             <?php if ($hero_main) : ?>
@@ -169,42 +152,58 @@ if ($hero_main) {
                         </div>
                     </article>
                 </section>
-                <aside class="col-lg-4 order-2 order-lg-1 hero-col-left">
-                    <div class="hero-live hero-col-card">
-                        <div class="hero-live-title"><span>تغطية
-                                حية</span><img
-                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/arrow-left-01-stroke-rounded.svg"></img>
-                        </div>
-                        <ul class="hero-live-timeline">
-                            <?php if (! empty($ticker_posts)) : ?>
-                                <?php foreach ($ticker_posts as $ticker_post) : ?>
-                                    <li><time class="hero-live-time"
-                                            datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time><span><a
-                                                href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <li><time class="hero-live-time" datetime="2026-05-01T14:30:00+03:00">الآن</time><span>سعيود
-                                        يعرض مشروع قانون الانتخابات أمام مجلس الأمة</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T13:22:00+03:00">13:22</time><span>فالڤيردي: توقعت طردي من ريال
-                                        مدريد بسبب لوكا زيدان (فيديو)</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T11:15:00+03:00">11:15</time><span>زوجته تعامله بشكل سيئ.. ترامب
-                                        يسخر من ماكرون مجددا!</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T10:45:00+03:00">10:45</time><span>ميناء وهران.. رسو باخرة ثالثة
-                                        محملة بـ 7 آلاف رأس غنم مستورد</span></li>
-                                <li><time class="hero-live-time" datetime="2026-05-01T09:22:00+03:00">09:22</time><span>فيفا
-                                        يرفع أسعار تذاكر نهائي كأس العالم 2026</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T09:12:00+03:00">09:12</time><span>مرشحة محتملة للرئاسة
-                                        الأمريكية تتعهد بمراجعة السياسة الخارجية</span></li>
-                            <?php endif; ?>
-                        </ul>
+
+                <aside class="col-lg-3 order-3 order-lg-3 hero-col hero-col-right">
+                    <div class="hero-latest-panel hero-col-card">
+                        <?php if (! empty($hero_right)) : ?>
+                            <?php $feature = $hero_right[0]; ?>
+                            <article class="hero-latest-feature">
+                                <a
+                                    href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
+                                <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?>
+                                </div>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
+                                </h3>
+                            </article>
+
+                            <?php foreach (array_slice($hero_right, 1, 2) as $hero_side_post) : ?>
+                                <article class="hero-latest-item">
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
+                                    <div>
+                                        <h4><a
+                                                href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
+                                        </h4>
+                                    </div>
+                                </article>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <article class="hero-latest-feature">
+                                <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=600&q=80"
+                                    alt="latest big" loading="lazy" decoding="async">
+                                <div class="hero-latest-date">2026/04/01</div>
+                                <h3>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h3>
+                            </article>
+
+                            <article class="hero-latest-item">
+                                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=220&q=80"
+                                    alt="latest small 1" loading="lazy" decoding="async">
+                                <div>
+                                    <h4>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ديربي مصر</h4>
+                                </div>
+                            </article>
+
+                            <article class="hero-latest-item">
+                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=220&q=80"
+                                    alt="latest small 2" loading="lazy" decoding="async">
+                                <div>
+                                    <h4>مواجهة قوية مرتقبة بين كندا وصربيا والصينية تشينغ تشيوان</h4>
+                                </div>
+                            </article>
+                        <?php endif; ?>
                     </div>
                 </aside>
-
             </div>
         </section>
 
@@ -275,7 +274,7 @@ if ($hero_main) {
 
         <section class="video-showcase grid-border">
             <div class="video-showcase-grid">
-                <aside class="col-lg-3 video-showcase-side">
+                <aside class="video-showcase-side">
                     <div class="video-side-ad">إعلان<br>300/250</div>
 
                     <div class="video-side-most">
@@ -317,7 +316,7 @@ if ($hero_main) {
                     </div>
                 </aside>
 
-                <section class="col-lg-9 video-showcase-main">
+                <section class="video-showcase-main">
                     <header class="video-main-header">
                         <div class="video-main-logo-wrap">
                             <div class="video-main-kicker">فيديوهات</div>
@@ -539,19 +538,19 @@ if ($hero_main) {
             </div>
         </section>
 
-        <section class="grid-border economy-section">
+        <section class="grid-border">
             <h5 class="section-title"><span>اقتصاد</span></h5>
-            <div class="row g-4 align-items-center economy-main-grid">
+            <div class="row g-4 align-items-center">
                 <div class="col-lg-4">
                     <h2 class="h5 headline">توقعات بنمو قطاعات حيوية خلال العام الحالي</h2>
                     <p class="summary">خبراء يؤكدون أن إجراءات الإصلاح ودعم الاستثمار تساهم في تحريك النشاط الاقتصادي.
                     </p>
                 </div>
-                <div class="col-lg-8 economy-main-media"><img
+                <div class="col-lg-8"><img
                         src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=80"
                         class="img-fluid" alt="economy" loading="lazy" decoding="async"></div>
             </div>
-            <div class="row g-3 mt-2 economy-sub-grid">
+            <div class="row g-3 mt-2">
                 <div class="col-6 col-md-3">
                     <article class="news-card"><img
                             src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=80"
@@ -583,155 +582,41 @@ if ($hero_main) {
             </div>
         </section>
 
-        <section class="blue-panel mb-5 opinion-panel">
+        <section class="blue-panel mb-5">
             <h5 class="section-title"><span>مقالات الرأي</span></h5>
-            <?php
-            $opinion_samples = array(
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1547981609-4b6bf67db7fc?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'لعلى بشطولة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'الإمبراطورية التي تصرخ.. تظهر وتسير على أجنحة الفراغ',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'رياض رمضان بن وادن',
-                    'author_img'  => 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'العنف الخفي في خطاب الذات!!',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'حسين لقرع',
-                    'author_img'  => 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'حملة حطّ اسمها الإمارات',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'محمد سليم قلالة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'بعض ما علمتنا الحرب على إيران',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1547981609-4b6bf67db7fc?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'لعلى بشطولة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'مآلات السردية الكبرى في زمن ما بعد اليقين',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'رياض رمضان بن وادن',
-                    'author_img'  => 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'قراءة ثانية في خطاب الأزمة ومجازاتها',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'حسين لقرع',
-                    'author_img'  => 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'الإقليم بين صخب الدعاية وهدوء الوقائع',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'محمد سليم قلالة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'إيران والخرائط الجديدة لموازين القوى',
-                ),
-            );
-            ?>
-            <div class="row g-0 opinion-grid">
-                <?php foreach ($opinion_samples as $sample) : ?>
-                    <div class="col-lg-3 col-md-6">
-                        <article class="opinion-card">
-                            <img class="opinion-card-thumb" src="<?php echo esc_url($sample['thumb']); ?>"
-                                alt="<?php echo esc_attr($sample['author_name']); ?>" loading="lazy" decoding="async">
-                            <div class="opinion-card-meta">
-                                <div class="opinion-card-author">
-                                    <span
-                                        class="opinion-card-author-name"><?php echo esc_html($sample['author_name']); ?></span>
-                                    <img class="avatar" src="<?php echo esc_url($sample['author_img']); ?>"
-                                        alt="<?php echo esc_attr($sample['author_name']); ?>" loading="lazy"
-                                        decoding="async">
-                                </div>
-                                <div class="opinion-card-date"><?php echo esc_html($sample['date']); ?></div>
-                            </div>
-                            <h3 class="opinion-card-title"><?php echo esc_html($sample['title']); ?></h3>
-                        </article>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="opinion-card"><img class="avatar mb-2"
+                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80"
+                            alt="author" loading="lazy" decoding="async">
+                        <h3 class="small-headline">مستقبل الإعلام الرقمي</h3>
+                        <p class="summary text-white-50 mb-0">بقلم كاتب</p>
                     </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
-
-        <section class="podcast-section mb-5">
-            <header class="podcast-section-head">
-                <h5 class="podcast-section-title">بودكاست</h5>
-            </header>
-            <div class="podcast-grid">
-                <aside class="podcast-follow-card">
-                    <p class="podcast-follow-title">تابع بودكاست الشروق على منصاتنا المختلفة</p>
-                    <div class="podcast-follow-platforms" aria-label="منصات البودكاست">
-                        <a href="#" aria-label="Apple Podcast"><i class="bi bi-music-note-beamed"></i></a>
-                        <a href="#" aria-label="Podcast"><i class="bi bi-broadcast-pin"></i></a>
-                        <a href="#" aria-label="SoundCloud"><i class="bi bi-soundwave"></i></a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="opinion-card"><img class="avatar mb-2"
+                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80"
+                            alt="author" loading="lazy" decoding="async">
+                        <h3 class="small-headline">قراءة في المشهد الدولي</h3>
+                        <p class="summary text-white-50 mb-0">بقلم كاتب</p>
                     </div>
-                    <a href="#" class="podcast-follow-more">المزيد <span><i class="bi bi-broadcast-pin"></i></span></a>
-                </aside>
-
-                <section class="podcast-center">
-                    <div class="podcast-list">
-                        <article class="podcast-list-item">
-                            <a href="#" class="podcast-list-thumb">
-                                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=80"
-                                    alt="podcast guest" loading="lazy" decoding="async">
-                                <span class="podcast-icon"><i class="bi bi-broadcast-pin"></i></span>
-                            </a>
-                            <div class="podcast-list-copy">
-                                <time datetime="2026-06-16">16/06/2026</time>
-                                <h3><a href="#">4 مشاريع عملية تخص تخزين المنتجات التجارية ومراقبتها</a></h3>
-                            </div>
-                        </article>
-                        <article class="podcast-list-item">
-                            <a href="#" class="podcast-list-thumb">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=700&q=80"
-                                    alt="podcast guest" loading="lazy" decoding="async">
-                                <span class="podcast-icon"><i class="bi bi-broadcast-pin"></i></span>
-                            </a>
-                            <div class="podcast-list-copy">
-                                <time datetime="2026-06-16">16/06/2026</time>
-                                <h3><a href="#">الأمين التنفيذي لمنظمة أمريكا اللاتينية للطاقة في زيارة عمل إلى
-                                        الجزائر</a></h3>
-                            </div>
-                        </article>
-                        <article class="podcast-list-item">
-                            <a href="#" class="podcast-list-thumb">
-                                <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=700&q=80"
-                                    alt="podcast guest" loading="lazy" decoding="async">
-                                <span class="podcast-icon"><i class="bi bi-broadcast-pin"></i></span>
-                            </a>
-                            <div class="podcast-list-copy">
-                                <time datetime="2026-06-16">16/06/2026</time>
-                                <h3><a href="#">الصيد الجائر والتهريب ينذران بزوال ثروات طبيعية نادرة في الجزائر</a>
-                                </h3>
-                            </div>
-                        </article>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="opinion-card"><img class="avatar mb-2"
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
+                            alt="author" loading="lazy" decoding="async">
+                        <h3 class="small-headline">الاقتصاد بين الفرص والتحديات</h3>
+                        <p class="summary text-white-50 mb-0">بقلم كاتب</p>
                     </div>
-                </section>
-
-                <article class="podcast-feature">
-                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
-                        alt="podcast feature" loading="lazy" decoding="async">
-                    <span class="podcast-icon"><i class="bi bi-broadcast-pin"></i></span>
-                    <div class="podcast-feature-body">
-                        <time datetime="2026-06-16">16/06/2026</time>
-                        <h3><a href="#">هكذا يتم تسديد رسوم المرقّي العقاري وضريبة السكن</a></h3>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="opinion-card"><img class="avatar mb-2"
+                            src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=100&q=80"
+                            alt="author" loading="lazy" decoding="async">
+                        <h3 class="small-headline">أولويات المرحلة المقبلة</h3>
+                        <p class="summary text-white-50 mb-0">بقلم كاتب</p>
                     </div>
-                </article>
+                </div>
             </div>
         </section>
 
