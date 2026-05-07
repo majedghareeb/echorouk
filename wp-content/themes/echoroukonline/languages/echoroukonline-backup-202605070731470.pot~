@@ -1,14 +1,14 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-07 07:32+0000\n"
-"Last-Translator: \n"
-"Language-Team: Arabic\n"
-"Language: ar\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100 >= 3 "
-"&& n%100<=10 ? 3 : n%100 >= 11 && n%100<=99 ? 4 : 5;\n"
+"POT-Creation-Date: 2026-05-07 07:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,550 +20,534 @@ msgstr ""
 #: header.php:32
 #, php-format
 msgid "%1$s - %2$s"
-msgstr "%1$s - %2$s"
+msgstr ""
 
-#: inc/template-tags.php:30 template-parts/content/single-article.php:97
+#: inc/template-tags.php:30 template-parts/content/single-article.php:93
 msgid "%d min read"
 msgid_plural "%d min read"
-msgstr[0] " %d د للقراءة"
-msgstr[1] "قراءة دقيقة %d"
-msgstr[2] "قراءة دقيقة %d"
-msgstr[3] "قراءة دقيقة %d"
-msgstr[4] "قراءة دقيقة %d"
-msgstr[5] "قراءة دقيقة %d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: inc/cpts.php:75
 #, php-format
 msgid "Add New %s"
-msgstr "أضف جديد %s"
+msgstr ""
 
 #: inc/widgets.php:24
 msgid "Add news widgets or block content here."
-msgstr "أضف أدوات الأخبار أو احجب المحتوى هنا."
+msgstr ""
 
 #: inc/redux.php:123
 msgid "Ads"
-msgstr "إعلانات"
+msgstr ""
 
 #: footer.php:111
 msgid "Advertising"
-msgstr "دعاية"
+msgstr ""
 
 #: inc/meta.php:12
 msgid "AI summary"
-msgstr "المخلص"
+msgstr ""
 
 #: inc/redux.php:87
 msgid "Article"
-msgstr "شرط"
+msgstr ""
 
 #: inc/meta.php:50
 msgid "Article fields"
-msgstr "حقول المقالة"
+msgstr ""
 
 #: inc/redux.php:128
 msgid "Article middle ad"
-msgstr "إعلان منتصف المقال"
+msgstr ""
 
 #: inc/widgets.php:13
 msgid "Article Sidebar"
-msgstr "الشريط الجانبي للمقال"
+msgstr ""
 
 #: inc/redux.php:127
 msgid "Article top ad"
-msgstr "إعلان مميز للمقال"
+msgstr ""
 
 #: inc/cpts.php:23 inc/cpts.php:24
 #: template-parts/components/audio-player.php:17
 msgid "Audio"
-msgstr "صوتي"
+msgstr ""
 
 #: template-parts/components/breadcrumbs.php:15
 msgid "Breadcrumbs"
-msgstr "فتات الخبز"
+msgstr ""
 
-#: template-parts/components/breaking-news.php:44
-msgid "Breaking"
-msgstr "عاجل"
-
-#: inc/meta.php:22 template-parts/components/breaking-news.php:42
+#: inc/meta.php:22 template-parts/components/breaking-news.php:41
 msgid "Breaking news"
-msgstr "أخبار عاجلة"
+msgstr ""
 
 #: inc/widgets.php:83
 msgid "Category ID"
-msgstr "معرف الفئة"
+msgstr ""
 
 #: inc/widgets.php:144
 msgid "Category news"
-msgstr "أخبار الفئة"
+msgstr ""
 
 #: inc/redux.php:198
 msgid "Centered"
-msgstr "متمركز"
+msgstr ""
 
 #: inc/redux.php:205
 msgid "Columns"
-msgstr "الأعمدة"
+msgstr ""
 
 #: comments.php:19
 #, php-format
 msgctxt "comments title"
 msgid "One comment"
 msgid_plural "%1$s comments"
-msgstr[0] "تعليق واحد"
-msgstr[1] "تعليقات %1$s"
-msgstr[2] "تعليقات %1$s"
-msgstr[3] "تعليقات %1$s"
-msgstr[4] "تعليقات %1$s"
-msgstr[5] "تعليقات %1$s"
+msgstr[0] ""
+msgstr[1] ""
 
 #: inc/redux.php:199 inc/redux.php:206
 msgid "Compact"
-msgstr "صغير الحجم"
+msgstr ""
 
 #: footer.php:87
 msgid "Contact us"
-msgstr "اتصل بنا"
+msgstr ""
 
 #: inc/redux.php:56
 msgid "Container width"
-msgstr "عرض الحاوية"
+msgstr ""
 
 #: footer.php:140
 msgid "Copyright is reserved"
-msgstr "جميع الحقوق محفوظة"
+msgstr ""
 
 #: inc/widgets.php:87
 msgid "Count"
-msgstr "عدد"
+msgstr ""
 
 #: inc/redux.php:41
 msgid "Dark logo"
-msgstr "شعار داكن"
+msgstr ""
 
 #: inc/redux.php:197
 msgid "Default"
-msgstr "تقصير"
+msgstr ""
 
 #: inc/redux.php:43
 msgid "Default post image"
-msgstr "صورة المنشور الافتراضية"
+msgstr ""
 
 #: inc/redux.php:115
 msgid "Disable block library CSS when not needed"
-msgstr "قم بتعطيل CSS الخاص بمكتبة الكتل عند عدم الحاجة إليه."
+msgstr ""
 
 #: inc/redux.php:109
 msgid "Disable Bootstrap JS components not used"
-msgstr "تعطيل مكونات Bootstrap JS غير المستخدمة"
+msgstr ""
 
 #: inc/redux.php:97
 msgid "Disable comment box"
-msgstr "تعطيل مربع التعليقات"
+msgstr ""
 
 #: inc/redux.php:114
 msgid "Disable embeds"
-msgstr "تعطيل التضمينات"
+msgstr ""
 
 #: inc/redux.php:113
 msgid "Disable emojis"
-msgstr "تعطيل الرموز التعبيرية"
+msgstr ""
 
 #: inc/cpts.php:28 template-parts/components/pdf-block.php:17
 msgid "Document"
-msgstr "وثيقة"
+msgstr ""
 
 #: inc/cpts.php:29 template-parts/components/document-list.php:24
 msgid "Documents"
-msgstr "وثائق"
+msgstr ""
 
 #: template-parts/components/pdf-block.php:21
 msgid "Download PDF"
-msgstr "تنزيل ملف PDF"
+msgstr ""
 
 #: inc/widgets.php:39
 msgid "Echourouk News List"
-msgstr "قائمة أخبار الشروق"
+msgstr ""
 
 #. Name of the theme
 #. Author of the theme
 #: inc/redux.php:24
 msgid "Echourouk Online"
-msgstr "موقع إيشوروك الإلكتروني"
+msgstr ""
 
 #: inc/redux.php:26
 msgid "Echourouk Online Options"
-msgstr "خيارات التعليم عبر الإنترنت في الشروق"
+msgstr ""
 
 #: inc/redux.php:180
 msgid ""
 "Echourouk Online uses theme defaults now. Install and activate the Redux "
 "Framework plugin only if you need the Theme Options admin panel."
 msgstr ""
-"يستخدم موقع Echourouk Online الآن الإعدادات الافتراضية للقالب. قم بتثبيت "
-"وتفعيل إضافة Redux Framework فقط إذا كنت بحاجة إلى لوحة تحكم خيارات القالب."
 
 #: inc/cpts.php:76
 #, php-format
 msgid "Edit %s"
-msgstr "تعديل %s"
+msgstr ""
 
 #: inc/meta.php:20
 msgid "Editorial pick"
-msgstr "اختيار المحرر"
+msgstr ""
 
 #: template-parts/components/editorial-recommendations.php:27
 msgid "Editorial picks"
-msgstr "اختيارات المحررين"
+msgstr ""
 
 #: inc/redux.php:76
 msgid "Editorial recommendation section"
-msgstr "قسم التوصيات التحريرية"
+msgstr ""
 
 #: inc/widgets.php:143
 msgid "Editorial recommendations"
-msgstr "توصيات تحريرية"
+msgstr ""
 
 #: inc/redux.php:72
 msgid "Editorial team can choose the homepage lead story."
-msgstr "يمكن لفريق التحرير اختيار القصة الرئيسية للصفحة الرئيسية."
+msgstr ""
 
 #: inc/guest-authors.php:13
 msgid "Email"
-msgstr "بريد إلكتروني"
+msgstr ""
 
 #: template-parts/components/newsletter.php:14
 #: template-parts/components/newsletter.php:15
 msgid "Email address"
-msgstr "عنوان البريد الإلكتروني"
+msgstr ""
 
 #: inc/redux.php:60
 msgid "Enable breadcrumbs"
-msgstr "تفعيل مسارات التنقل"
+msgstr ""
 
 #: inc/redux.php:112
 msgid "Enable critical CSS placeholder"
-msgstr "تفعيل عناصر CSS النائبة الهامة"
+msgstr ""
 
 #: inc/redux.php:44
 msgid "Enable dark mode"
-msgstr "تفعيل الوضع المظلم"
+msgstr ""
 
 #: header.php:40
 msgid "enable notifications"
-msgstr "تفعيل الإشعارات"
+msgstr ""
 
 #: inc/redux.php:98
 msgid "Enable sticky ad/sidebar"
-msgstr "تفعيل الإعلانات الثابتة/الشريط الجانبي"
+msgstr ""
 
 #: inc/redux.php:45
 msgid "Enable sticky header"
-msgstr "تفعيل رأس الصفحة الثابت"
+msgstr ""
 
 #: inc/meta.php:82
 msgid "Enabled"
-msgstr "مُفعّل"
+msgstr ""
 
 #: inc/guest-authors.php:14 inc/redux.php:154
 #: template-parts/components/social-share.php:15
 msgid "Facebook"
-msgstr "فيسبوك"
+msgstr ""
 
 #: inc/redux.php:42
 msgid "Favicon"
-msgstr "أيقونة الموقع"
+msgstr ""
 
 #: inc/meta.php:21
 msgid "Featured priority"
-msgstr "أولوية مميزة"
+msgstr ""
 
 #: inc/redux.php:73
 msgid "Featured section"
-msgstr "القسم المميز"
+msgstr ""
 
 #: inc/redux.php:138
 msgid "Footer"
-msgstr "تذييل الصفحة"
+msgstr ""
 
 #: inc/redux.php:130
 msgid "Footer ad"
-msgstr "إعلان في أسفل الصفحة"
+msgstr ""
 
 #: inc/redux.php:141
 msgid "Footer address"
-msgstr "عنوان التذييل"
+msgstr ""
 
 #: inc/widgets.php:14
 msgid "Footer Column 1"
-msgstr "العمود السفلي 1"
+msgstr ""
 
 #: inc/widgets.php:15
 msgid "Footer Column 2"
-msgstr "العمود الثاني من التذييل"
+msgstr ""
 
 #: inc/widgets.php:16
 msgid "Footer Column 3"
-msgstr "العمود الثالث من التذييل"
+msgstr ""
 
 #: inc/redux.php:143
 msgid "Footer email"
-msgstr "تذييل البريد الإلكتروني"
+msgstr ""
 
 #: inc/redux.php:58
 msgid "Footer layout"
-msgstr "تصميم التذييل"
+msgstr ""
 
 #: inc/setup.php:35
 msgid "Footer menu"
-msgstr "قائمة التذييل"
+msgstr ""
 
 #: inc/redux.php:142
 msgid "Footer phone"
-msgstr "هاتف التذييل"
+msgstr ""
 
 #: inc/cpts.php:19
 msgid "Galleries"
-msgstr "المعارض"
+msgstr ""
 
 #: inc/cpts.php:18 template-parts/components/gallery-block.php:25
 msgid "Gallery"
-msgstr "معرض"
+msgstr ""
 
 #: inc/redux.php:37
 msgid "General"
-msgstr "عام"
+msgstr ""
 
 #: inc/cpts.php:56
 msgid "Guest Author"
-msgstr "كاتب ضيف"
+msgstr ""
 
 #: inc/guest-authors.php:65
 msgid "Guest author"
-msgstr "ضيف"
+msgstr ""
 
 #: inc/guest-authors.php:55
 msgid "Guest author details"
-msgstr "تفاصيل المؤلف الضيف"
+msgstr ""
 
 #: inc/cpts.php:56
 msgid "Guest Authors"
-msgstr "مؤلفون ضيوف"
+msgstr ""
 
 #: inc/redux.php:126
 msgid "Header ad"
-msgstr "إعلان رأس الصفحة"
+msgstr ""
 
 #: inc/redux.php:57
 msgid "Header layout"
-msgstr "تخطيط رأس الصفحة"
+msgstr ""
 
 #: inc/redux.php:71
 msgid "Hero layout"
-msgstr "تصميم البطل"
+msgstr ""
 
 #: inc/redux.php:72
 msgid "Hero lead story"
-msgstr "القصة الرئيسية"
+msgstr ""
 
 #: template-parts/components/breadcrumbs.php:17
 msgid "Home"
-msgstr "بيت"
+msgstr ""
 
 #: inc/redux.php:68
 msgid "Homepage"
-msgstr "الصفحة الرئيسية"
+msgstr ""
 
 #. Name of the template
 #: page-templates/homepage-mockup.php:2
 msgid "Homepage Mockup"
-msgstr "نموذج الصفحة الرئيسية"
+msgstr ""
 
 #: front-page.php:38
 msgid "Homepage sidebar"
-msgstr "الشريط الجانبي للصفحة الرئيسية"
+msgstr ""
 
 #. URI of the theme
 msgid "https://www.echoroukonline.com/"
-msgstr "https://www.echoroukonline.com/"
+msgstr ""
 
 #: inc/guest-authors.php:16 inc/redux.php:156
 msgid "Instagram"
-msgstr "انستغرام"
+msgstr ""
 
 #: inc/guest-authors.php:12
 msgid "Job title"
-msgstr "مسمى وظيفي"
+msgstr ""
 
 #: single-templates/guest-author.php:38
 msgid "Latest articles"
-msgstr "أحدث المقالات"
+msgstr ""
 
 #: inc/widgets.php:141 template-parts/components/latest-news.php:26
 msgid "Latest news"
-msgstr "آخر الأخبار"
+msgstr ""
 
 #: inc/redux.php:79
 msgid "Latest news count"
-msgstr "آخر الأخبار"
+msgstr ""
 
 #: inc/redux.php:74
 msgid "Latest news section"
-msgstr "قسم آخر الأخبار"
+msgstr ""
 
 #: inc/redux.php:53
 msgid "Layout"
-msgstr "تَخطِيط"
+msgstr ""
 
 #: inc/redux.php:110
 msgid "Lazy-load images"
-msgstr "تحميل الصور عند الحاجة"
+msgstr ""
 
 #: inc/redux.php:71
 msgid "Lead grid"
-msgstr "شبكة الرصاص"
+msgstr ""
 
 #: inc/redux.php:59
 msgid "Left"
-msgstr "غادر"
+msgstr ""
 
 #: template-parts/components/tts-player.php:17
 msgid "Listen to article"
-msgstr "استمع إلى المقال"
+msgstr ""
 
-#: template-parts/content/single-article.php:91
+#: template-parts/content/single-article.php:87
 msgid "Listen to Summary"
-msgstr "استمع"
+msgstr ""
 
 #: footer.php:102
 msgid "Live Streaming"
-msgstr "البث المباشر"
+msgstr ""
 
 #: inc/meta.php:16
 msgid "Main audio URL"
-msgstr "رابط الصوت الرئيسي"
+msgstr ""
 
 #: inc/widgets.php:12
 msgid "Main Sidebar"
-msgstr "الشريط الجانبي الرئيسي"
+msgstr ""
 
 #: inc/meta.php:15
 msgid "Main video URL"
-msgstr "رابط الفيديو الرئيسي"
+msgstr ""
 
 #: header.php:97
 msgid "Menu"
-msgstr "قائمة طعام"
+msgstr ""
 
 #: inc/widgets.php:142 template-parts/components/most-read.php:38
 msgid "Most read"
-msgstr "الأكثر قراءة"
+msgstr ""
 
 #: inc/redux.php:75
 msgid "Most read section"
-msgstr "القسم الأكثر قراءة"
+msgstr ""
 
 #: inc/cpts.php:77
 #, php-format
 msgid "New %s"
-msgstr "جديد %s"
+msgstr ""
 
 #: footer.php:108 template-parts/components/newsletter.php:11
 msgid "Newsletter"
-msgstr "النشرة الإخبارية"
+msgstr ""
 
 #: inc/redux.php:78
 msgid "Newsletter block"
-msgstr "قسم النشرة الإخبارية"
+msgstr ""
 
 #: inc/widgets.php:147
 msgid "Newsletter subscription"
-msgstr "الاشتراك في النشرة الإخبارية"
+msgstr ""
 
 #: inc/template-tags.php:66
 msgid "Next"
-msgstr "التالي"
+msgstr ""
 
-#: template-parts/content/single-article.php:130
+#: template-parts/content/single-article.php:126
 msgid "No AI summary available at the moment."
-msgstr "لا يوجد ملخص للذكاء الاصطناعي متاح في الوقت الحالي."
+msgstr ""
 
 #: inc/cpts.php:81
 msgid "No items found in Trash."
-msgstr "لم يتم العثور على أي أغراض في سلة المهملات."
+msgstr ""
 
 #: inc/cpts.php:80
 msgid "No items found."
-msgstr "لم يتم العثور على أي عناصر."
+msgstr ""
 
 #: inc/redux.php:59
 msgid "None"
-msgstr "لا أحد"
+msgstr ""
 
 #: template-parts/content/none.php:11
 msgid "Nothing found"
-msgstr "لم يتم العثور على شيء"
+msgstr ""
 
 #: 404.php:13
 msgid "Page not found"
-msgstr "الصفحة غير موجودة"
+msgstr ""
 
 #: inc/meta.php:17
 msgid "PDF file URL"
-msgstr "رابط ملف PDF"
+msgstr ""
 
 #: inc/widgets.php:146
 msgid "PDF/document list"
-msgstr "قائمة ملفات PDF/المستندات"
+msgstr ""
 
 #: inc/redux.php:106
 msgid "Performance"
-msgstr "أداء"
+msgstr ""
 
 #: inc/template-tags.php:67
 msgid "Posts navigation"
-msgstr "تصفح المنشورات"
+msgstr ""
 
 #: inc/redux.php:111
 msgid "Preload main font"
-msgstr "قم بتحميل الخط الرئيسي مسبقًا"
+msgstr ""
 
 #: inc/template-tags.php:65
 msgid "Previous"
-msgstr "سابق"
+msgstr ""
 
 #: header.php:101 inc/setup.php:34
 msgid "Primary menu"
-msgstr "القائمة الرئيسية"
+msgstr ""
 
 #: footer.php:105
 msgid "Privacy Policy"
-msgstr "سياسة الخصوصية"
+msgstr ""
 
 #: inc/meta.php:14
 msgid "Reading time"
-msgstr "وقت القراءة"
+msgstr ""
 
 #: template-parts/components/related-articles.php:17
 msgid "Related articles"
-msgstr "مقال ذو صلة"
+msgstr ""
 
 #: inc/widgets.php:40
 msgid ""
 "Reusable latest, most-read, editorial, category, video, PDF, or newsletter "
 "block."
 msgstr ""
-"كتلة قابلة لإعادة الاستخدام لأحدث المقالات، أو الأكثر قراءة، أو المقالات "
-"التحريرية، أو الفئات، أو مقاطع الفيديو، أو ملفات PDF، أو النشرات الإخبارية."
 
 #: inc/redux.php:59
 msgid "Right"
-msgstr "يمين"
+msgstr ""
 
 #: inc/redux.php:161
 msgid "RSS"
-msgstr "RSS"
+msgstr ""
 
 #. Description of the theme
 msgid ""
@@ -571,268 +555,269 @@ msgid ""
 "templates, media CPTs, optional Redux plugin options, and native meta "
 "fallbacks."
 msgstr ""
-"قالب تصميم إخباري من اليمين إلى اليسار لموقع Echourouk Online مع قوالب "
-"مقالات قابلة لإعادة الاستخدام، وأنواع منشورات الوسائط، وخيارات إضافية "
-"اختيارية لمكون Redux الإضافي، وبيانات تعريفية احتياطية أصلية."
 
 #: searchform.php:12 searchform.php:15
 #: template-parts/components/breadcrumbs.php:34
 msgid "Search"
-msgstr "يبحث"
+msgstr ""
 
 #: inc/cpts.php:79
 #, php-format
 msgid "Search %s"
-msgstr "ابحث عن %s"
+msgstr ""
 
 #: searchform.php:11
 msgid "Search for:"
-msgstr "بحث عن:"
+msgstr ""
 
 #: search.php:17
 #, php-format
 msgid "Search results for: %s"
-msgstr "نتائج البحث عن: %s"
+msgstr ""
 
 #. Name of the template
 #: inc/template-routing.php:71 page-templates/section-landing.php:2
 msgid "Section Landing Page"
-msgstr "قسم الصفحة الرئيسية"
+msgstr ""
 
 #: template-parts/components/category-block.php:25
 msgid "Sections"
-msgstr "الأقسام"
+msgstr ""
 
 #: template-parts/components/social-share.php:14
 msgid "Share"
-msgstr "شارك"
+msgstr ""
 
-#: template-parts/content/single-article.php:83
+#: template-parts/content/single-article.php:79
 msgid "share"
-msgstr "شارك"
+msgstr ""
 
 #: template-parts/components/social-share.php:13
 msgid "Share article"
-msgstr "شارك المقال"
+msgstr ""
 
 #: inc/redux.php:90
 msgid "Show AI summary"
-msgstr "الملخص"
+msgstr ""
 
 #: inc/redux.php:93
 msgid "Show author box"
-msgstr "إظهار مربع المؤلف"
+msgstr ""
 
 #: inc/redux.php:95
 msgid "Show Most Read widget in article sidebar"
-msgstr "عرض أداة \"الأكثر قراءة\" في الشريط الجانبي للمقالات"
+msgstr ""
 
 #: inc/redux.php:92
 msgid "Show reading time"
-msgstr "عرض وقت القراءة"
+msgstr ""
 
 #: inc/redux.php:94
 msgid "Show related articles"
-msgstr "عرض المقالات ذات الصلة"
+msgstr ""
 
 #: inc/redux.php:96
 msgid "Show social share"
-msgstr "مشاركة عبر وسائل التواصل الاجتماعي"
+msgstr ""
 
 #: inc/redux.php:91
 msgid "Show TTS player"
-msgstr "عرض مشغلات تحويل النص إلى كلام"
+msgstr ""
 
-#: template-parts/content/single-article.php:105
+#: template-parts/content/single-article.php:101
 msgid "show_ai_aummary"
-msgstr "الملخص"
+msgstr ""
 
 #: sidebar.php:20
 msgid "Sidebar"
-msgstr "الشريط الجانبي"
+msgstr ""
 
 #: inc/redux.php:129
 msgid "Sidebar ad"
-msgstr "إعلان الشريط الجانبي"
+msgstr ""
 
 #: inc/redux.php:59
 msgid "Sidebar position"
-msgstr "موضع الشريط الجانبي"
+msgstr ""
 
 #: inc/redux.php:71
 msgid "Single lead"
-msgstr "سلك واحد"
+msgstr ""
 
 #: inc/redux.php:40
 msgid "Site logo"
-msgstr "شعار الموقع"
+msgstr ""
 
 #: header.php:22
 msgid "Skip to content"
-msgstr "انتقل إلى المحتوى"
+msgstr ""
 
 #: inc/redux.php:151
 msgid "Social"
-msgstr "اجتماعي"
+msgstr ""
 
 #: inc/setup.php:36
 msgid "Social links menu"
-msgstr "قائمة روابط التواصل الاجتماعي"
+msgstr ""
 
 #: inc/meta.php:18
 msgid "Source name"
-msgstr "اسم المصدر"
+msgstr ""
 
 #: inc/meta.php:19
 msgid "Source URL"
-msgstr "رابط المصدر"
+msgstr ""
 
-#: template-parts/content/single-article.php:148
+#: template-parts/content/single-article.php:144
 msgid "Source:"
-msgstr "مصدر:"
+msgstr ""
 
 #: inc/meta.php:23
 msgid "Sponsored label"
-msgstr "علامة تجارية برعاية"
+msgstr ""
 
 #: template-parts/components/newsletter.php:16
 msgid "Subscribe"
-msgstr "يشترك"
+msgstr ""
 
-#: template-parts/content/single-article.php:126
+#: template-parts/content/single-article.php:122
 msgid "Summary"
-msgstr "ملخص"
+msgstr ""
 
 #: inc/redux.php:160
 msgid "Telegram"
-msgstr "برقية"
+msgstr ""
 
 #: 404.php:14
 msgid ""
 "The requested page could not be found. Try searching or browse the latest "
 "stories."
-msgstr "لم يتم العثور على الصفحة المطلوبة. حاول البحث أو تصفح أحدث الأخبار."
+msgstr ""
 
 #: inc/redux.php:25
 msgid "Theme Options"
-msgstr "خيارات القالب"
+msgstr ""
 
 #: inc/redux.php:158
 msgid "TikTok"
-msgstr "تيك توك"
+msgstr ""
 
 #: inc/widgets.php:71
 msgid "Title"
-msgstr "عنوان"
+msgstr ""
 
 #: template-parts/content/none.php:12
 msgid "Try another search or browse the latest news."
-msgstr "جرب بحثًا آخر أو تصفح آخر الأخبار."
+msgstr ""
 
 #: template-parts/components/tts-player.php:21
 msgid "TTS audio placeholder"
-msgstr "عنصر نائب صوتي لتحويل النص إلى كلام"
+msgstr ""
 
 #: inc/meta.php:13
 msgid "TTS URL"
-msgstr "رابط تحويل النص إلى كلام"
+msgstr ""
 
 #: inc/widgets.php:75
 msgid "Type"
-msgstr "يكتب"
+msgstr ""
 
 #: inc/guest-authors.php:90
 msgid "Use the featured image as this guest author avatar."
-msgstr "استخدم الصورة المميزة كصورة رمزية لهذا الكاتب الضيف."
+msgstr ""
 
 #: inc/guest-authors.php:108
 msgid "Use WordPress author"
-msgstr "استخدم أداة WordPress Author"
+msgstr ""
 
 #: inc/cpts.php:13 template-parts/components/video-embed.php:19
 msgid "Video"
-msgstr "فيديو"
+msgstr ""
 
 #: inc/widgets.php:145
 msgid "Video list"
-msgstr "قائمة الفيديوهات"
+msgstr ""
 
 #: inc/redux.php:77
 msgid "Video section"
-msgstr "قسم الفيديو"
+msgstr ""
 
 #: inc/cpts.php:14 template-parts/components/video-list.php:24
 msgid "Videos"
-msgstr "مقاطع فيديو"
+msgstr ""
 
 #: inc/cpts.php:78
 #, php-format
 msgid "View %s"
-msgstr "عرض %s"
+msgstr ""
 
 #: template-parts/components/voting-placeholder.php:11
 msgid "Voting module placeholder"
-msgstr "مكان مخصص لوحدة التصويت"
+msgstr ""
 
 #: inc/redux.php:159 template-parts/components/social-share.php:17
 msgid "WhatsApp"
-msgstr "واتساب"
+msgstr ""
 
 #: template-parts/components/social-share.php:16
 msgid "X"
-msgstr "X"
+msgstr ""
 
 #: inc/guest-authors.php:15 inc/redux.php:155
 msgid "X/Twitter"
-msgstr "إكس/تويتر"
+msgstr ""
 
 #: inc/guest-authors.php:17 inc/redux.php:157
 msgid "YouTube"
-msgstr "يوتيوب"
+msgstr ""
 
 #: footer.php:72
 msgid "اقتصاد"
-msgstr "الفتاة"
+msgstr ""
 
 #: header.php:63
 msgid "البث الحي"
-msgstr "-الطعام"
+msgstr ""
 
 #: footer.php:70
 msgid "الجزائر"
-msgstr "الجزائر"
+msgstr ""
 
 #: footer.php:76
 msgid "الرأي"
-msgstr "سلي"
+msgstr ""
 
 #: footer.php:69
 msgid "الرئيسية"
-msgstr "فور"
+msgstr ""
 
 #: footer.php:71
 msgid "العالم"
-msgstr "العالم"
+msgstr ""
 
 #: footer.php:80
 msgid "العامة"
-msgstr "إدارة"
+msgstr ""
 
 #: footer.php:28
 msgid "المزيد"
-msgstr "المزيد"
+msgstr ""
 
 #: footer.php:77
 msgid "جواهر"
-msgstr "دراسي"
+msgstr ""
 
 #: footer.php:73
 msgid "رياضة"
-msgstr "لحم البقر"
+msgstr ""
+
+#: template-parts/components/breaking-news.php:43
+msgid "عاجل"
+msgstr ""
 
 #: footer.php:79
 msgid "قناة الشروق"
-msgstr "قناة الشروق"
+msgstr ""
 
 #: footer.php:25
 msgid ""
@@ -840,10 +825,7 @@ msgid ""
 "الإخبارية في الجزائر والعالم العربي من أجل توفير تغطية آنية ومستمرّة للأحداث "
 "على مدار الساعة بالعربية والإنجليزية والفرنسية."
 msgstr ""
-"منذ عام 2005 أطلقت الجزائر مؤسسة الشروق للإعلام والنشر واحدة من أولى مواقع "
-"الويب الإعلامية في والعالم العربي من أجل توفير تغطية آنية ومستمرة للأحداث "
-"على مدار الساعة بالعربية والإنجليزية والفرنسية."
 
 #: footer.php:78
 msgid "منوعات"
-msgstr "منفوط"
+msgstr ""

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 03:32+0000\n"
+"POT-Creation-Date: 2026-05-07 07:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%1$s - %2$s"
 msgstr ""
 
-#: inc/template-tags.php:30
+#: inc/template-tags.php:30 template-parts/content/single-article.php:97
 msgid "%d min read"
 msgid_plural "%d min read"
 msgstr[0] ""
@@ -39,6 +39,10 @@ msgstr ""
 
 #: inc/redux.php:123
 msgid "Ads"
+msgstr ""
+
+#: footer.php:111
+msgid "Advertising"
 msgstr ""
 
 #: inc/meta.php:12
@@ -74,11 +78,11 @@ msgstr ""
 msgid "Breadcrumbs"
 msgstr ""
 
-#: template-parts/components/breaking-news.php:27
+#: template-parts/components/breaking-news.php:44
 msgid "Breaking"
 msgstr ""
 
-#: inc/meta.php:22 template-parts/components/breaking-news.php:25
+#: inc/meta.php:22 template-parts/components/breaking-news.php:42
 msgid "Breaking news"
 msgstr ""
 
@@ -90,11 +94,11 @@ msgstr ""
 msgid "Category news"
 msgstr ""
 
-#: inc/redux.php:185
+#: inc/redux.php:198
 msgid "Centered"
 msgstr ""
 
-#: inc/redux.php:192
+#: inc/redux.php:205
 msgid "Columns"
 msgstr ""
 
@@ -106,12 +110,20 @@ msgid_plural "%1$s comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/redux.php:186 inc/redux.php:193
+#: inc/redux.php:199 inc/redux.php:206
 msgid "Compact"
+msgstr ""
+
+#: footer.php:87
+msgid "Contact us"
 msgstr ""
 
 #: inc/redux.php:56
 msgid "Container width"
+msgstr ""
+
+#: footer.php:140
+msgid "Copyright is reserved"
 msgstr ""
 
 #: inc/widgets.php:87
@@ -122,7 +134,7 @@ msgstr ""
 msgid "Dark logo"
 msgstr ""
 
-#: inc/redux.php:184
+#: inc/redux.php:197
 msgid "Default"
 msgstr ""
 
@@ -176,7 +188,7 @@ msgstr ""
 msgid "Echourouk Online Options"
 msgstr ""
 
-#: inc/redux.php:167
+#: inc/redux.php:180
 msgid ""
 "Echourouk Online uses theme defaults now. Install and activate the Redux "
 "Framework plugin only if you need the Theme Options admin panel."
@@ -228,6 +240,10 @@ msgstr ""
 msgid "Enable dark mode"
 msgstr ""
 
+#: header.php:40
+msgid "enable notifications"
+msgstr ""
+
 #: inc/redux.php:98
 msgid "Enable sticky ad/sidebar"
 msgstr ""
@@ -240,7 +256,7 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: inc/guest-authors.php:14 inc/redux.php:141
+#: inc/guest-authors.php:14 inc/redux.php:154
 #: template-parts/components/social-share.php:15
 msgid "Facebook"
 msgstr ""
@@ -257,8 +273,16 @@ msgstr ""
 msgid "Featured section"
 msgstr ""
 
+#: inc/redux.php:138
+msgid "Footer"
+msgstr ""
+
 #: inc/redux.php:130
 msgid "Footer ad"
+msgstr ""
+
+#: inc/redux.php:141
+msgid "Footer address"
 msgstr ""
 
 #: inc/widgets.php:14
@@ -273,12 +297,20 @@ msgstr ""
 msgid "Footer Column 3"
 msgstr ""
 
+#: inc/redux.php:143
+msgid "Footer email"
+msgstr ""
+
 #: inc/redux.php:58
 msgid "Footer layout"
 msgstr ""
 
 #: inc/setup.php:35
 msgid "Footer menu"
+msgstr ""
+
+#: inc/redux.php:142
+msgid "Footer phone"
 msgstr ""
 
 #: inc/cpts.php:19
@@ -346,7 +378,7 @@ msgstr ""
 msgid "https://www.echoroukonline.com/"
 msgstr ""
 
-#: inc/guest-authors.php:16 inc/redux.php:143
+#: inc/guest-authors.php:16 inc/redux.php:156
 msgid "Instagram"
 msgstr ""
 
@@ -386,12 +418,16 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
-#: template-parts/content/single-article.php:86
-msgid "listen"
-msgstr ""
-
 #: template-parts/components/tts-player.php:17
 msgid "Listen to article"
+msgstr ""
+
+#: template-parts/content/single-article.php:91
+msgid "Listen to Summary"
+msgstr ""
+
+#: footer.php:102
+msgid "Live Streaming"
 msgstr ""
 
 #: inc/meta.php:16
@@ -423,7 +459,7 @@ msgstr ""
 msgid "New %s"
 msgstr ""
 
-#: template-parts/components/newsletter.php:11
+#: footer.php:108 template-parts/components/newsletter.php:11
 msgid "Newsletter"
 msgstr ""
 
@@ -437,6 +473,10 @@ msgstr ""
 
 #: inc/template-tags.php:66
 msgid "Next"
+msgstr ""
+
+#: template-parts/content/single-article.php:130
+msgid "No AI summary available at the moment."
 msgstr ""
 
 #: inc/cpts.php:81
@@ -487,6 +527,10 @@ msgstr ""
 msgid "Primary menu"
 msgstr ""
 
+#: footer.php:105
+msgid "Privacy Policy"
+msgstr ""
+
 #: inc/meta.php:14
 msgid "Reading time"
 msgstr ""
@@ -505,7 +549,7 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-#: inc/redux.php:148
+#: inc/redux.php:161
 msgid "RSS"
 msgstr ""
 
@@ -548,7 +592,7 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
-#: template-parts/content/single-article.php:79
+#: template-parts/content/single-article.php:83
 msgid "share"
 msgstr ""
 
@@ -584,7 +628,7 @@ msgstr ""
 msgid "Show TTS player"
 msgstr ""
 
-#: template-parts/content/single-article.php:100
+#: template-parts/content/single-article.php:105
 msgid "show_ai_aummary"
 msgstr ""
 
@@ -612,7 +656,7 @@ msgstr ""
 msgid "Skip to content"
 msgstr ""
 
-#: inc/redux.php:138
+#: inc/redux.php:151
 msgid "Social"
 msgstr ""
 
@@ -628,7 +672,7 @@ msgstr ""
 msgid "Source URL"
 msgstr ""
 
-#: template-parts/content/single-article.php:145
+#: template-parts/content/single-article.php:148
 msgid "Source:"
 msgstr ""
 
@@ -640,7 +684,11 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
-#: inc/redux.php:147
+#: template-parts/content/single-article.php:126
+msgid "Summary"
+msgstr ""
+
+#: inc/redux.php:160
 msgid "Telegram"
 msgstr ""
 
@@ -654,7 +702,7 @@ msgstr ""
 msgid "Theme Options"
 msgstr ""
 
-#: inc/redux.php:145
+#: inc/redux.php:158
 msgid "TikTok"
 msgstr ""
 
@@ -711,7 +759,7 @@ msgstr ""
 msgid "Voting module placeholder"
 msgstr ""
 
-#: inc/redux.php:146 template-parts/components/social-share.php:17
+#: inc/redux.php:159 template-parts/components/social-share.php:17
 msgid "WhatsApp"
 msgstr ""
 
@@ -719,101 +767,65 @@ msgstr ""
 msgid "X"
 msgstr ""
 
-#: inc/guest-authors.php:15 inc/redux.php:142
+#: inc/guest-authors.php:15 inc/redux.php:155
 msgid "X/Twitter"
 msgstr ""
 
-#: inc/guest-authors.php:17 inc/redux.php:144
+#: inc/guest-authors.php:17 inc/redux.php:157
 msgid "YouTube"
 msgstr ""
 
-#: footer.php:68
+#: footer.php:72
 msgid "اقتصاد"
 msgstr ""
 
-#: footer.php:98
-msgid "الإشهار"
-msgstr ""
-
-#: header.php:63 footer.php:89
+#: header.php:63
 msgid "البث الحي"
 msgstr ""
 
-#: footer.php:66
+#: footer.php:70
 msgid "الجزائر"
 msgstr ""
 
-#: footer.php:72
+#: footer.php:76
 msgid "الرأي"
 msgstr ""
 
-#: footer.php:65
+#: footer.php:69
 msgid "الرئيسية"
 msgstr ""
 
-#: footer.php:67
+#: footer.php:71
 msgid "العالم"
 msgstr ""
 
-#: footer.php:76
+#: footer.php:80
 msgid "العامة"
 msgstr ""
 
-#: footer.php:24
+#: footer.php:28
 msgid "المزيد"
 msgstr ""
 
-#: footer.php:95
-msgid "النشرة البريدية"
-msgstr ""
-
-#: header.php:40
-msgid "تفعيل الإشعارات"
-msgstr ""
-
-#: footer.php:83
-msgid "تواصل معنا"
-msgstr ""
-
-#: footer.php:127
-msgid "جميع الحقوق محفوظة لموقع الشروق أونلاين"
-msgstr ""
-
-#: footer.php:73
+#: footer.php:77
 msgid "جواهر"
 msgstr ""
 
-#: footer.php:84
-msgid "حي السعيدون محمد بلوزداد رقم 166 - القبة، الجزائر"
-msgstr ""
-
-#: footer.php:69
+#: footer.php:73
 msgid "رياضة"
 msgstr ""
 
-#: footer.php:92
-msgid "سياسة الخصوصية"
-msgstr ""
-
-#: footer.php:75
+#: footer.php:79
 msgid "قناة الشروق"
 msgstr ""
 
-#: template-parts/content/single-article.php:125
-msgid "لا يوجد ملخص متاح حالياً."
-msgstr ""
-
-#: template-parts/content/single-article.php:121
-msgid "ملخص"
-msgstr ""
-
-#: footer.php:21
+#: footer.php:25
 msgid ""
 "منذ سنة 2005 أطلقت مؤسسة الشروق للإعلام والنشر واحدا من أولى المواقع "
 "الإخبارية في الجزائر والعالم العربي من أجل توفير تغطية آنية ومستمرّة للأحداث "
 "على مدار الساعة بالعربية والإنجليزية والفرنسية."
 msgstr ""
 
-#: footer.php:74
+#: footer.php:78
 msgid "منوعات"
 msgstr ""

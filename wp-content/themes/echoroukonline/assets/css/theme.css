@@ -717,7 +717,9 @@ body.is-rtl .most-read-widget .ranked-list span {
 .single-article__media {
   grid-area: media;
   margin: 0;
-  height: 100%;
+  width: 760px;
+  height: 428px;
+  object-fit: cover;
   overflow: hidden;
   border: 1px solid var(--echorouk-border);
   border-radius: 8px;
@@ -743,16 +745,19 @@ body.is-rtl .most-read-widget .ranked-list span {
 
 .single-article__title {
   margin: 0;
-  font-size: clamp(2rem, 3vw, 3.35rem);
-  line-height: 1.35;
-  font-weight: 700;
+  font-size: 30px;
+  letter-spacing: 0.02em;
+  /* line-height: 1.35; */
+  font-weight: bold;
 }
 
 .single-article__deck {
   margin: 0;
   color: #1f2933;
-  font-size: clamp(1.2rem, 1.55vw, 1.95rem);
-  line-height: 1.75;
+  font-size: 30px;
+  font-weight: normal;
+  letter-spacing: 0px;
+  /* line-height: 1.75; */
 }
 
 .single-article__author-line {
@@ -790,12 +795,12 @@ body.is-rtl .author-box {
 }
 
 .single-article__author-copy time {
-  font-size: .96rem;
+  font-size: 18px;
 }
 
 .single-article__author-name {
   color: inherit;
-  font-size: 2rem;
+  font-size: 30px;
   line-height: 1.15;
 }
 
@@ -804,8 +809,8 @@ body.is-rtl .author-box {
 }
 
 .single-article__author-avatar img {
-  width: 4.35rem;
-  height: 4.35rem;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -1177,10 +1182,6 @@ body.is-rtl .single-article__body {
     order: 2;
     border-inline-end: 0;
     padding-inline-end: 0;
-  }
-
-  .single-article__author-name {
-    font-size: 1.55rem;
   }
 
   .site-sidebar--sticky,

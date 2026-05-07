@@ -1,14 +1,14 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-02 03:18+0000\n"
-"Last-Translator: \n"
-"Language-Team: Arabic\n"
-"Language: ar\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100 >= 3 "
-"&& n%100<=10 ? 3 : n%100 >= 11 && n%100<=99 ? 4 : 5;\n"
+"POT-Creation-Date: 2026-05-02 03:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -386,6 +386,10 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
+#: template-parts/content/single-article.php:86
+msgid "listen"
+msgstr ""
+
 #: template-parts/components/tts-player.php:17
 msgid "Listen to article"
 msgstr ""
@@ -544,6 +548,10 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
+#: template-parts/content/single-article.php:79
+msgid "share"
+msgstr ""
+
 #: template-parts/components/social-share.php:13
 msgid "Share article"
 msgstr ""
@@ -574,6 +582,10 @@ msgstr ""
 
 #: inc/redux.php:91
 msgid "Show TTS player"
+msgstr ""
+
+#: template-parts/content/single-article.php:100
+msgid "show_ai_aummary"
 msgstr ""
 
 #: sidebar.php:20
@@ -616,7 +628,7 @@ msgstr ""
 msgid "Source URL"
 msgstr ""
 
-#: template-parts/content/single-article.php:146
+#: template-parts/content/single-article.php:145
 msgid "Source:"
 msgstr ""
 
@@ -715,10 +727,6 @@ msgstr ""
 msgid "YouTube"
 msgstr ""
 
-#: template-parts/content/single-article.php:86
-msgid "استمع"
-msgstr ""
-
 #: footer.php:68
 msgid "اقتصاد"
 msgstr ""
@@ -755,10 +763,6 @@ msgstr ""
 msgid "المزيد"
 msgstr ""
 
-#: template-parts/content/single-article.php:101
-msgid "الملخص"
-msgstr ""
-
 #: footer.php:95
 msgid "النشرة البريدية"
 msgstr ""
@@ -791,19 +795,15 @@ msgstr ""
 msgid "سياسة الخصوصية"
 msgstr ""
 
-#: template-parts/content/single-article.php:79
-msgid "شارك"
-msgstr ""
-
 #: footer.php:75
 msgid "قناة الشروق"
 msgstr ""
 
-#: template-parts/content/single-article.php:126
+#: template-parts/content/single-article.php:125
 msgid "لا يوجد ملخص متاح حالياً."
 msgstr ""
 
-#: template-parts/content/single-article.php:122
+#: template-parts/content/single-article.php:121
 msgid "ملخص"
 msgstr ""
 

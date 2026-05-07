@@ -84,7 +84,7 @@ msgstr "فتات الخبز"
 
 #: template-parts/components/breaking-news.php:44
 msgid "Breaking"
-msgstr "عاجل"
+msgstr ""
 
 #: inc/meta.php:22 template-parts/components/breaking-news.php:42
 msgid "Breaking news"
