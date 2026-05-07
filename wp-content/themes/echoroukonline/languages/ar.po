@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-07 07:32+0000\n"
+"PO-Revision-Date: 2026-05-07 07:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -796,7 +796,7 @@ msgstr "الفتاة"
 
 #: header.php:63
 msgid "البث الحي"
-msgstr "-الطعام"
+msgstr "البث الحي"
 
 #: footer.php:70
 msgid "الجزائر"

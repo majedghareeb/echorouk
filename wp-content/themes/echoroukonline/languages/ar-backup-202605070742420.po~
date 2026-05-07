@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-07 07:16+0000\n"
+"PO-Revision-Date: 2026-05-07 07:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -22,10 +22,10 @@ msgstr ""
 msgid "%1$s - %2$s"
 msgstr "%1$s - %2$s"
 
-#: inc/template-tags.php:30 template-parts/content/single-article.php:93
+#: inc/template-tags.php:30 template-parts/content/single-article.php:97
 msgid "%d min read"
 msgid_plural "%d min read"
-msgstr[0] " د %d للقراءة"
+msgstr[0] " %d د للقراءة"
 msgstr[1] "قراءة دقيقة %d"
 msgstr[2] "قراءة دقيقة %d"
 msgstr[3] "قراءة دقيقة %d"
@@ -82,7 +82,11 @@ msgstr "صوتي"
 msgid "Breadcrumbs"
 msgstr "فتات الخبز"
 
-#: inc/meta.php:22 template-parts/components/breaking-news.php:41
+#: template-parts/components/breaking-news.php:44
+msgid "Breaking"
+msgstr "عاجل"
+
+#: inc/meta.php:22 template-parts/components/breaking-news.php:42
 msgid "Breaking news"
 msgstr "أخبار عاجلة"
 
@@ -428,9 +432,9 @@ msgstr "غادر"
 msgid "Listen to article"
 msgstr "استمع إلى المقال"
 
-#: template-parts/content/single-article.php:87
+#: template-parts/content/single-article.php:91
 msgid "Listen to Summary"
-msgstr "استمع إلى الملخص"
+msgstr "استمع"
 
 #: footer.php:102
 msgid "Live Streaming"
@@ -481,7 +485,7 @@ msgstr "الاشتراك في النشرة الإخبارية"
 msgid "Next"
 msgstr "التالي"
 
-#: template-parts/content/single-article.php:126
+#: template-parts/content/single-article.php:130
 msgid "No AI summary available at the moment."
 msgstr "لا يوجد ملخص للذكاء الاصطناعي متاح في الوقت الحالي."
 
@@ -601,11 +605,11 @@ msgstr "الأقسام"
 
 #: template-parts/components/social-share.php:14
 msgid "Share"
-msgstr "يشارك"
+msgstr "شارك"
 
-#: template-parts/content/single-article.php:79
+#: template-parts/content/single-article.php:83
 msgid "share"
-msgstr "يشارك"
+msgstr "شارك"
 
 #: template-parts/components/social-share.php:13
 msgid "Share article"
@@ -639,7 +643,7 @@ msgstr "مشاركة عبر وسائل التواصل الاجتماعي"
 msgid "Show TTS player"
 msgstr "عرض مشغلات تحويل النص إلى كلام"
 
-#: template-parts/content/single-article.php:101
+#: template-parts/content/single-article.php:105
 msgid "show_ai_aummary"
 msgstr "الملخص"
 
@@ -683,7 +687,7 @@ msgstr "اسم المصدر"
 msgid "Source URL"
 msgstr "رابط المصدر"
 
-#: template-parts/content/single-article.php:144
+#: template-parts/content/single-article.php:148
 msgid "Source:"
 msgstr "مصدر:"
 
@@ -695,7 +699,7 @@ msgstr "علامة تجارية برعاية"
 msgid "Subscribe"
 msgstr "يشترك"
 
-#: template-parts/content/single-article.php:122
+#: template-parts/content/single-article.php:126
 msgid "Summary"
 msgstr "ملخص"
 
@@ -825,10 +829,6 @@ msgstr "دراسي"
 #: footer.php:73
 msgid "رياضة"
 msgstr "لحم البقر"
-
-#: template-parts/components/breaking-news.php:43
-msgid "عاجل"
-msgstr "الكفاءة"
 
 #: footer.php:79
 msgid "قناة الشروق"
