@@ -20,7 +20,7 @@ wp-content/themes/bootscore
 wp-content/plugins/object-cache-pro
 wp-content/plugins/redux-framework
 wp-content/object-cache.php
-
+wp-content/uploads
 wp-content/themes/AGENTS.md
 .htaccess
 wp-config-docker.php

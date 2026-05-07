@@ -20,20 +20,20 @@ defined('ABSPATH') || exit;
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
     <a class="skip-link" href="#primary"><?php esc_html_e('Skip to content', 'echoroukonline'); ?></a>
-
+    <div class="ad-box container-xl my-4">مساحة إعلانية</div>
     <header class="site-header echorouk-header" role="banner">
         <?php echorouk_the_ad_slot('header_ad'); ?>
         <div class="<?php echo esc_attr(echorouk_container_class()); ?>">
             <div class="echorouk-header-meta">
                 <div class="echorouk-meta-date">
                     <?php
-					printf(
-						/* translators: 1: formatted date, 2: formatted time */
-						esc_html__('%1$s - %2$s', 'echoroukonline'),
-						esc_html(wp_date('j F Y')),
-						esc_html(wp_date('H:i'))
-					);
-					?>
+                    printf(
+                        /* translators: 1: formatted date, 2: formatted time */
+                        esc_html__('%1$s - %2$s', 'echoroukonline'),
+                        esc_html(wp_date('j F Y')),
+                        esc_html(wp_date('H:i'))
+                    );
+                    ?>
                 </div>
                 <div class="echorouk-meta-tools">
                     <a class="echorouk-alert-link"
@@ -42,22 +42,22 @@ defined('ABSPATH') || exit;
                             data="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/notification-off-01-stroke-rounded.svg"></object></a>
                     <div class="echorouk-footer-social">
                         <?php
-						$social = array(
-							'facebook'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/facebook-01-stroke-rounded.svg"></object>',
-							'twitter'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/new-twitter-rectangle-stroke-rounded.svg"></object>',
-							'instagram'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/instagram-stroke-rounded.svg"></object>',
-							'youtube'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/youtube-stroke-rounded.svg"></object>',
-						);
-						foreach ($social as $network => $label) :
-							$url = echorouk_get_option($network, '');
-							if (! $url) {
-								continue;
-							}
-						?>
-                        <a class="echorouk-social-link echorouk-social-link--<?php echo esc_attr($network); ?>"
-                            href="<?php echo esc_url($url); ?>" rel="me noopener" target="_blank"
-                            aria-label="<?php echo esc_attr(ucfirst(str_replace('twitter', 'x', $network))); ?>">
-                            <?php echo $label; ?></a>
+                        $social = array(
+                            'facebook'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/facebook-01-stroke-rounded.svg"></object>',
+                            'twitter'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/new-twitter-rectangle-stroke-rounded.svg"></object>',
+                            'instagram'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/instagram-stroke-rounded.svg"></object>',
+                            'youtube'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/youtube-stroke-rounded.svg"></object>',
+                        );
+                        foreach ($social as $network => $label) :
+                            $url = echorouk_get_option($network, '');
+                            if (! $url) {
+                                continue;
+                            }
+                        ?>
+                            <a class="echorouk-social-link echorouk-social-link--<?php echo esc_attr($network); ?>"
+                                href="<?php echo esc_url($url); ?>" rel="me noopener" target="_blank"
+                                aria-label="<?php echo esc_attr(ucfirst(str_replace('twitter', 'x', $network))); ?>">
+                                <?php echo $label; ?></a>
                         <?php endforeach; ?>
                     </div>
                     <a class="echorouk-live-pill" href="#"><?php esc_html_e('البث الحي', 'echoroukonline'); ?>&nbsp;<img
@@ -70,21 +70,21 @@ defined('ABSPATH') || exit;
                     <a class="site-branding__link echorouk-brand-link" href="<?php echo esc_url(home_url('/')); ?>"
                         rel="home">
                         <?php
-						$logo_url      = echorouk_get_media_option_url('site_logo');
-						$dark_logo_url = echorouk_get_media_option_url('dark_logo');
-						$site_logo      = site_url('wp-content/themes/echoroukonline/assets/images/logo/ech-logo.svg');
-						if ($logo_url) :
-						?>
-                        <img class="site-logo site-logo--light echorouk-brand-logo"
-                            src="<?php echo esc_url($logo_url); ?>" width="260" height="76"
-                            alt="<?php echo esc_attr(get_bloginfo('name')); ?>" decoding="async">
-                        <?php if ($dark_logo_url) : ?>
-                        <img class="site-logo site-logo--dark echorouk-brand-logo"
-                            src="<?php echo esc_url($dark_logo_url); ?>" width="260" height="76"
-                            alt="<?php echo esc_attr(get_bloginfo('name')); ?>" decoding="async">
-                        <?php endif; ?>
+                        $logo_url      = echorouk_get_media_option_url('site_logo');
+                        $dark_logo_url = echorouk_get_media_option_url('dark_logo');
+                        $site_logo      = site_url('wp-content/themes/echoroukonline/assets/images/logo/ech-logo.svg');
+                        if ($logo_url) :
+                        ?>
+                            <img class="site-logo site-logo--light echorouk-brand-logo"
+                                src="<?php echo esc_url($logo_url); ?>" width="260" height="76"
+                                alt="<?php echo esc_attr(get_bloginfo('name')); ?>" decoding="async">
+                            <?php if ($dark_logo_url) : ?>
+                                <img class="site-logo site-logo--dark echorouk-brand-logo"
+                                    src="<?php echo esc_url($dark_logo_url); ?>" width="260" height="76"
+                                    alt="<?php echo esc_attr(get_bloginfo('name')); ?>" decoding="async">
+                            <?php endif; ?>
                         <?php else : ?>
-                        <div class="" id="echorouk-logo-dark"></div>
+                            <div class="" id="echorouk-logo-dark"></div>
                         <?php endif; ?>
                     </a>
                 </div>
@@ -100,16 +100,16 @@ defined('ABSPATH') || exit;
                 <nav class="primary-navigation echorouk-primary-navigation" id="primary-menu"
                     aria-label="<?php esc_attr_e('Primary menu', 'echoroukonline'); ?>" data-primary-menu>
                     <?php
-					wp_nav_menu(
-						array(
-							'theme_location' => 'primary',
-							'container'      => false,
-							'menu_class'     => 'primary-menu echorouk-primary-menu',
-							'fallback_cb'    => false,
-							'depth'          => 1,
-						)
-					);
-					?>
+                    wp_nav_menu(
+                        array(
+                            'theme_location' => 'primary',
+                            'container'      => false,
+                            'menu_class'     => 'primary-menu echorouk-primary-menu',
+                            'fallback_cb'    => false,
+                            'depth'          => 1,
+                        )
+                    );
+                    ?>
                 </nav>
             </div>
         </div>
