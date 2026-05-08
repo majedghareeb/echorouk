@@ -13,6 +13,7 @@ define( 'ECHOROUK_THEME_URI', get_template_directory_uri() );
 
 $echorouk_includes = array(
 	'inc/helpers.php',
+	'inc/newsletter.php',
 	'inc/setup.php',
 	'inc/template-functions.php',
 	'inc/template-routing.php',

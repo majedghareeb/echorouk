@@ -36,21 +36,21 @@ class Echorouk_RSS_Importer
     public function admin_page_contents()
     {
 ?>
-<div class="wrap">
-    <h1>Echorouk RSS Importer</h1>
-    <p>Fetch the latest news from Echorouk Online and convert them to WordPress posts.</p>
+        <div class="wrap">
+            <h1>Echorouk RSS Importer</h1>
+            <p>Fetch the latest news from Echorouk Online and convert them to WordPress posts.</p>
 
-    <form method="post">
-        <?php wp_nonce_field('run_echorouk_importer', 'echorouk_nonce'); ?>
-        <input type="submit" name="run_importer" class="button button-primary" value="Run Manual Sync Now">
-    </form>
+            <form method="post">
+                <?php wp_nonce_field('run_echorouk_importer', 'echorouk_nonce'); ?>
+                <input type="submit" name="run_importer" class="button button-primary" value="Run Manual Sync Now">
+            </form>
 
-    <?php
+            <?php
             if (isset($_POST['run_importer']) && check_admin_referer('run_echorouk_importer', 'echorouk_nonce')) {
                 $this->run_import();
             }
             ?>
-</div>
+        </div>
 <?php
     }
 
@@ -65,7 +65,7 @@ class Echorouk_RSS_Importer
             return;
         }
 
-        $items = $rss->get_items(0, 50); // Get latest 10 items
+        $items = $rss->get_items(0, 50); // Get latest 50 items
         $count = 0;
 
         foreach ($items as $item) {

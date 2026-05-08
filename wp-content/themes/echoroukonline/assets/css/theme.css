@@ -1746,6 +1746,71 @@ body.is-rtl .single-article__body {
   margin: 0 12px 12px 12px;
 }
 
+/* Keep secondary cards visually equal regardless of headline length. */
+.echorouk-homepage-mockup .most-read-grid>[class*="col-"],
+.echorouk-homepage-mockup .sports-sub-grid>[class*="col-"],
+.echorouk-homepage-mockup .economy-sub-grid>[class*="col-"],
+.echorouk-homepage-mockup .jawaher-sub-grid>[class*="col-"] {
+  display: flex;
+}
+
+.echorouk-homepage-mockup .most-read-grid .news-card,
+.echorouk-homepage-mockup .sports-sub-grid .news-card,
+.echorouk-homepage-mockup .economy-sub-grid .news-card,
+.echorouk-homepage-mockup .jawaher-sub-grid .news-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.echorouk-homepage-mockup .most-read-grid .small-headline,
+.echorouk-homepage-mockup .sports-sub-grid .small-headline,
+.echorouk-homepage-mockup .economy-sub-grid .small-headline,
+.echorouk-homepage-mockup .jawaher-sub-grid .small-headline {
+  min-height: calc(1.55em * 3);
+}
+
+.echorouk-homepage-mockup .most-read-grid .small-headline a,
+.echorouk-homepage-mockup .sports-sub-grid .small-headline a,
+.echorouk-homepage-mockup .economy-sub-grid .small-headline a,
+.echorouk-homepage-mockup .jawaher-sub-grid .small-headline a,
+.echorouk-homepage-mockup .world-mini-card h3,
+.echorouk-homepage-mockup .video-bottom-card h4,
+.echorouk-homepage-mockup .diplomacy-side-item h4,
+.echorouk-homepage-mockup .diplomacy-bottom-item h4,
+.echorouk-homepage-mockup .other-lang-copy h4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.echorouk-homepage-mockup .most-read-grid .small-headline a,
+.echorouk-homepage-mockup .sports-sub-grid .small-headline a,
+.echorouk-homepage-mockup .economy-sub-grid .small-headline a,
+.echorouk-homepage-mockup .jawaher-sub-grid .small-headline a,
+.echorouk-homepage-mockup .world-mini-card h3,
+.echorouk-homepage-mockup .diplomacy-side-item h4,
+.echorouk-homepage-mockup .diplomacy-bottom-item h4,
+.echorouk-homepage-mockup .other-lang-copy h4 {
+  -webkit-line-clamp: 3;
+}
+
+.echorouk-homepage-mockup .video-main-bottom {
+  align-items: stretch;
+}
+
+.echorouk-homepage-mockup .video-bottom-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.echorouk-homepage-mockup .video-bottom-card h4 {
+  -webkit-line-clamp: 2;
+  min-height: calc(1.35em * 2);
+}
+
 .echorouk-homepage-mockup .summary {
   font-size: 12px;
   color: #62717c;

@@ -28,6 +28,7 @@ function echorouk_theme_default_options() {
 		'editorial_section_enabled'    => true,
 		'video_section_enabled'        => true,
 		'newsletter_enabled'           => true,
+		'newsletter_external_action_url' => '',
 		'latest_news_count'            => 8,
 		'show_ai_summary'              => true,
 		'show_tts_player'              => true,
@@ -61,6 +62,10 @@ function echorouk_theme_default_options() {
 		'whatsapp'                     => '',
 		'telegram'                     => '',
 		'rss'                          => get_bloginfo( 'rss2_url' ),
+		'podcast_primary_url'          => '',
+		'podcast_secondary_url'        => '',
+		'podcast_soundcloud_url'       => '',
+		'podcast_archive_url'          => '',
 	) );
 }
 

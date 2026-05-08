@@ -76,6 +76,7 @@ function echorouk_register_redux_options() {
 				array( 'id' => 'editorial_section_enabled', 'type' => 'switch', 'title' => esc_html__( 'Editorial recommendation section', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'video_section_enabled', 'type' => 'switch', 'title' => esc_html__( 'Video section', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'newsletter_enabled', 'type' => 'switch', 'title' => esc_html__( 'Newsletter block', 'echoroukonline' ), 'default' => true ),
+				array( 'id' => 'newsletter_external_action_url', 'type' => 'text', 'title' => esc_html__( 'Newsletter endpoint URL', 'echoroukonline' ), 'subtitle' => esc_html__( 'Optional external URL. Leave empty to use the built-in subscribe endpoint.', 'echoroukonline' ) ),
 				array( 'id' => 'latest_news_count', 'type' => 'spinner', 'title' => esc_html__( 'Latest news count', 'echoroukonline' ), 'default' => 8, 'min' => 4, 'max' => 24 ),
 			),
 		)
@@ -159,6 +160,10 @@ function echorouk_register_redux_options() {
 				array( 'id' => 'whatsapp', 'type' => 'text', 'title' => esc_html__( 'WhatsApp', 'echoroukonline' ) ),
 				array( 'id' => 'telegram', 'type' => 'text', 'title' => esc_html__( 'Telegram', 'echoroukonline' ) ),
 				array( 'id' => 'rss', 'type' => 'text', 'title' => esc_html__( 'RSS', 'echoroukonline' ), 'default' => get_bloginfo( 'rss2_url' ) ),
+				array( 'id' => 'podcast_primary_url', 'type' => 'text', 'title' => esc_html__( 'Podcast primary URL', 'echoroukonline' ) ),
+				array( 'id' => 'podcast_secondary_url', 'type' => 'text', 'title' => esc_html__( 'Podcast secondary URL', 'echoroukonline' ) ),
+				array( 'id' => 'podcast_soundcloud_url', 'type' => 'text', 'title' => esc_html__( 'Podcast SoundCloud URL', 'echoroukonline' ) ),
+				array( 'id' => 'podcast_archive_url', 'type' => 'text', 'title' => esc_html__( 'Podcast archive URL', 'echoroukonline' ) ),
 			),
 		)
 	);

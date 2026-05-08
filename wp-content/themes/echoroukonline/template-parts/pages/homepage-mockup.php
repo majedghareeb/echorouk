@@ -6,8 +6,91 @@
  * @package EchouroukOnline
  */
 
-$hero_section = function_exists('echorouk_homepage_get_section') ? echorouk_homepage_get_section('hero') : null;
-$hero_meta    = is_array($hero_section) && isset($hero_section['meta']) && is_array($hero_section['meta']) ? $hero_section['meta'] : array();
+$get_section = static function ($section_id) {
+    if (! function_exists('echorouk_homepage_get_section')) {
+        return null;
+    }
+
+    $section = echorouk_homepage_get_section($section_id);
+
+    return is_array($section) ? $section : null;
+};
+
+$get_section_posts = static function ($section_id, $limit = 6, $fallback_args = array()) use ($get_section) {
+    $section = $get_section($section_id);
+    if (is_array($section) && array_key_exists('enabled', $section) && empty($section['enabled'])) {
+        return array();
+    }
+
+    if (function_exists('echorouk_homepage_get_posts_for_section')) {
+        $posts = echorouk_homepage_get_posts_for_section($section_id, $limit);
+        if (! empty($posts) && is_array($posts)) {
+            return $posts;
+        }
+    }
+
+    if (function_exists('echorouk_homepage_section_posts')) {
+        return echorouk_homepage_section_posts($section_id, $limit, $fallback_args);
+    }
+
+    return get_posts(
+        wp_parse_args(
+            $fallback_args,
+            array(
+                'post_type'      => echorouk_news_post_types(),
+                'post_status'    => 'publish',
+                'posts_per_page' => absint($limit),
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            )
+        )
+    );
+};
+
+$get_posts_by_ids = static function ($ids, $limit = 0) {
+    $ids = is_array($ids) ? array_values(array_filter(array_map('absint', $ids))) : array();
+
+    if (empty($ids)) {
+        return array();
+    }
+
+    $args = array(
+        'post_type'      => 'post',
+        'post_status'    => 'publish',
+        'post__in'       => $ids,
+        'orderby'        => 'post__in',
+        'posts_per_page' => $limit > 0 ? absint($limit) : count($ids),
+    );
+
+    return get_posts($args);
+};
+
+$filter_posts = static function ($posts) {
+    if (! is_array($posts)) {
+        return array();
+    }
+
+    $filtered = array();
+    foreach ($posts as $post) {
+        if ($post instanceof WP_Post && 'publish' === $post->post_status) {
+            $filtered[] = $post;
+        }
+    }
+
+    return $filtered;
+};
+
+$get_excerpt = static function ($post, $words = 24) {
+    $excerpt = get_the_excerpt($post);
+    if (! $excerpt) {
+        $excerpt = get_post_field('post_content', $post);
+    }
+
+    return wp_trim_words(wp_strip_all_tags((string) $excerpt), absint($words));
+};
+
+$hero_section = $get_section('hero');
+$hero_meta    = is_array($hero_section) && ! empty($hero_section['meta']) && is_array($hero_section['meta']) ? $hero_section['meta'] : array();
 
 $hero_main = null;
 if (! empty($hero_meta['main_post_id'])) {
@@ -17,7 +100,7 @@ if (! $hero_main || 'publish' !== $hero_main->post_status) {
     $hero_main = null;
 }
 
-$hero_feed = function_exists('echorouk_homepage_get_posts_for_section') ? echorouk_homepage_get_posts_for_section('hero', 4) : array();
+$hero_feed = $filter_posts($get_section_posts('hero', 6));
 if (! $hero_main && ! empty($hero_feed)) {
     $hero_main = $hero_feed[0];
 }
@@ -25,24 +108,30 @@ if (! $hero_main && ! empty($hero_feed)) {
 $live_enabled = ! empty($hero_meta['live_coverage_enabled']);
 $live_id      = ! empty($hero_meta['live_post_id']) ? absint($hero_meta['live_post_id']) : 0;
 $live_post    = ($live_enabled && $live_id) ? get_post($live_id) : null;
-$side_ids     = ! empty($hero_meta['side_post_ids']) && is_array($hero_meta['side_post_ids']) ? array_map('absint', $hero_meta['side_post_ids']) : array();
-$fallback_ids = ! empty($hero_meta['fallback_post_ids']) && is_array($hero_meta['fallback_post_ids']) ? array_map('absint', $hero_meta['fallback_post_ids']) : array();
-$right_ids    = ($live_post && 'publish' === $live_post->post_status) ? $side_ids : $fallback_ids;
-$hero_right   = ! empty($right_ids) ? get_posts(
-    array(
-        'post_type'      => 'post',
-        'post_status'    => 'publish',
-        'post__in'       => $right_ids,
-        'orderby'        => 'post__in',
-        'posts_per_page' => 3,
-    )
-) : array();
-
-if (empty($hero_right) && ! empty($hero_feed)) {
-    $hero_right = array_slice($hero_feed, $hero_main ? 1 : 0, 3);
+if (! $live_post || 'publish' !== $live_post->post_status) {
+    $live_post = null;
 }
 
-$ticker_posts = function_exists('echorouk_homepage_get_posts_for_section') ? echorouk_homepage_get_posts_for_section('news_ticker', 6) : array();
+$side_ids     = ! empty($hero_meta['side_post_ids']) && is_array($hero_meta['side_post_ids']) ? $hero_meta['side_post_ids'] : array();
+$fallback_ids = ! empty($hero_meta['fallback_post_ids']) && is_array($hero_meta['fallback_post_ids']) ? $hero_meta['fallback_post_ids'] : array();
+$right_ids    = ($live_post ? $side_ids : $fallback_ids);
+$hero_right   = $filter_posts($get_posts_by_ids($right_ids, 3));
+
+if (empty($hero_right)) {
+    $fallback_right = array();
+    foreach ($hero_feed as $feed_post) {
+        if ($hero_main && $hero_main->ID === $feed_post->ID) {
+            continue;
+        }
+        $fallback_right[] = $feed_post;
+        if (count($fallback_right) >= 3) {
+            break;
+        }
+    }
+    $hero_right = $fallback_right;
+}
+
+$ticker_posts = $filter_posts($get_section_posts('news_ticker', 6));
 
 $hero_tag = '';
 if ($hero_main) {
@@ -50,6 +139,253 @@ if ($hero_main) {
     $hero_tag        = ! empty($hero_categories) ? $hero_categories[0]->name : '';
 }
 
+$world_section = $get_section('world');
+$world_meta    = is_array($world_section) && ! empty($world_section['meta']) && is_array($world_section['meta']) ? $world_section['meta'] : array();
+$world_feed    = $filter_posts($get_section_posts('world', 6));
+
+$world_main = null;
+if (! empty($world_meta['main_post_id'])) {
+    $world_main = get_post(absint($world_meta['main_post_id']));
+}
+if (! $world_main || 'publish' !== $world_main->post_status) {
+    $world_main = ! empty($world_feed) ? $world_feed[0] : null;
+}
+
+$world_secondary = array();
+if (! empty($world_meta['secondary_post_ids']) && is_array($world_meta['secondary_post_ids'])) {
+    $world_secondary = $filter_posts($get_posts_by_ids($world_meta['secondary_post_ids'], 6));
+}
+if (empty($world_secondary)) {
+    foreach ($world_feed as $world_feed_post) {
+        if ($world_main && $world_main->ID === $world_feed_post->ID) {
+            continue;
+        }
+        $world_secondary[] = $world_feed_post;
+        if (count($world_secondary) >= 4) {
+            break;
+        }
+    }
+}
+$world_left  = array_slice($world_secondary, 0, 2);
+$world_right = array_slice($world_secondary, 2, 2);
+
+$video_posts   = $filter_posts($get_section_posts('video', 8));
+$sport_posts   = $filter_posts($get_section_posts('sport', 5));
+$economy_posts = $filter_posts($get_section_posts('economy', 5));
+$opinion_posts = $filter_posts($get_section_posts('opinion', 8));
+$last_posts    = $filter_posts($get_section_posts('last', 12));
+$jawaher_posts = $filter_posts($get_section_posts('jawaher', 5));
+
+if (count($video_posts) < 8) {
+    $video_fill = $filter_posts(
+        get_posts(
+            array(
+                'post_type'           => array('video', 'post'),
+                'post_status'         => 'publish',
+                'posts_per_page'      => 8 - count($video_posts),
+                'post__not_in'        => array_values(array_filter(array_map(static function ($post) {
+                    return $post instanceof WP_Post ? (int) $post->ID : 0;
+                }, $video_posts))),
+                'orderby'             => 'date',
+                'order'               => 'DESC',
+                'ignore_sticky_posts' => true,
+            )
+        )
+    );
+
+    if (! empty($video_fill)) {
+        $video_posts = array_values(array_merge($video_posts, $video_fill));
+    }
+}
+
+$most_read_posts = echorouk_get_cached_posts(
+    'homepage_mockup_most_read',
+    array(
+        'post_type'      => echorouk_news_post_types(),
+        'posts_per_page' => 4,
+        'meta_key'       => 'echorouk_view_count',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'DESC',
+    ),
+    300
+);
+$most_read_posts = $filter_posts($most_read_posts);
+if (empty($most_read_posts)) {
+    $most_read_posts = array_slice($last_posts, 0, 4);
+}
+
+$floating_section = $get_section('floating_video');
+$floating_meta    = is_array($floating_section) && ! empty($floating_section['meta']) && is_array($floating_section['meta']) ? $floating_section['meta'] : array();
+$floating_url     = ! empty($floating_meta['video_url']) ? esc_url_raw((string) $floating_meta['video_url']) : '';
+$floating_embed   = $floating_url ? wp_oembed_get($floating_url) : '';
+
+$sport_main   = ! empty($sport_posts) ? $sport_posts[0] : null;
+$sport_cards  = array_slice($sport_posts, 1, 4);
+$economy_main = ! empty($economy_posts) ? $economy_posts[0] : null;
+$economy_cards = array_slice($economy_posts, 1, 4);
+$jawaher_main = ! empty($jawaher_posts) ? $jawaher_posts[0] : null;
+$jawaher_cards = array_slice($jawaher_posts, 1, 4);
+
+$diplomacy_pool = $last_posts;
+
+if (count($diplomacy_pool) < 8) {
+    $diplomacy_fill = $filter_posts(
+        get_posts(
+            array(
+                'post_type'           => echorouk_news_post_types(),
+                'post_status'         => 'publish',
+                'posts_per_page'      => 8 - count($diplomacy_pool),
+                'post__not_in'        => array_values(array_filter(array_map(static function ($post) {
+                    return $post instanceof WP_Post ? (int) $post->ID : 0;
+                }, $diplomacy_pool))),
+                'orderby'             => 'date',
+                'order'               => 'DESC',
+                'ignore_sticky_posts' => true,
+            )
+        )
+    );
+
+    if (! empty($diplomacy_fill)) {
+        $diplomacy_pool = array_values(array_merge($diplomacy_pool, $diplomacy_fill));
+    }
+}
+
+$diplomacy_main = ! empty($diplomacy_pool) ? $diplomacy_pool[0] : null;
+
+$diplomacy_remaining = $diplomacy_main ? array_slice($diplomacy_pool, 1) : $diplomacy_pool;
+$diplomacy_feature   = ! empty($diplomacy_remaining) ? array_shift($diplomacy_remaining) : $diplomacy_main;
+$diplomacy_side      = array_slice($diplomacy_remaining, 0, 3);
+$diplomacy_bottom    = array_slice($diplomacy_remaining, 3, 3);
+
+if (count($diplomacy_bottom) < 3) {
+    $diplomacy_excluded_ids = array();
+
+    foreach (array($diplomacy_main, $diplomacy_feature) as $diplomacy_post_item) {
+        if ($diplomacy_post_item instanceof WP_Post) {
+            $diplomacy_excluded_ids[] = (int) $diplomacy_post_item->ID;
+        }
+    }
+    foreach ($diplomacy_side as $diplomacy_post_item) {
+        if ($diplomacy_post_item instanceof WP_Post) {
+            $diplomacy_excluded_ids[] = (int) $diplomacy_post_item->ID;
+        }
+    }
+    foreach ($diplomacy_bottom as $diplomacy_post_item) {
+        if ($diplomacy_post_item instanceof WP_Post) {
+            $diplomacy_excluded_ids[] = (int) $diplomacy_post_item->ID;
+        }
+    }
+
+    $diplomacy_bottom_fill = $filter_posts(
+        get_posts(
+            array(
+                'post_type'           => echorouk_news_post_types(),
+                'post_status'         => 'publish',
+                'posts_per_page'      => 3 - count($diplomacy_bottom),
+                'post__not_in'        => array_values(array_unique(array_map('absint', $diplomacy_excluded_ids))),
+                'orderby'             => 'date',
+                'order'               => 'DESC',
+                'ignore_sticky_posts' => true,
+            )
+        )
+    );
+
+    if (! empty($diplomacy_bottom_fill)) {
+        $diplomacy_bottom = array_values(array_merge($diplomacy_bottom, $diplomacy_bottom_fill));
+    }
+}
+
+$podcast_posts = echorouk_get_cached_posts(
+    'homepage_mockup_podcast',
+    array(
+        'post_type'      => array('audio', 'post'),
+        'post_status'    => 'publish',
+        'posts_per_page' => 5,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ),
+    300
+);
+$podcast_posts   = $filter_posts($podcast_posts);
+$podcast_feature = ! empty($podcast_posts) ? $podcast_posts[0] : null;
+$podcast_list    = array_slice($podcast_posts, 1, 3);
+
+$collect_category_ids = static function ($needles) {
+    $needles = is_array($needles) ? $needles : array();
+    $needles = array_filter(array_map(static function ($value) {
+        $value = strtolower(remove_accents((string) $value));
+
+        return trim(preg_replace('/[^a-z0-9]+/', '', $value));
+    }, $needles));
+
+    if (empty($needles)) {
+        return array();
+    }
+
+    $matched = array();
+    $terms   = get_categories(
+        array(
+            'hide_empty' => false,
+        )
+    );
+
+    foreach ($terms as $term) {
+        $name_key = trim(preg_replace('/[^a-z0-9]+/', '', strtolower(remove_accents((string) $term->name))));
+        $slug_key = trim(preg_replace('/[^a-z0-9]+/', '', strtolower(remove_accents((string) $term->slug))));
+
+        if (in_array($name_key, $needles, true) || in_array($slug_key, $needles, true)) {
+            $matched[] = (int) $term->term_id;
+        }
+    }
+
+    return array_values(array_unique($matched));
+};
+
+$get_posts_by_category_keys = static function ($category_keys, $limit = 3) use ($filter_posts, $collect_category_ids) {
+    $category_ids = $collect_category_ids($category_keys);
+    if (empty($category_ids)) {
+        return array();
+    }
+
+    return $filter_posts(
+        get_posts(
+            array(
+                'post_type'           => 'post',
+                'post_status'         => 'publish',
+                'posts_per_page'      => absint($limit),
+                'category__in'        => $category_ids,
+                'orderby'             => 'date',
+                'order'               => 'DESC',
+                'ignore_sticky_posts' => true,
+            )
+        )
+    );
+};
+
+$french_posts  = $get_posts_by_category_keys(array('francais', 'français', 'french', 'fr'));
+$english_posts = $get_posts_by_category_keys(array('english', 'anglais', 'en'));
+
+$podcast_primary_url    = echorouk_get_option('podcast_primary_url', '');
+$podcast_secondary_url  = echorouk_get_option('podcast_secondary_url', '');
+$podcast_soundcloud_url = echorouk_get_option('podcast_soundcloud_url', '');
+$podcast_archive_url    = echorouk_get_option('podcast_archive_url', '');
+
+if (! $podcast_primary_url) {
+    $podcast_primary_url = echorouk_get_option('youtube', '');
+}
+if (! $podcast_secondary_url) {
+    $podcast_secondary_url = echorouk_get_option('rss', get_bloginfo('rss2_url'));
+}
+if (! $podcast_soundcloud_url) {
+    $podcast_soundcloud_url = echorouk_get_option('telegram', '');
+}
+if (! $podcast_archive_url) {
+    $podcast_archive_url = home_url('/');
+}
+
+$newsletter_feedback = function_exists('echorouk_newsletter_get_feedback') ? echorouk_newsletter_get_feedback() : null;
+$newsletter_action   = function_exists('echorouk_newsletter_form_action_url') ? echorouk_newsletter_form_action_url() : admin_url('admin-post.php');
+$newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoint') ? echorouk_newsletter_use_internal_endpoint() : true;
 ?>
 <main id="primary" class="site-main echorouk-homepage-mockup">
     <div class="container-xl echorouk-homepage-wrap py-4">
@@ -60,912 +396,561 @@ if ($hero_main) {
                         <?php if (! empty($hero_right)) : ?>
                             <?php $feature = $hero_right[0]; ?>
                             <article class="hero-latest-feature">
-                                <a
-                                    href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
-                                <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?>
-                                </div>
-                                <h3><a
-                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
-                                </h3>
+                                <a href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
+                                <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?></div>
+                                <h3><a href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a></h3>
                             </article>
 
                             <?php foreach (array_slice($hero_right, 1, 2) as $hero_side_post) : ?>
                                 <article class="hero-latest-item">
-                                    <a
-                                        href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
                                     <div>
-                                        <h4><a
-                                                href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
-                                        </h4>
+                                        <h4><a href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a></h4>
                                     </div>
                                 </article>
                             <?php endforeach; ?>
-                        <?php else : ?>
-                            <article class="hero-latest-feature">
-                                <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=600&q=80"
-                                    alt="latest big" loading="lazy" decoding="async">
-                                <div class="hero-latest-date">2026/04/01</div>
-                                <h3>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h3>
-                            </article>
-
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 1" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ديربي مصر</h4>
-                                </div>
-                            </article>
-
-                            <article class="hero-latest-item">
-                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=220&q=80"
-                                    alt="latest small 2" loading="lazy" decoding="async">
-                                <div>
-                                    <h4>مواجهة قوية مرتقبة بين كندا وصربيا والصينية تشينغ تشيوان</h4>
-                                </div>
-                            </article>
                         <?php endif; ?>
                     </div>
                 </aside>
 
-
                 <section class="col-lg-5 order-1 order-lg-2 hero-col-center">
-                    <article class="hero-lead hero-col-card">
-                        <div class="hero-lead-media position-relative">
-                            <?php if ($hero_main) : ?>
-                                <span class="tag"><?php echo esc_html($hero_tag ? $hero_tag : 'العالم'); ?></span>
-                                <a
-                                    href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero'); ?></a>
-                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center"
-                                    aria-label="قراءة الخبر">
-                                    <img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/play-circle-stroke-rounded-white.svg"></img></a>
-                                <a href="#" class="hero-lead-icon">
+                    <?php if ($hero_main) : ?>
+                        <article class="hero-lead hero-col-card">
+                            <div class="hero-lead-media position-relative">
+                                <span class="tag"><?php echo esc_html($hero_tag ? $hero_tag : __('العالم', 'echoroukonline')); ?></span>
+                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero', '', true); ?></a>
+                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center" aria-label="<?php esc_attr_e('Read article', 'echoroukonline'); ?>">
+                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded-white.svg'); ?>" alt="">
                                 </a>
-                            <?php else : ?>
-                                <span class="tag">العالم</span>
-                                <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=900&q=80"
-                                    alt="main news" loading="lazy" decoding="async">
-                                <a href="#" class="hero-play-center" aria-label="تشغيل الفيديو"><i
-                                        class="bi bi-play-fill"></i></a>
-                            <?php endif; ?>
-                            <aside class="hero-floating-video" aria-label="نافذة فيديو عائمة">
-                                <div class="hero-floating-head">
-                                    <button class="hero-floating-close" type="button"
-                                        aria-label="إغلاق الفيديو العائم">×</button>
-                                    <span class="hero-floating-live">البث الحي</span>
-                                </div>
-                                <div class="hero-floating-frame">
-                                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=260&q=80"
-                                        alt="floating video" loading="lazy" decoding="async">
-                                    <span class="hero-floating-label">Episode 172</span>
-                                </div>
-                            </aside>
-                        </div>
 
-                        <div class="hero-lead-box-wrap">
-                            <div class="hero-lead-text-box">
-                                <?php if ($hero_main) : ?>
-                                    <h1 class="headline"><a
-                                            href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a>
-                                    </h1>
-                                    <div class="hero-meta-line"><?php echo esc_html(get_the_date('', $hero_main)); ?>
-                                    </div>
-                                    <p class="summary mb-0">
-                                        <?php echo esc_html(wp_trim_words(wp_strip_all_tags(get_the_excerpt($hero_main) ? get_the_excerpt($hero_main) : get_post_field('post_content', $hero_main)), 28)); ?>
-                                    </p>
-                                <?php else : ?>
-                                    <h1 class="headline">ترامب يهاجم بريطانيا وفرنسا.. هذا ما قاله</h1>
-                                    <div class="hero-meta-line">السبت 22 مارس 2026</div>
-                                    <p class="summary mb-0">قال ترامب في منشور عبر منصة "تروث سوشيال" إن بريطانيا من بين
-                                        الدول التي لم تعد قادرة على الحصول على وقود الطائرات بسبب إغلاق مضيق هرمز.</p>
+                                <?php if ($floating_url) : ?>
+                                    <aside class="hero-floating-video" aria-label="<?php esc_attr_e('Floating video', 'echoroukonline'); ?>">
+                                        <div class="hero-floating-head">
+                                            <button class="hero-floating-close" type="button" aria-label="<?php esc_attr_e('Close floating video', 'echoroukonline'); ?>">×</button>
+                                            <span class="hero-floating-live"><?php esc_html_e('Live Streaming', 'echoroukonline'); ?></span>
+                                        </div>
+                                        <div class="hero-floating-frame">
+                                            <?php if ($floating_embed) : ?>
+                                                <?php echo $floating_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                            <?php else : ?>
+                                                <a href="<?php echo esc_url($floating_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($floating_url); ?></a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </aside>
                                 <?php endif; ?>
                             </div>
-                            <div class="hero-lead-icons-box" aria-label="إجراءات الخبر">
-                                <a href="#" class="hero-lead-icon"><img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/share-08-stroke-rounded.svg"></img></a>
-                                <a href="#" class="hero-lead-icon"><img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/menu-01-stroke-rounded.svg"></img></a>
-                                <a href="#" class="hero-lead-icon is-active"><img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/headphones-stroke-rounded.svg"></img></a>
-                                <a href="#" class="hero-lead-icon"><img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/bookmark-02-stroke-rounded.svg"></img></a>
+
+                            <div class="hero-lead-box-wrap">
+                                <div class="hero-lead-text-box">
+                                    <h1 class="headline"><a href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a></h1>
+                                    <div class="hero-meta-line"><?php echo esc_html(get_the_date('', $hero_main)); ?></div>
+                                    <p class="summary mb-0"><?php echo esc_html($get_excerpt($hero_main, 28)); ?></p>
+                                </div>
+                                <div class="hero-lead-icons-box" aria-label="<?php esc_attr_e('Article actions', 'echoroukonline'); ?>">
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/share-08-stroke-rounded.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/menu-01-stroke-rounded.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon is-active"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/headphones-stroke-rounded.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/bookmark-02-stroke-rounded.svg'); ?>" alt=""></a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
+                    <?php endif; ?>
                 </section>
+
                 <aside class="col-lg-4 order-2 order-lg-1 hero-col-left">
                     <div class="hero-live hero-col-card">
-                        <div class="hero-live-title"><span>تغطية
-                                حية</span><img
-                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/arrow-left-01-stroke-rounded.svg"></img>
-                        </div>
+                        <div class="hero-live-title"><span><?php esc_html_e('Live Streaming', 'echoroukonline'); ?></span><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>" alt=""></div>
                         <ul class="hero-live-timeline">
-                            <?php if (! empty($ticker_posts)) : ?>
-                                <?php foreach ($ticker_posts as $ticker_post) : ?>
-                                    <li><time class="hero-live-time"
-                                            datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time><span><a
-                                                href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <li><time class="hero-live-time" datetime="2026-05-01T14:30:00+03:00">الآن</time><span>سعيود
-                                        يعرض مشروع قانون الانتخابات أمام مجلس الأمة</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T13:22:00+03:00">13:22</time><span>فالڤيردي: توقعت طردي من ريال
-                                        مدريد بسبب لوكا زيدان (فيديو)</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T11:15:00+03:00">11:15</time><span>زوجته تعامله بشكل سيئ.. ترامب
-                                        يسخر من ماكرون مجددا!</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T10:45:00+03:00">10:45</time><span>ميناء وهران.. رسو باخرة ثالثة
-                                        محملة بـ 7 آلاف رأس غنم مستورد</span></li>
-                                <li><time class="hero-live-time" datetime="2026-05-01T09:22:00+03:00">09:22</time><span>فيفا
-                                        يرفع أسعار تذاكر نهائي كأس العالم 2026</span></li>
-                                <li><time class="hero-live-time"
-                                        datetime="2026-05-01T09:12:00+03:00">09:12</time><span>مرشحة محتملة للرئاسة
-                                        الأمريكية تتعهد بمراجعة السياسة الخارجية</span></li>
-                            <?php endif; ?>
+                            <?php foreach ($ticker_posts as $ticker_post) : ?>
+                                <li>
+                                    <time class="hero-live-time" datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time>
+                                    <span><a href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </aside>
-
             </div>
         </section>
-        <div class="ad-box my-4">مساحة إعلانية</div>
-        <hr class="section-divider my-4">
-        <section class="world-spotlight grid-border">
-            <div class="row g-4 align-items-stretch world-spotlight-grid">
-                <aside class="col-lg-3 world-side">
-                    <article class="world-mini-card">
-                        <div class="world-mini-media">
-                            <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?auto=format&fit=crop&w=500&q=80"
-                                alt="macron" loading="lazy" decoding="async">
-                            <span class="world-mini-tag">إيران</span>
-                        </div>
-                        <div class="world-mini-date">2026/04/05</div>
-                        <h3>هكذا رد ماكرون على سخرية ترامب منه ومن زوجته</h3>
-                    </article>
-                    <article class="world-mini-card">
-                        <div class="world-mini-media">
-                            <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=500&q=80"
-                                alt="flights" loading="lazy" decoding="async">
-                            <span class="world-mini-tag">الجزائر</span>
-                        </div>
-                        <div class="world-mini-date">2026/04/05</div>
-                        <h3>بعد توقف دام سنوات.. عودة الرحلات الجوية نحو هذه الولاية</h3>
-                    </article>
-                </aside>
 
-                <section class="col-lg-6">
-                    <article class="world-feature-card">
-                        <div class="world-feature-media">
-                            <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1000&q=80"
-                                alt="featured world" loading="lazy" decoding="async">
-                            <span class="world-feature-tag">العالم</span>
-                        </div>
-                        <div class="world-feature-body">
-                            <div class="world-feature-date">2026/04/05</div>
-                            <h3>بعد شهرين من استدعائه.. عودة السفير الإيطالي إلى سويسرا</h3>
-                            <p>ذكرت وزارة الخارجية السويسرية أن سفير إيطاليا سيعود إلى مهامه، وذلك بعد أكثر من شهرين من
-                                استدعائه احتجاجا على إجراءات السلطات السويسرية بشأن حريق اندلع في حانة وادى إلى مصرع
-                                إيطاليين.</p>
-                        </div>
-                    </article>
-                </section>
+        <div class="ad-box my-4"><?php esc_html_e('Ads', 'echoroukonline'); ?></div>
 
-                <aside class="col-lg-3 world-side">
-                    <article class="world-mini-card">
-                        <div class="world-mini-media">
-                            <img src="https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?auto=format&fit=crop&w=500&q=80"
-                                alt="usa flag" loading="lazy" decoding="async">
-                            <span class="world-mini-tag">إيران</span>
-                        </div>
-                        <div class="world-mini-date">2026/04/05</div>
-                        <h3>السلطات الأمريكية تعلن توقيف قريبتين لقاسم سليماني.. وطهران تنفي</h3>
-                    </article>
-                    <article class="world-mini-card">
-                        <div class="world-mini-media">
-                            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=500&q=80"
-                                alt="police" loading="lazy" decoding="async">
-                            <span class="world-mini-tag">الجزائر</span>
-                        </div>
-                        <div class="world-mini-date">2026/04/05</div>
-                        <h3>ترقيات استثنائية لأعوان الشرطة الحاصلين على شهادات جامعية</h3>
-                    </article>
-                </aside>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="grid-border">
-            <header class="most-read-header">
-                <h5 class="section-title"><span>الأكثر قراءة</span></h5>
-                <h5 class="most-read-tabs">
-                    <ul class="most-read-time-filters" role="tablist" aria-label="تصفية الأكثر قراءة حسب المدة">
-                        <li role="presentation">
-                            <button type="button" class="most-read-time-filter" data-time-range="day" role="tab"
-                                aria-selected="false" aria-pressed="false">
-                                اليوم
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button type="button" class="most-read-time-filter" data-time-range="week" role="tab"
-                                aria-selected="false" aria-pressed="false">
-                                هذا الأسبوع
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button type="button" class="most-read-time-filter is-active" data-time-range="month"
-                                role="tab" aria-selected="true" aria-pressed="true">
-                                هذا الشهر
-                            </button>
-                        </li>
-                    </ul>
-                </h5>
-            </header>
-            <div class="row g-3">
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=500&q=80"
-                            alt="cooperation" loading="lazy" decoding="async">
-                        <div class="most-read-mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">لقاء وزاري لبحث التعاون</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=500&q=80"
-                            alt="work market" loading="lazy" decoding="async">
-                        <div class="most-read-mini-date">2026/04/05</div>
+        <?php if ($world_main) : ?>
+            <hr class="section-divider my-4">
+            <section class="world-spotlight grid-border">
+                <div class="row g-4 align-items-stretch world-spotlight-grid">
+                    <aside class="col-lg-3 world-side">
+                        <?php foreach ($world_left as $world_post) : ?>
+                            <article class="world-mini-card">
+                                <div class="world-mini-media">
+                                    <a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
+                                    <span class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
+                                </div>
+                                <div class="world-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $world_post)); ?></div>
+                                <h3><a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a></h3>
+                            </article>
+                        <?php endforeach; ?>
+                    </aside>
 
-                        <h3 class="small-headline mt-2">تقرير حول سوق العمل</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=500&q=80"
-                            alt="roads" loading="lazy" decoding="async">
-                        <div class="most-read-mini-date">2026/04/05</div>
-
-                        <h3 class="small-headline mt-2">تطوير شبكة الطرق</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=500&q=80"
-                            alt="conference" loading="lazy" decoding="async">
-                        <div class="most-read-mini-date">2026/04/05</div>
-
-                        <h3 class="small-headline mt-2">مؤتمر صحفي مرتقب</h3>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="video-showcase grid-border">
-            <div class="video-showcase-grid">
-                <aside class="col-lg-3 video-showcase-side">
-                    <div class="video-side-ad">إعلان<br>300/250</div>
-
-                    <div class="video-side-most">
-                        <div class="video-side-title-wrap">
-                            <h3 class="video-side-title">الأكثر مشاهدة</h3>
-                            <img
-                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/arrow-left-double-stroke-rounded.svg"></img>
-                        </div>
-
-                        <article class="video-side-feature">
-                            <div class="video-side-thumb">
-                                <img src="https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=500&q=80"
-                                    alt="most watched" loading="lazy" decoding="async">
-                                <span class="video-thumb-play" aria-hidden="true">
-                                    <img src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/play-stroke-rounded-2.svg"
-                                        alt="">
-                                </span>
+                    <section class="col-lg-6">
+                        <article class="world-feature-card">
+                            <div class="world-feature-media">
+                                <a href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo echorouk_post_image_html($world_main->ID, 'large'); ?></a>
+                                <span class="world-feature-tag"><?php echo esc_html(echorouk_get_primary_category($world_main->ID) ? echorouk_get_primary_category($world_main->ID)->name : __('العالم', 'echoroukonline')); ?></span>
                             </div>
-                            <div class="video-side-date">2026/04/01</div>
-                            <h4>سعيود يستقبل رئيس المجلس الوطني للأقاليم والجهات التونسي</h4>
+                            <div class="world-feature-body">
+                                <div class="world-feature-date"><?php echo esc_html(get_the_date('Y/m/d', $world_main)); ?></div>
+                                <h3><a href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo esc_html(get_the_title($world_main)); ?></a></h3>
+                                <p><?php echo esc_html($get_excerpt($world_main, 30)); ?></p>
+                            </div>
                         </article>
+                    </section>
 
-                        <div class="video-side-list">
-                            <article class="video-side-item">
-                                <div class="video-side-thumb">
-                                    <img class="video-side-thumb-img"
-                                        src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=180&q=80"
-                                        alt="thumb 1" loading="lazy" decoding="async">
-                                    <span class="video-thumb-play" aria-hidden="true">
-                                        <img src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/play-stroke-rounded-2.svg"
-                                            alt="">
-                                    </span>
+                    <aside class="col-lg-3 world-side">
+                        <?php foreach ($world_right as $world_post) : ?>
+                            <article class="world-mini-card">
+                                <div class="world-mini-media">
+                                    <a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
+                                    <span class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
                                 </div>
-
-                                <div>
-                                    <h5>الاتحاد الإسباني يدين هتافات عنصرية ضد المسلمين في ودية مصر</h5>
-                                </div>
-
+                                <div class="world-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $world_post)); ?></div>
+                                <h3><a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a></h3>
                             </article>
-                            <article class="video-side-item">
-                                <img class="video-side-thumb-img"
-                                    src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=180&q=80"
-                                    alt="thumb 2" loading="lazy" decoding="async">
-                                <div>
-                                    <h5>مواجهة قوية مرتقبة بين كيليا نيمور والصينية تشيو شييوان</h5>
-                                </div>
-                            </article>
-                            <article class="video-side-item">
-                                <img class="video-side-thumb-img"
-                                    src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=180&q=80"
-                                    alt="thumb 3" loading="lazy" decoding="async">
-                                <div>
-                                    <h5>محركتنا مفتوحة ضد الهيمنة الأمريكية</h5>
-                                </div>
+                        <?php endforeach; ?>
+                    </aside>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <?php if (! empty($most_read_posts)) : ?>
+            <hr class="section-divider my-4">
+            <section class="grid-border">
+                <header class="most-read-header">
+                    <h5 class="section-title"><span><?php esc_html_e('Most read', 'echoroukonline'); ?></span></h5>
+                    <h5 class="most-read-tabs">
+                        <ul class="most-read-time-filters" role="tablist" aria-label="<?php esc_attr_e('Most read filters', 'echoroukonline'); ?>">
+                            <li role="presentation"><button type="button" class="most-read-time-filter" data-time-range="day" role="tab" aria-selected="false" aria-pressed="false"><?php esc_html_e('Today', 'echoroukonline'); ?></button></li>
+                            <li role="presentation"><button type="button" class="most-read-time-filter" data-time-range="week" role="tab" aria-selected="false" aria-pressed="false"><?php esc_html_e('This week', 'echoroukonline'); ?></button></li>
+                            <li role="presentation"><button type="button" class="most-read-time-filter is-active" data-time-range="month" role="tab" aria-selected="true" aria-pressed="true"><?php esc_html_e('This month', 'echoroukonline'); ?></button></li>
+                        </ul>
+                    </h5>
+                </header>
+                <div class="row g-3 most-read-grid">
+                    <?php foreach ($most_read_posts as $most_read_post) : ?>
+                        <div class="col-6 col-md-3">
+                            <article class="news-card">
+                                <a href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo echorouk_post_image_html($most_read_post->ID, 'medium'); ?></a>
+                                <div class="most-read-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $most_read_post)); ?></div>
+                                <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo esc_html(get_the_title($most_read_post)); ?></a></h3>
                             </article>
                         </div>
-                    </div>
-                </aside>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
-                <section class="col-lg-9 video-showcase-main">
-                    <header class="video-main-header">
-                        <div class="video-main-logo-wrap">
-                            <div class="video-main-kicker">فيديوهات</div>
-                            <div class="video-main-logo" id="echorouk-logo-white"></div>
-                        </div>
-                        <a href="#" class="video-main-all">كل الفيديوهات <span aria-hidden="true"><img
-                                    style="transform: matrix(-1, 0, 0, -1, 0, 0);"
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/play-stroke-rounded.svg"></img></span></a>
-                    </header>
-
-                    <article class="video-main-feature">
-                        <img src="https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80"
-                            alt="featured video" loading="lazy" decoding="async">
-                        <div class="video-main-overlay">
-                            <div class="video-main-feature-date">15/03/2025</div>
-
-                            <div class="video-main-feature-title">
-                                <img
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/play-circle-stroke-rounded.svg">
-                                <h3>البرازيل تكبل أنشيلوتي</h3>
-                            </div>
-                        </div>
-                    </article>
-
-                    <div class="video-main-bottom">
-                        <article class="video-bottom-card">
-                            <img src="https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?auto=format&fit=crop&w=700&q=80"
-                                alt="video bottom 1" loading="lazy" decoding="async">
-                            <div class="video-bottom-date">25/03/2026</div>
-                            <h4>الجزائر.. موقفها مع موريتانيا الشقيقة</h4>
-                        </article>
-                        <article class="video-bottom-card">
-                            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=700&q=80"
-                                alt="video bottom 2" loading="lazy" decoding="async">
-                            <div class="video-bottom-date">25/03/2026</div>
-                            <h4>روسيا والصين تفتحان مشروع "أوراسيا" حول الوضع في الشرق الأوسط</h4>
-                        </article>
-                    </div>
-                </section>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="grid-border sports-section">
-            <div class="video-sports-logo-wrap">
-                <div class="video-sports-logo" id="echorouk-sports-logo-dark"></div>
-            </div>
-            <div class="row g-4 align-items-center sports-main-grid">
-                <div class="col-lg-4 sports-main-article">
-                    <h3>توقعات بنمو قطاعات حيوية خلال العام الحالي</h3>
-                    <p class="summary">خبراء يؤكدون أن إجراءات الإصلاح ودعم الاستثمار تساهم في تحريك النشاط الاقتصادي.
-                    </p>
-                </div>
-                <div class="col-lg-8 sports-main-media"><img
-                        src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=80"
-                        class="img-fluid" alt="economy" loading="lazy" decoding="async"></div>
-            </div>
-            <div class="row g-3 mt-2 sports-sub-grid">
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=80"
-                            alt="currencies" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">أسعار العملات اليوم</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=500&q=80"
-                            alt="investments" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">خطة لجذب الاستثمارات</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80"
-                            alt="real estate" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">التمويل العقاري يتصدر</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=500&q=80"
-                            alt="trade" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">مؤشرات إيجابية للتجارة</h3>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="grid-border economy-section">
-            <h5 class="section-title"><span>اقتصاد</span></h5>
-            <div class="row g-4 align-items-center economy-main-grid">
-                <div class="col-lg-4 economy-main-article">
-                    <h3 class="headline">توقعات بنمو قطاعات حيوية خلال العام الحالي</h3>
-                    <p class="summary">خبراء يؤكدون أن إجراءات الإصلاح ودعم الاستثمار تساهم في تحريك النشاط الاقتصادي.
-                    </p>
-                </div>
-                <div class="col-lg-8 economy-main-media"><img
-                        src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=80"
-                        class="img-fluid" alt="economy" loading="lazy" decoding="async"></div>
-            </div>
-            <div class="row g-3 mt-2 economy-sub-grid">
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=80"
-                            alt="currencies" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">أسعار العملات اليوم</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=500&q=80"
-                            alt="investments" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">خطة لجذب الاستثمارات</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80"
-                            alt="real estate" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">التمويل العقاري يتصدر</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=500&q=80"
-                            alt="trade" loading="lazy" decoding="async">
-                        <div class="mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">مؤشرات إيجابية للتجارة</h3>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="daily-boxes grid-border">
-            <div class="row g-3 daily-boxes-grid">
-                <div class="col-lg-6 col-md-6 col-12">
-                    <article class="daily-box daily-print-box">
-                        <header class="daily-box-header">
-                            <h3>الشروق اليومي - النسخة المطبوعة</h3>
-                            <div class="daily-box-link">
-                                <a href="#"> الأرشيف<img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/archive-02-stroke-rounded.svg"></img></a>
-                            </div>
-
-                        </header>
-                        <div class="daily-box-divider"></div>
-                        <div class="daily-print-content">
-                            <div class="daily-print-cover-wrap">
-                                <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80"
-                                    alt="newspaper cover" loading="lazy" decoding="async">
-                            </div>
-                            <div class="daily-print-meta">
-                                <div class="daily-print-date">الخميس 16 أفريل 2026</div>
-                                <div class="daily-print-downloads">تحميل 1569</div>
-                                <div class="download-button">
-                                    <a href="#" class="daily-print-download" aria-label="تحميل النسخة">
-                                        <img
-                                            src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/download-03-stroke-rounded.svg"></img>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                    </article>
-                </div>
-                <div class="col-lg-6 col-md-6 col-12">
-                    <article class="daily-box daily-poll-box">
-                        <header class="daily-box-header">
-                            <h3>تصويت اليوم</h3>
-                            <div class="daily-box-link">
-                                <a href="#"> كل التصويتات<img
-                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/check-list-stroke-rounded.svg"></img></a>
-                            </div>
-                        </header>
-                        <div class="daily-box-divider"></div>
-                        <form class="daily-poll-form" action="#" method="post">
-                            <p class="daily-poll-question">من هو أفضل لاعب كرة قدم لعب للمنتخب الوطني</p>
-                            <label class="daily-poll-option">
-                                <input type="radio" name="poll_player" value="riyad-mahrez">
-                                <span>رياض محرز</span>
-                            </label>
-                            <label class="daily-poll-option">
-                                <input type="radio" name="poll_player" value="lakhdar-belloumi">
-                                <span>لخضر بلومي</span>
-                            </label>
-                            <label class="daily-poll-option">
-                                <input type="radio" name="poll_player" value="rabah-madjer">
-                                <span>رابح ماجر</span>
-                            </label>
-                            <button class="daily-poll-submit" type="submit">تصويت</button>
-                        </form>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="blue-panel mb-5 opinion-panel">
-            <div class="opinion-main-logo-wrap">
-                <div class="opinion-main-kicker">أقلام</div>
-                <div class="opinion-main-logo" id="echorouk-logo-white"></div>
-            </div>
+        <?php if (! empty($video_posts)) : ?>
             <?php
-            $opinion_samples = array(
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'لعلى بشطولة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'الإمبراطورية التي تصرخ.. تظهر وتسير على أجنحة الفراغ',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'رياض رمضان بن وادن',
-                    'author_img'  => 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'العنف الخفي في خطاب الذات!!',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'حسين لقرع',
-                    'author_img'  => 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'حملة حطّ اسمها الإمارات',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'محمد سليم قلالة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/07',
-                    'title'       => 'بعض ما علمتنا الحرب على إيران',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'لعلى بشطولة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'مآلات السردية الكبرى في زمن ما بعد اليقين',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'رياض رمضان بن وادن',
-                    'author_img'  => 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'قراءة ثانية في خطاب الأزمة ومجازاتها',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1505245208761-ba872912fac0?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'حسين لقرع',
-                    'author_img'  => 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'الإقليم بين صخب الدعاية وهدوء الوقائع',
-                ),
-                array(
-                    'thumb'       => 'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=800&q=80',
-                    'author_name' => 'محمد سليم قلالة',
-                    'author_img'  => 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=100&q=80',
-                    'date'        => '2026/04/08',
-                    'title'       => 'إيران والخرائط الجديدة لموازين القوى',
-                ),
-            );
-            ?>
-            <div class="row g-0 opinion-grid">
-                <?php foreach ($opinion_samples as $sample) : ?>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <article class="opinion-card">
-                            <img class="opinion-card-thumb" src="<?php echo esc_url($sample['thumb']); ?>"
-                                alt="<?php echo esc_attr($sample['author_name']); ?>" loading="lazy" decoding="async">
-                            <div class="opinion-card-meta">
-                                <div class="opinion-card-author">
-                                    <div class="author-name-date">
-                                        <span
-                                            class="opinion-card-author-name"><?php echo esc_html($sample['author_name']); ?></span>
-                                        <div class="opinion-card-date"><?php echo esc_html($sample['date']); ?></div>
-                                    </div>
+            $video_side_feature = $video_posts[0];
+            $video_side_list    = array_slice($video_posts, 1, 3);
+            $video_used_ids     = array($video_side_feature->ID);
+            foreach ($video_side_list as $video_side_item) {
+                $video_used_ids[] = $video_side_item->ID;
+            }
 
-                                    <img class="avatar" src="<?php echo esc_url($sample['author_img']); ?>"
-                                        alt="<?php echo esc_attr($sample['author_name']); ?>" loading="lazy"
-                                        decoding="async">
+            $video_remaining = array();
+            foreach ($video_posts as $video_post_item) {
+                if (in_array($video_post_item->ID, $video_used_ids, true)) {
+                    continue;
+                }
+                $video_remaining[] = $video_post_item;
+            }
+
+            $video_main_feature = ! empty($video_remaining) ? array_shift($video_remaining) : $video_side_feature;
+            $video_bottom_cards = array_slice($video_remaining, 0, 2);
+
+            if (count($video_bottom_cards) < 2) {
+                $video_excluded_ids = array($video_side_feature->ID, $video_main_feature->ID);
+                foreach ($video_side_list as $video_side_item) {
+                    $video_excluded_ids[] = $video_side_item->ID;
+                }
+                foreach ($video_bottom_cards as $video_bottom_item) {
+                    $video_excluded_ids[] = $video_bottom_item->ID;
+                }
+
+                $video_bottom_fill = $filter_posts(
+                    get_posts(
+                        array(
+                            'post_type'           => array('video', 'post'),
+                            'post_status'         => 'publish',
+                            'posts_per_page'      => 2 - count($video_bottom_cards),
+                            'post__not_in'        => array_values(array_unique(array_map('absint', $video_excluded_ids))),
+                            'orderby'             => 'date',
+                            'order'               => 'DESC',
+                            'ignore_sticky_posts' => true,
+                        )
+                    )
+                );
+
+                if (! empty($video_bottom_fill)) {
+                    $video_bottom_cards = array_values(array_merge($video_bottom_cards, $video_bottom_fill));
+                }
+            }
+            ?>
+            <hr class="section-divider my-4">
+            <section class="video-showcase grid-border">
+                <div class="video-showcase-grid">
+                    <aside class="col-lg-3 video-showcase-side">
+                        <div class="video-side-ad"><?php esc_html_e('Ads', 'echoroukonline'); ?><br>300/250</div>
+
+                        <div class="video-side-most">
+                            <div class="video-side-title-wrap">
+                                <h3 class="video-side-title"><?php esc_html_e('Most viewed', 'echoroukonline'); ?></h3>
+                                <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-double-stroke-rounded.svg'); ?>" alt="">
+                            </div>
+
+                            <article class="video-side-feature">
+                                <a class="video-side-thumb" href="<?php echo esc_url(get_permalink($video_side_feature)); ?>">
+                                    <?php echo echorouk_post_image_html($video_side_feature->ID, 'medium'); ?>
+                                    <span class="video-thumb-play" aria-hidden="true"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>" alt=""></span>
+                                </a>
+                                <div class="video-side-date"><?php echo esc_html(get_the_date('Y/m/d', $video_side_feature)); ?></div>
+                                <h4><a href="<?php echo esc_url(get_permalink($video_side_feature)); ?>"><?php echo esc_html(get_the_title($video_side_feature)); ?></a></h4>
+                            </article>
+
+                            <div class="video-side-list">
+                                <?php foreach ($video_side_list as $video_side_item) : ?>
+                                    <article class="video-side-item">
+                                        <a href="<?php echo esc_url(get_permalink($video_side_item)); ?>"><?php echo echorouk_post_image_html($video_side_item->ID, 'thumbnail', 'video-side-thumb-img'); ?></a>
+                                        <div>
+                                            <h5><a href="<?php echo esc_url(get_permalink($video_side_item)); ?>"><?php echo esc_html(get_the_title($video_side_item)); ?></a></h5>
+                                        </div>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <section class="col-lg-9 video-showcase-main">
+                        <header class="video-main-header">
+                            <div class="video-main-logo-wrap">
+                                <div class="video-main-kicker"><?php esc_html_e('Videos', 'echoroukonline'); ?></div>
+                                <div class="video-main-logo" id="echorouk-logo-white"></div>
+                            </div>
+                            <a href="<?php echo esc_url(get_post_type_archive_link('video') ? get_post_type_archive_link('video') : home_url('/')); ?>" class="video-main-all"><?php esc_html_e('All videos', 'echoroukonline'); ?><span aria-hidden="true"><img style="transform: matrix(-1, 0, 0, -1, 0, 0);" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded.svg'); ?>" alt=""></span></a>
+                        </header>
+
+                        <article class="video-main-feature">
+                            <a href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo echorouk_post_image_html($video_main_feature->ID, 'large'); ?></a>
+                            <div class="video-main-overlay">
+                                <div class="video-main-feature-date"><?php echo esc_html(get_the_date('d/m/Y', $video_main_feature)); ?></div>
+                                <div class="video-main-feature-title">
+                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded.svg'); ?>" alt="">
+                                    <h3><a href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo esc_html(get_the_title($video_main_feature)); ?></a></h3>
                                 </div>
                             </div>
-                            <h3 class="opinion-card-title"><?php echo esc_html($sample['title']); ?></h3>
                         </article>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="diplomacy-spotlight grid-border">
-            <div class="row g-0 align-items-start diplomacy-spotlight-top">
 
-                <div class="col-lg-3 col-12 diplomacy-top-col diplomacy-top-main">
-                    <article class="diplomacy-main-story">
-                        <h3>زيارة البابا إلى الجزائر محطة دبلوماسية رفيعة</h3>
-                        <div class="diplomacy-main-date">2026/04/12</div>
-                    </article>
-                </div>
-                <div class="col-lg-6 col-12 diplomacy-top-col diplomacy-top-feature">
-                    <article class="diplomacy-feature-media">
-                        <img src="https://images.unsplash.com/photo-1533035350251-aa8b8e208d95?auto=format&fit=crop&w=1000&q=80"
-                            alt="diplomatic visit" loading="lazy" decoding="async">
-                    </article>
-                </div>
-                <div class="col-lg-3 col-12 diplomacy-top-col diplomacy-top-side">
-                    <aside class="diplomacy-side-list">
-                        <article class="diplomacy-side-item">
-                            <div class="diplomacy-side-date">2026/04/12</div>
-                            <h4>إنذارات المستوى الثاني: أمطار غزيرة جدا عبر 30 ولاية</h4>
-                        </article>
-                        <article class="diplomacy-side-item">
-                            <div class="diplomacy-side-date">2026/04/12</div>
-                            <h4>بالفيديو.. الحكم يرفض هدفين لاتحاد العاصمة بمباراة ممثل بلاد مراكش</h4>
-                        </article>
-                        <article class="diplomacy-side-item">
-                            <div class="diplomacy-side-date">2026/04/12</div>
-                            <h4>الجوية الجزائرية تجري أكبر توسعة في تاريخها!</h4>
-                        </article>
-                    </aside>
-                </div>
-
-            </div>
-
-            <div class="row g-0 diplomacy-spotlight-bottom">
-                <div class="col-lg-4 col-12 diplomacy-bottom-col">
-                    <article class="diplomacy-bottom-item">
-                        <div class="diplomacy-bottom-date">2026/04/12</div>
-                        <h4>3 نقاط خلاف رئيسية تفشل محادثات أمريكا وإيران.. التفاصيل</h4>
-                    </article>
-                </div>
-                <div class="col-lg-4 col-12 diplomacy-bottom-col">
-                    <article class="diplomacy-bottom-item">
-                        <div class="diplomacy-bottom-date">2026/04/12</div>
-                        <h4>السفارة الأمريكية بالجزائر تفتح باب التدريب أمام هذه الفئة</h4>
-                    </article>
-                </div>
-                <div class="col-lg-4 col-12 diplomacy-bottom-col">
-                    <article class="diplomacy-bottom-item">
-                        <div class="diplomacy-bottom-date">2026/04/12</div>
-                        <h4>قاليباف: واشنطن فشلت في كسب ثقة وفدنا المفاوض</h4>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <section class="podcast-section mb-5">
-            <header class="podcast-section-head">
-                <h5 class="podcast-section-title">بودكاست</h5>
-            </header>
-            <div class="row g-3 podcast-grid align-items-stretch">
-                <div class="col-lg-3 col-12">
-                    <aside class="podcast-follow-card">
-                        <p class="podcast-follow-title">تابع بودكاست الشروق على منصاتنا المختلفة</p>
-                        <div class="podcast-follow-platforms" aria-label="منصات البودكاست">
-                            <a href="#" aria-label="Apple Podcast"><img class="podcast-follow-platforms-icon"
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/music-note-04-stroke-rounded.svg"></a>
-                            <a href="#" aria-label="Podcast"><img class="podcast-follow-platforms-icon"
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></a>
-                            <a href="#" aria-label="SoundCloud"><img class="podcast-follow-platforms-icon"
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/soundcloud-stroke-rounded.svg"></a>
-                        </div>
-                        <div class="podcast-box-link">
-                            <a href="#">المزيد <img
-                                    src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></a>
-                        </div>
-
-                    </aside>
-                </div>
-
-                <div class="col-lg-4 col-12">
-                    <section class="podcast-center">
-                        <div class="podcast-list">
-                            <article class="podcast-list-item">
-                                <a href="#" class="podcast-list-thumb">
-                                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=80"
-                                        alt="podcast guest" loading="lazy" decoding="async">
-                                    <span class="podcast-icon"><img
-                                            src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></span>
-                                </a>
-                                <div class="podcast-list-copy">
-                                    <time datetime="2026-06-16">16/06/2026</time>
-                                    <h3><a href="#">4 مشاريع عملية تخص تخزين المنتجات التجارية ومراقبتها</a></h3>
-                                </div>
-                            </article>
-                            <article class="podcast-list-item">
-                                <a href="#" class="podcast-list-thumb">
-                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=700&q=80"
-                                        alt="podcast guest" loading="lazy" decoding="async">
-                                    <span class="podcast-icon"><img
-                                            src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></span>
-                                </a>
-                                <div class="podcast-list-copy">
-                                    <time datetime="2026-06-16">16/06/2026</time>
-                                    <h3><a href="#">الأمين التنفيذي لمنظمة أمريكا اللاتينية للطاقة في زيارة عمل إلى
-                                            الجزائر</a></h3>
-                                </div>
-                            </article>
-                            <article class="podcast-list-item">
-                                <a href="#" class="podcast-list-thumb">
-                                    <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=700&q=80"
-                                        alt="podcast guest" loading="lazy" decoding="async">
-                                    <span class="podcast-icon"><img
-                                            src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></span>
-                                </a>
-                                <div class="podcast-list-copy">
-                                    <time datetime="2026-06-16">16/06/2026</time>
-                                    <h3><a href="#">الصيد الجائر والتهريب ينذران بزوال ثروات طبيعية نادرة في الجزائر</a>
-                                    </h3>
-                                </div>
-                            </article>
-                        </div>
+                        <?php if (! empty($video_bottom_cards)) : ?>
+                            <div class="video-main-bottom">
+                                <?php foreach ($video_bottom_cards as $video_bottom_post) : ?>
+                                    <article class="video-bottom-card">
+                                        <a href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo echorouk_post_image_html($video_bottom_post->ID, 'medium_large'); ?></a>
+                                        <div class="video-bottom-date"><?php echo esc_html(get_the_date('d/m/Y', $video_bottom_post)); ?></div>
+                                        <h4><a href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo esc_html(get_the_title($video_bottom_post)); ?></a></h4>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </section>
                 </div>
+            </section>
+        <?php endif; ?>
 
-                <div class="col-lg-5 col-12">
-                    <article class="podcast-feature">
-                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80"
-                            alt="podcast feature" loading="lazy" decoding="async">
-                        <span class="podcast-icon"><img
-                                src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/podcast-stroke-rounded-2.svg"></span>
-                        <div class="podcast-feature-body">
-                            <time datetime="2026-06-16">16/06/2026</time>
-                            <h3><a href="#">هكذا يتم تسديد رسوم المرقّي العقاري وضريبة السكن</a></h3>
-                        </div>
-                    </article>
+        <?php if ($sport_main) : ?>
+            <hr class="section-divider my-4">
+            <section class="grid-border sports-section">
+                <div class="video-sports-logo-wrap">
+                    <div class="video-sports-logo" id="echorouk-sports-logo-dark"></div>
                 </div>
-            </div>
-        </section>
+                <div class="row g-4 align-items-center sports-main-grid">
+                    <div class="col-lg-4 sports-main-article">
+                        <h3><a href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo esc_html(get_the_title($sport_main)); ?></a></h3>
+                        <p class="summary"><?php echo esc_html($get_excerpt($sport_main, 20)); ?></p>
+                    </div>
+                    <div class="col-lg-8 sports-main-media"><a href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo echorouk_post_image_html($sport_main->ID, 'large', 'img-fluid'); ?></a></div>
+                </div>
+                <?php if (! empty($sport_cards)) : ?>
+                    <div class="row g-3 mt-2 sports-sub-grid">
+                        <?php foreach ($sport_cards as $sport_card) : ?>
+                            <div class="col-6 col-md-3">
+                                <article class="news-card">
+                                    <a href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo echorouk_post_image_html($sport_card->ID, 'medium'); ?></a>
+                                    <div class="mini-date"><?php echo esc_html(get_the_date('Y/m/d', $sport_card)); ?></div>
+                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo esc_html(get_the_title($sport_card)); ?></a></h3>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+
+        <?php if ($economy_main) : ?>
+            <hr class="section-divider my-4">
+            <section class="grid-border economy-section">
+                <h5 class="section-title"><span><?php esc_html_e('Economy', 'echoroukonline'); ?></span></h5>
+                <div class="row g-4 align-items-center economy-main-grid">
+                    <div class="col-lg-4 economy-main-article">
+                        <h3 class="headline"><a href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo esc_html(get_the_title($economy_main)); ?></a></h3>
+                        <p class="summary"><?php echo esc_html($get_excerpt($economy_main, 20)); ?></p>
+                    </div>
+                    <div class="col-lg-8 economy-main-media"><a href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo echorouk_post_image_html($economy_main->ID, 'large', 'img-fluid'); ?></a></div>
+                </div>
+                <?php if (! empty($economy_cards)) : ?>
+                    <div class="row g-3 mt-2 economy-sub-grid">
+                        <?php foreach ($economy_cards as $economy_card) : ?>
+                            <div class="col-6 col-md-3">
+                                <article class="news-card">
+                                    <a href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo echorouk_post_image_html($economy_card->ID, 'medium'); ?></a>
+                                    <div class="mini-date"><?php echo esc_html(get_the_date('Y/m/d', $economy_card)); ?></div>
+                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo esc_html(get_the_title($economy_card)); ?></a></h3>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+
+        <?php if (! empty($opinion_posts)) : ?>
+            <hr class="section-divider my-4">
+            <section class="blue-panel mb-5 opinion-panel">
+                <div class="opinion-main-logo-wrap">
+                    <div class="opinion-main-kicker"><?php esc_html_e('Opinion', 'echoroukonline'); ?></div>
+                    <div class="opinion-main-logo" id="echorouk-logo-white"></div>
+                </div>
+                <div class="row g-0 opinion-grid">
+                    <?php foreach ($opinion_posts as $opinion_post) : ?>
+                        <?php
+                        $author_name = get_the_author_meta('display_name', $opinion_post->post_author);
+                        $author_img  = get_avatar_url($opinion_post->post_author, array('size' => 96, 'default' => 'mystery'));
+                        ?>
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <article class="opinion-card">
+                                <a href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo echorouk_post_image_html($opinion_post->ID, 'medium_large', 'opinion-card-thumb'); ?></a>
+                                <div class="opinion-card-meta">
+                                    <div class="opinion-card-author">
+                                        <div class="author-name-date">
+                                            <span class="opinion-card-author-name"><?php echo esc_html($author_name); ?></span>
+                                            <div class="opinion-card-date"><?php echo esc_html(get_the_date('Y/m/d', $opinion_post)); ?></div>
+                                        </div>
+                                        <img class="avatar" src="<?php echo esc_url($author_img); ?>" alt="<?php echo esc_attr($author_name); ?>" loading="lazy" decoding="async">
+                                    </div>
+                                </div>
+                                <h3 class="opinion-card-title"><a href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo esc_html(get_the_title($opinion_post)); ?></a></h3>
+                            </article>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <?php if ($diplomacy_main) : ?>
+            <hr class="section-divider my-4">
+            <section class="diplomacy-spotlight grid-border">
+                <div class="row g-0 align-items-start diplomacy-spotlight-top">
+                    <div class="col-lg-3 col-12 diplomacy-top-col diplomacy-top-main">
+                        <article class="diplomacy-main-story">
+                            <h3><a href="<?php echo esc_url(get_permalink($diplomacy_main)); ?>"><?php echo esc_html(get_the_title($diplomacy_main)); ?></a></h3>
+                            <div class="diplomacy-main-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_main)); ?></div>
+                        </article>
+                    </div>
+                    <div class="col-lg-6 col-12 diplomacy-top-col diplomacy-top-feature">
+                        <?php if ($diplomacy_feature) : ?>
+                            <article class="diplomacy-feature-media">
+                                <a href="<?php echo esc_url(get_permalink($diplomacy_feature)); ?>"><?php echo echorouk_post_image_html($diplomacy_feature->ID, 'large'); ?></a>
+                            </article>
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-lg-3 col-12 diplomacy-top-col diplomacy-top-side">
+                        <?php if (! empty($diplomacy_side)) : ?>
+                            <aside class="diplomacy-side-list">
+                                <?php foreach ($diplomacy_side as $diplomacy_side_post) : ?>
+                                    <article class="diplomacy-side-item">
+                                        <div class="diplomacy-side-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_side_post)); ?></div>
+                                        <h4><a href="<?php echo esc_url(get_permalink($diplomacy_side_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_side_post)); ?></a></h4>
+                                    </article>
+                                <?php endforeach; ?>
+                            </aside>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <?php if (! empty($diplomacy_bottom)) : ?>
+                    <div class="row g-0 diplomacy-spotlight-bottom">
+                        <?php foreach ($diplomacy_bottom as $diplomacy_bottom_post) : ?>
+                            <div class="col-lg-4 col-12 diplomacy-bottom-col">
+                                <article class="diplomacy-bottom-item">
+                                    <div class="diplomacy-bottom-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_bottom_post)); ?></div>
+                                    <h4><a href="<?php echo esc_url(get_permalink($diplomacy_bottom_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_bottom_post)); ?></a></h4>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+
+        <?php if ($podcast_feature) : ?>
+            <hr class="section-divider my-4">
+            <section class="podcast-section mb-5">
+                <header class="podcast-section-head">
+                    <h5 class="podcast-section-title"><?php esc_html_e('Podcast', 'echoroukonline'); ?></h5>
+                </header>
+                <div class="row g-3 podcast-grid align-items-stretch">
+                    <div class="col-lg-3 col-12">
+                        <aside class="podcast-follow-card">
+                            <p class="podcast-follow-title"><?php esc_html_e('Follow Echourouk podcasts on our platforms', 'echoroukonline'); ?></p>
+                            <div class="podcast-follow-platforms" aria-label="<?php esc_attr_e('Podcast platforms', 'echoroukonline'); ?>">
+                                <?php if ($podcast_primary_url) : ?>
+                                    <a href="<?php echo esc_url($podcast_primary_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Primary podcast platform', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/music-note-04-stroke-rounded.svg'); ?>" alt=""></a>
+                                <?php endif; ?>
+                                <?php if ($podcast_secondary_url) : ?>
+                                    <a href="<?php echo esc_url($podcast_secondary_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Secondary podcast platform', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></a>
+                                <?php endif; ?>
+                                <?php if ($podcast_soundcloud_url) : ?>
+                                    <a href="<?php echo esc_url($podcast_soundcloud_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('SoundCloud', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/soundcloud-stroke-rounded.svg'); ?>" alt=""></a>
+                                <?php endif; ?>
+                            </div>
+                            <div class="podcast-box-link">
+                                <a href="<?php echo esc_url($podcast_archive_url); ?>"><?php esc_html_e('More', 'echoroukonline'); ?> <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></a>
+                            </div>
+                        </aside>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                        <section class="podcast-center">
+                            <div class="podcast-list">
+                                <?php foreach ($podcast_list as $podcast_item) : ?>
+                                    <article class="podcast-list-item">
+                                        <a href="<?php echo esc_url(get_permalink($podcast_item)); ?>" class="podcast-list-thumb">
+                                            <?php echo echorouk_post_image_html($podcast_item->ID, 'medium'); ?>
+                                            <span class="podcast-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></span>
+                                        </a>
+                                        <div class="podcast-list-copy">
+                                            <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_item)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_item)); ?></time>
+                                            <h3><a href="<?php echo esc_url(get_permalink($podcast_item)); ?>"><?php echo esc_html(get_the_title($podcast_item)); ?></a></h3>
+                                        </div>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-lg-5 col-12">
+                        <article class="podcast-feature">
+                            <a href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo echorouk_post_image_html($podcast_feature->ID, 'large'); ?></a>
+                            <span class="podcast-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></span>
+                            <div class="podcast-feature-body">
+                                <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_feature)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_feature)); ?></time>
+                                <h3><a href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo esc_html(get_the_title($podcast_feature)); ?></a></h3>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
+
         <hr class="section-divider my-4">
         <section class="newsletter mb-5">
             <div class="row align-items-center g-3">
                 <div class="col-lg-5">
-                    <h5 class="headline mb-1">اشترك في النشرة البريدية</h5>
-                    <p class="summary mb-0">تابع أهم الأخبار والتحليلات مباشرة في بريدك.</p>
+                    <h5 class="headline mb-1"><?php esc_html_e('Newsletter subscription', 'echoroukonline'); ?></h5>
+                    <p class="summary mb-0"><?php esc_html_e('Get the top stories and analysis directly in your inbox.', 'echoroukonline'); ?></p>
+                    <?php if (is_array($newsletter_feedback) && ! empty($newsletter_feedback['message'])) : ?>
+                        <p class="summary mb-0 newsletter-feedback newsletter-feedback--<?php echo esc_attr($newsletter_feedback['type']); ?>" role="status"><?php echo esc_html($newsletter_feedback['message']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="col-lg-7">
-                    <form class="input-group" action="#"><input type="email" class="form-control"
-                            placeholder="البريد الإلكتروني"><button class="btn btn-warning text-white"
-                            type="button">اشتراك</button></form>
+                    <form class="input-group" action="<?php echo esc_url($newsletter_action); ?>" method="post">
+                        <?php wp_nonce_field('echorouk_newsletter_signup', 'echorouk_newsletter_nonce'); ?>
+                        <?php if ($newsletter_internal) : ?>
+                            <input type="hidden" name="action" value="echorouk_newsletter_subscribe">
+                        <?php endif; ?>
+                        <input type="email" class="form-control" name="email" placeholder="<?php esc_attr_e('Email address', 'echoroukonline'); ?>" required>
+                        <button class="btn btn-warning text-white" type="submit"><?php esc_html_e('Subscribe', 'echoroukonline'); ?></button>
+                    </form>
                 </div>
             </div>
         </section>
-        <hr class="section-divider my-4">
 
-        <section class="grid-border jawaher-section">
-            <div class="jawaher-logo-wrap">
-                <div class="jawaher-logo" id="echorouk-jawahir-logo-dark"></div>
-            </div>
-            <div class="row g-4 align-items-center jawaher-main-grid">
-                <div class="col-lg-4 jawaher-main-article">
-                    <h3>توقعات بنمو قطاعات حيوية خلال العام الحالي</h3>
-                    <p class="summary">خبراء يؤكدون أن إجراءات الإصلاح ودعم الاستثمار تساهم في تحريك النشاط الاقتصادي.
-                    </p>
+        <?php if ($jawaher_main) : ?>
+            <hr class="section-divider my-4">
+            <section class="grid-border jawaher-section">
+                <div class="jawaher-logo-wrap">
+                    <div class="jawaher-logo" id="echorouk-jawahir-logo-dark"></div>
                 </div>
-                <div class="col-lg-8 jawaher-main-media"><img
-                        src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=900&q=80"
-                        class="img-fluid" alt="jawaher" loading="lazy" decoding="async"></div>
-            </div>
-            <div class="row g-3 mt-2 jawaher-sub-grid">
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=500&q=80"
-                            alt="currencies" loading="lazy" decoding="async">
-                        <div class="jawaher-mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">أسعار العملات اليوم</h3>
-                    </article>
+                <div class="row g-4 align-items-center jawaher-main-grid">
+                    <div class="col-lg-4 jawaher-main-article">
+                        <h3><a href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo esc_html(get_the_title($jawaher_main)); ?></a></h3>
+                        <p class="summary"><?php echo esc_html($get_excerpt($jawaher_main, 20)); ?></p>
+                    </div>
+                    <div class="col-lg-8 jawaher-main-media"><a href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo echorouk_post_image_html($jawaher_main->ID, 'large', 'img-fluid'); ?></a></div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=500&q=80"
-                            alt="investments" loading="lazy" decoding="async">
-                        <div class="jawaher-mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">خطة لجذب الاستثمارات</h3>
-                    </article>
+                <?php if (! empty($jawaher_cards)) : ?>
+                    <div class="row g-3 mt-2 jawaher-sub-grid">
+                        <?php foreach ($jawaher_cards as $jawaher_card) : ?>
+                            <div class="col-6 col-md-3">
+                                <article class="news-card">
+                                    <a href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo echorouk_post_image_html($jawaher_card->ID, 'medium'); ?></a>
+                                    <div class="jawaher-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $jawaher_card)); ?></div>
+                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo esc_html(get_the_title($jawaher_card)); ?></a></h3>
+                                </article>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+
+        <?php if (! empty($french_posts) || ! empty($english_posts)) : ?>
+            <hr class="section-divider my-4">
+            <section class="other-languages-section grid-border mb-5">
+                <div class="row g-0">
+                    <div class="col-lg-6 col-md-6 col-12 other-lang-col">
+                        <h3 class="other-lang-title">Français</h3>
+                        <?php foreach ($french_posts as $latest_post) : ?>
+                            <article class="other-lang-item">
+                                <a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
+                                <div class="other-lang-copy">
+                                    <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
+                                    <h4><a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a></h4>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-12 other-lang-col">
+                        <h3 class="other-lang-title">English</h3>
+                        <?php foreach ($english_posts as $latest_post) : ?>
+                            <article class="other-lang-item">
+                                <a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
+                                <div class="other-lang-copy">
+                                    <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
+                                    <h4><a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a></h4>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80"
-                            alt="real estate" loading="lazy" decoding="async">
-                        <div class="jawaher-mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">التمويل العقاري يتصدر</h3>
-                    </article>
-                </div>
-                <div class="col-6 col-md-3">
-                    <article class="news-card"><img
-                            src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=500&q=80"
-                            alt="trade" loading="lazy" decoding="async">
-                        <div class="jawaher-mini-date">2026/04/05</div>
-                        <h3 class="small-headline mt-2">مؤشرات إيجابية للتجارة</h3>
-                    </article>
-                </div>
-            </div>
-        </section>
+            </section>
+        <?php endif; ?>
+
         <hr class="section-divider my-4">
-        <section class="other-languages-section grid-border mb-5">
-            <div class="row g-0">
-                <div class="col-lg-6 col-md-6 col-12 other-lang-col">
-                    <h3 class="other-lang-title">Français</h3>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=500&q=80"
-                            alt="fr article 1" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>AADL 3: Les ordres de versements de la 1ère tranche mis en ligne</h4>
-                        </div>
-                    </article>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=500&q=80"
-                            alt="fr article 2" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>Port d’Alger: Arrivée d’un nouveau chargement de moutons importés en prévision de l’Aïd
-                                al-Adha</h4>
-                        </div>
-                    </article>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1531384370597-8590413be50a?auto=format&fit=crop&w=500&q=80"
-                            alt="fr article 3" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>5 ans de prison ferme pour l’ancien ministre Ali Aoun</h4>
-                        </div>
-                    </article>
-                </div>
-                <div class="col-lg-6 col-md-6 col-12 other-lang-col">
-                    <h3 class="other-lang-title">English</h3>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=500&q=80"
-                            alt="en article 1" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>AADL 3: First installment payment orders are now online</h4>
-                        </div>
-                    </article>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=500&q=80"
-                            alt="en article 2" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>Port of Algiers receives new shipment of imported sheep ahead of Eid al-Adha</h4>
-                        </div>
-                    </article>
-                    <article class="other-lang-item">
-                        <img src="https://images.unsplash.com/photo-1531384370597-8590413be50a?auto=format&fit=crop&w=500&q=80"
-                            alt="en article 3" loading="lazy" decoding="async">
-                        <div class="other-lang-copy">
-                            <time datetime="2027-06-16">16/06/2027</time>
-                            <h4>Former minister Ali Aoun sentenced to five years in prison</h4>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-        <hr class="section-divider my-4">
-        <div class="ad-box">مساحة إعلانية</div>
+        <div class="ad-box"><?php esc_html_e('Ads', 'echoroukonline'); ?></div>
     </div>
 </main>
+
 <script>
     document.addEventListener('click', function(event) {
         var closeButton = event.target.closest('.hero-floating-close');
@@ -992,6 +977,7 @@ if ($hero_main) {
             mostReadFilter.setAttribute('aria-pressed', 'true');
             return;
         }
+
         var floatingVideo = closeButton.closest('.hero-floating-video');
         if (floatingVideo) {
             floatingVideo.style.display = 'none';
