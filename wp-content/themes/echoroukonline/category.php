@@ -6,10 +6,11 @@
  */
 
 get_header();
+$query          = isset( $GLOBALS['wp_query'] ) && $GLOBALS['wp_query'] instanceof WP_Query ? $GLOBALS['wp_query'] : null;
 $category_posts = array();
 
-if ( isset( $wp_query ) && $wp_query instanceof WP_Query && is_array( $wp_query->posts ) ) {
-	$category_posts = array_values( $wp_query->posts );
+if ( $query instanceof WP_Query && is_array( $query->posts ) ) {
+	$category_posts = array_values( $query->posts );
 }
 ?>
 <main id="primary" class="site-main">
@@ -36,7 +37,7 @@ if ( isset( $wp_query ) && $wp_query instanceof WP_Query && is_array( $wp_query-
 						?>
 					</div>
 					<?php
-					$total_pages = isset( $wp_query->max_num_pages ) ? (int) $wp_query->max_num_pages : 0;
+					$total_pages = $query instanceof WP_Query ? (int) $query->max_num_pages : 0;
 					$current     = max( 1, (int) get_query_var( 'paged', 1 ) );
 
 					if ( $total_pages > 1 ) :
