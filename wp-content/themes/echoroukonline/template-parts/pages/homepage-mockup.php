@@ -111,10 +111,12 @@ $live_post    = ($live_enabled && $live_id) ? get_post($live_id) : null;
 if (! $live_post || 'publish' !== $live_post->post_status) {
     $live_post = null;
 }
+$has_live_coverage = $live_enabled && ($live_post instanceof WP_Post);
 
-$side_ids     = ! empty($hero_meta['side_post_ids']) && is_array($hero_meta['side_post_ids']) ? $hero_meta['side_post_ids'] : array();
-$fallback_ids = ! empty($hero_meta['fallback_post_ids']) && is_array($hero_meta['fallback_post_ids']) ? $hero_meta['fallback_post_ids'] : array();
-$right_ids    = ($live_post ? $side_ids : $fallback_ids);
+$side_ids         = ! empty($hero_meta['side_post_ids']) && is_array($hero_meta['side_post_ids']) ? $hero_meta['side_post_ids'] : array();
+$left_column_ids  = ! empty($hero_meta['left_column_post_ids']) && is_array($hero_meta['left_column_post_ids']) ? $hero_meta['left_column_post_ids'] : array();
+$fallback_ids     = ! empty($hero_meta['fallback_post_ids']) && is_array($hero_meta['fallback_post_ids']) ? $hero_meta['fallback_post_ids'] : array();
+$right_ids        = ($has_live_coverage ? $side_ids : $fallback_ids);
 $hero_right   = $filter_posts($get_posts_by_ids($right_ids, 3));
 
 if (empty($hero_right)) {
@@ -131,8 +133,60 @@ if (empty($hero_right)) {
     $hero_right = $fallback_right;
 }
 
+$hero_left_fallback = array();
+if (! $has_live_coverage) {
+    $left_seed_ids = ! empty($left_column_ids) ? $left_column_ids : $fallback_ids;
+    $hero_left_fallback = $filter_posts($get_posts_by_ids($left_seed_ids, 5));
+
+    $left_excluded_ids = array();
+    if ($hero_main instanceof WP_Post) {
+        $left_excluded_ids[] = (int) $hero_main->ID;
+    }
+    foreach ($hero_right as $right_post) {
+        if ($right_post instanceof WP_Post) {
+            $left_excluded_ids[] = (int) $right_post->ID;
+        }
+    }
+    $left_excluded_ids = array_values(array_unique(array_map('absint', $left_excluded_ids)));
+
+    if (! empty($hero_left_fallback)) {
+        $hero_left_fallback = array_values(array_filter($hero_left_fallback, static function ($post) use ($left_excluded_ids) {
+            return $post instanceof WP_Post && ! in_array((int) $post->ID, $left_excluded_ids, true);
+        }));
+    }
+
+    if (count($hero_left_fallback) < 3) {
+        $excluded_ids = array();
+        $excluded_ids = array_merge($excluded_ids, $left_excluded_ids);
+        foreach ($hero_left_fallback as $used_post) {
+            if ($used_post instanceof WP_Post) {
+                $excluded_ids[] = (int) $used_post->ID;
+            }
+        }
+
+        $fill = array();
+        foreach ($hero_feed as $feed_post) {
+            if (! ($feed_post instanceof WP_Post)) {
+                continue;
+            }
+            if (in_array((int) $feed_post->ID, $excluded_ids, true)) {
+                continue;
+            }
+            $fill[] = $feed_post;
+            $excluded_ids[] = (int) $feed_post->ID;
+            if ((count($hero_left_fallback) + count($fill)) >= 3) {
+                break;
+            }
+        }
+
+        if (! empty($fill)) {
+            $hero_left_fallback = array_values(array_merge($hero_left_fallback, $fill));
+        }
+    }
+}
+
 $live_timeline_items = array();
-if ($live_post) {
+if ($has_live_coverage) {
     $timeline_raw_keys = array(
         'echorouk_live_updates',
         'live_coverage_updates',
@@ -462,9 +516,6 @@ if (! $podcast_archive_url) {
     $podcast_archive_url = home_url('/');
 }
 
-$newsletter_feedback = function_exists('echorouk_newsletter_get_feedback') ? echorouk_newsletter_get_feedback() : null;
-$newsletter_action   = function_exists('echorouk_newsletter_form_action_url') ? echorouk_newsletter_form_action_url() : admin_url('admin-post.php');
-$newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoint') ? echorouk_newsletter_use_internal_endpoint() : true;
 ?>
 <main id="primary" class="site-main echorouk-homepage-mockup">
     <div class="container-xl echorouk-homepage-wrap py-4">
@@ -564,14 +615,14 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 </section>
 
                 <aside class="col-lg-4 order-2 order-lg-1 hero-col-left">
-                    <div class="hero-live hero-col-card">
-                        <div class="hero-live-title">
-                            <span><?php esc_html_e('Live Coverage', 'echoroukonline'); ?></span><img
-                                src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>"
-                                alt="">
-                        </div>
-                        <ul class="hero-live-timeline">
-                            <?php if (! empty($live_timeline_items)) : ?>
+                    <?php if ($has_live_coverage && ! empty($live_timeline_items)) : ?>
+                        <div class="hero-live hero-col-card">
+                            <div class="hero-live-title">
+                                <span><?php esc_html_e('Live Coverage', 'echoroukonline'); ?></span><img
+                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>"
+                                    alt="">
+                            </div>
+                            <ul class="hero-live-timeline">
                                 <?php foreach ($live_timeline_items as $timeline_item) : ?>
                                     <li>
                                         <time class="hero-live-time"
@@ -580,9 +631,35 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                                                 href="<?php echo esc_url($timeline_item['url']); ?>"><?php echo esc_html($timeline_item['title']); ?></a></span>
                                     </li>
                                 <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php else : ?>
+                        <div class="hero-latest-panel hero-col-card hero-live-fallback">
+                            <?php if (! empty($hero_left_fallback)) : ?>
+                                <?php $feature = $hero_left_fallback[0]; ?>
+                                <article class="hero-latest-feature">
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
+                                    <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?></div>
+                                    <h3><a
+                                            href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
+                                    </h3>
+                                </article>
+
+                                <?php foreach (array_slice($hero_left_fallback, 1, 2) as $hero_side_post) : ?>
+                                    <article class="hero-latest-item">
+                                        <a
+                                            href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
+                                        <div>
+                                            <h4><a
+                                                    href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
+                                            </h4>
+                                        </div>
+                                    </article>
+                                <?php endforeach; ?>
                             <?php endif; ?>
-                        </ul>
-                    </div>
+                        </div>
+                    <?php endif; ?>
                 </aside>
             </div>
         </section>
@@ -837,7 +914,7 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
             <hr class="section-divider my-4">
             <section class="grid-border sports-section">
                 <div class="video-sports-logo-wrap">
-                    <div class="video-sports-logo" id="echorouk-sports-logo-dark"></div>
+                    <div class="sports-logo" id="echorouk-sports-logo-dark"></div>
                 </div>
                 <div class="row g-4 align-items-center sports-main-grid">
                     <div class="col-lg-4 sports-main-article">
@@ -1088,33 +1165,10 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
             </section>
         <?php endif; ?>
 
-        <hr class="section-divider my-4">
-        <section class="newsletter mb-5">
-            <div class="row align-items-center g-3">
-                <div class="col-lg-5">
-                    <h5 class="headline mb-1"><?php esc_html_e('Newsletter subscription', 'echoroukonline'); ?></h5>
-                    <p class="summary mb-0">
-                        <?php esc_html_e('Get the top stories and analysis directly in your inbox.', 'echoroukonline'); ?>
-                    </p>
-                    <?php if (is_array($newsletter_feedback) && ! empty($newsletter_feedback['message'])) : ?>
-                        <p class="summary mb-0 newsletter-feedback newsletter-feedback--<?php echo esc_attr($newsletter_feedback['type']); ?>"
-                            role="status"><?php echo esc_html($newsletter_feedback['message']); ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="col-lg-7">
-                    <form class="input-group" action="<?php echo esc_url($newsletter_action); ?>" method="post">
-                        <?php wp_nonce_field('echorouk_newsletter_signup', 'echorouk_newsletter_nonce'); ?>
-                        <?php if ($newsletter_internal) : ?>
-                            <input type="hidden" name="action" value="echorouk_newsletter_subscribe">
-                        <?php endif; ?>
-                        <input type="email" class="form-control" name="email"
-                            placeholder="<?php esc_attr_e('Email address', 'echoroukonline'); ?>" required>
-                        <button class="btn btn-warning text-white"
-                            type="submit"><?php esc_html_e('Subscribe', 'echoroukonline'); ?></button>
-                    </form>
-                </div>
-            </div>
-        </section>
+        <?php if (echorouk_get_option('newsletter_enabled', true)) : ?>
+            <hr class="section-divider my-4">
+            <?php get_template_part('template-parts/components/newsletter'); ?>
+        <?php endif; ?>
 
         <?php if ($jawaher_main) : ?>
             <hr class="section-divider my-4">
@@ -1140,7 +1194,7 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                                 <article class="news-card">
                                     <a
                                         href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo echorouk_post_image_html($jawaher_card->ID, 'medium'); ?></a>
-                                    <div class="jawaher-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $jawaher_card)); ?>
+                                    <div class="mini-date"><?php echo esc_html(get_the_date('Y/m/d', $jawaher_card)); ?>
                                     </div>
                                     <h3 class="small-headline mt-2"><a
                                             href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo esc_html(get_the_title($jawaher_card)); ?></a>

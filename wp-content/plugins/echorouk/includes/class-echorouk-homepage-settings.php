@@ -56,6 +56,7 @@ class Echorouk_Homepage_Settings
                     'live_coverage_enabled'  => false,
                     'live_post_id'           => 0,
                     'side_post_ids'          => [],
+                    'left_column_post_ids'   => [],
                     'fallback_post_ids'      => [],
                 ],
             ],
@@ -368,6 +369,7 @@ class Echorouk_Homepage_Settings
                 $clean['live_coverage_enabled'] = ! empty($clean['live_coverage_enabled']);
                 $clean['live_post_id'] = isset($clean['live_post_id']) ? absint($clean['live_post_id']) : 0;
                 $clean['side_post_ids'] = $this->sanitize_ids(isset($clean['side_post_ids']) ? $clean['side_post_ids'] : [], 5);
+                $clean['left_column_post_ids'] = $this->sanitize_ids(isset($clean['left_column_post_ids']) ? $clean['left_column_post_ids'] : [], 5);
                 $clean['fallback_post_ids'] = $this->sanitize_ids(isset($clean['fallback_post_ids']) ? $clean['fallback_post_ids'] : [], 5);
                 break;
 

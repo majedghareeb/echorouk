@@ -14,17 +14,24 @@ defined( 'ABSPATH' ) || exit;
  * object-cache values can leave the array keyed by post ID, which triggers
  * undefined offset warnings when the loop starts.
  *
- * @param array $posts Retrieved posts.
+ * @param array    $posts Retrieved posts.
+ * @param WP_Query $query Query object.
  * @return array
  */
-function echorouk_normalize_loop_posts( $posts ) {
+function echorouk_normalize_loop_posts( $posts, $query ) {
 	if ( ! is_array( $posts ) || array() === $posts ) {
 		return $posts;
 	}
 
-	return array_values( $posts );
+	$normalized = array_values( $posts );
+
+	if ( $query instanceof WP_Query ) {
+		$query->post_count = count( $normalized );
+	}
+
+	return $normalized;
 }
-add_filter( 'the_posts', 'echorouk_normalize_loop_posts', PHP_INT_MAX );
+add_filter( 'the_posts', 'echorouk_normalize_loop_posts', PHP_INT_MAX, 2 );
 
 function echorouk_language_attributes_dir( $output ) {
 	if ( false !== strpos( $output, 'dir=' ) ) {

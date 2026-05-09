@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-09 04:01+0000\n"
+"PO-Revision-Date: 2026-05-09 07:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -43,11 +43,11 @@ msgstr "أضف أدوات الأخبار أو احجب المحتوى هنا."
 
 #: inc/live-coverage.php:96
 msgid "Add timeline updates in chronological order."
-msgstr ""
+msgstr "أضف تحديثات الجدول الزمني بالترتيب الزمني."
 
 #: inc/live-coverage.php:117
 msgid "Add update"
-msgstr ""
+msgstr "إضافة تحديث"
 
 #: inc/redux.php:124 template-parts/pages/homepage-mockup.php:590
 #: template-parts/pages/homepage-mockup.php:742
@@ -65,7 +65,7 @@ msgstr "المخلص"
 
 #: template-parts/pages/homepage-mockup.php:794
 msgid "All videos"
-msgstr ""
+msgstr "جميع الفيديوهات"
 
 #: inc/redux.php:88
 msgid "Article"
@@ -73,7 +73,7 @@ msgstr "شرط"
 
 #: template-parts/pages/homepage-mockup.php:546
 msgid "Article actions"
-msgstr ""
+msgstr "إجراءات المادة"
 
 #: inc/meta.php:50
 msgid "Article fields"
@@ -122,7 +122,7 @@ msgstr "متمركز"
 
 #: template-parts/pages/homepage-mockup.php:520
 msgid "Close floating video"
-msgstr ""
+msgstr "إغلاق الفيديو العائم"
 
 #: inc/redux.php:210
 msgid "Columns"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: template-parts/pages/homepage-mockup.php:875
 msgid "Economy"
-msgstr ""
+msgstr "اقتصاد"
 
 #: inc/cpts.php:91
 #, php-format
@@ -312,11 +312,11 @@ msgstr "القسم المميز"
 
 #: template-parts/pages/homepage-mockup.php:517
 msgid "Floating video"
-msgstr ""
+msgstr "فيديو عائم"
 
 #: template-parts/pages/homepage-mockup.php:1010
 msgid "Follow Echourouk podcasts on our platforms"
-msgstr ""
+msgstr "تابعوا بودكاست إيشوروك على منصاتنا"
 
 #: inc/redux.php:139
 msgid "Footer"
@@ -372,7 +372,7 @@ msgstr "عام"
 
 #: template-parts/pages/homepage-mockup.php:1097
 msgid "Get the top stories and analysis directly in your inbox."
-msgstr ""
+msgstr "احصل على أهم الأخبار والتحليلات مباشرة في بريدك الإلكتروني."
 
 #: inc/cpts.php:71
 msgid "Guest Author"
@@ -408,7 +408,7 @@ msgstr "القصة الرئيسية"
 
 #: template-parts/components/breadcrumbs.php:17
 msgid "Home"
-msgstr "بيت"
+msgstr "الرئيسية"
 
 #: inc/redux.php:68
 msgid "Homepage"
@@ -433,7 +433,7 @@ msgstr "انستغرام"
 
 #: inc/newsletter.php:44
 msgid "Invalid request. Please try again."
-msgstr ""
+msgstr "طلب غير صالح. يرجى المحاولة مرة أخرى."
 
 #: inc/guest-authors.php:12
 msgid "Job title"
@@ -485,11 +485,11 @@ msgstr "استمع"
 #: template-parts/content/single-live-coverage.php:65
 #: template-parts/pages/homepage-mockup.php:569
 msgid "Live Coverage"
-msgstr ""
+msgstr "تغطية حية"
 
 #: inc/live-coverage.php:80
 msgid "Live Coverage Updates"
-msgstr ""
+msgstr "تحديثات التغطية المباشرة"
 
 #: footer.php:102 template-parts/pages/homepage-mockup.php:522
 msgid "Live Streaming"
@@ -513,7 +513,7 @@ msgstr "قائمة طعام"
 
 #: template-parts/pages/homepage-mockup.php:1039
 msgid "More"
-msgstr ""
+msgstr "أكثر"
 
 #: inc/widgets.php:142 template-parts/components/most-read.php:38
 #: template-parts/pages/homepage-mockup.php:656
@@ -522,7 +522,7 @@ msgstr "الأكثر قراءة"
 
 #: template-parts/pages/homepage-mockup.php:659
 msgid "Most read filters"
-msgstr ""
+msgstr "أكثر الفلاتر قراءة"
 
 #: inc/redux.php:75
 msgid "Most read section"
@@ -530,7 +530,7 @@ msgstr "القسم الأكثر قراءة"
 
 #: template-parts/pages/homepage-mockup.php:746
 msgid "Most viewed"
-msgstr ""
+msgstr "الأكثر مشاهدة"
 
 #: inc/cpts.php:92
 #, php-format
@@ -547,7 +547,7 @@ msgstr "قسم النشرة الإخبارية"
 
 #: inc/redux.php:79
 msgid "Newsletter endpoint URL"
-msgstr ""
+msgstr "رابط نقطة نهاية النشرة الإخبارية"
 
 #: inc/widgets.php:147 template-parts/pages/homepage-mockup.php:1095
 msgid "Newsletter subscription"
@@ -571,7 +571,7 @@ msgstr "لم يتم العثور على أي عناصر."
 
 #: template-parts/content/single-live-coverage.php:96
 msgid "No live updates yet."
-msgstr ""
+msgstr "لا توجد تحديثات مباشرة حتى الآن."
 
 #: inc/redux.php:59
 msgid "None"
@@ -583,16 +583,17 @@ msgstr "لم يتم العثور على شيء"
 
 #: template-parts/pages/homepage-mockup.php:910
 msgid "Opinion"
-msgstr ""
+msgstr "رأي"
 
 #: inc/redux.php:79
 msgid ""
 "Optional external URL. Leave empty to use the built-in subscribe endpoint."
 msgstr ""
+"عنوان URL خارجي اختياري. اتركه فارغًا لاستخدام نقطة نهاية الاشتراك المدمجة."
 
 #: inc/live-coverage.php:109 inc/live-coverage.php:132
 msgid "Optional URL"
-msgstr ""
+msgstr "عنوان URL اختياري"
 
 #: 404.php:13
 msgid "Page not found"
@@ -612,31 +613,31 @@ msgstr "أداء"
 
 #: inc/newsletter.php:40
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "يرجى إدخال عنوان بريد إلكتروني صالح."
 
 #: template-parts/pages/homepage-mockup.php:1004
 msgid "Podcast"
-msgstr ""
+msgstr "بودكاست"
 
 #: inc/redux.php:166
 msgid "Podcast archive URL"
-msgstr ""
+msgstr "رابط أرشيف البودكاست"
 
 #: template-parts/pages/homepage-mockup.php:1012
 msgid "Podcast platforms"
-msgstr ""
+msgstr "منصات البودكاست"
 
 #: inc/redux.php:163
 msgid "Podcast primary URL"
-msgstr ""
+msgstr "الرابط الرئيسي للبودكاست"
 
 #: inc/redux.php:164
 msgid "Podcast secondary URL"
-msgstr ""
+msgstr "رابط البودكاست الثانوي"
 
 #: inc/redux.php:165
 msgid "Podcast SoundCloud URL"
-msgstr ""
+msgstr "رابط بودكاست ساوند كلاود"
 
 #: inc/template-tags.php:67
 msgid "Posts navigation"
@@ -656,7 +657,7 @@ msgstr "القائمة الرئيسية"
 
 #: template-parts/pages/homepage-mockup.php:1016
 msgid "Primary podcast platform"
-msgstr ""
+msgstr "منصة البودكاست الرئيسية"
 
 #: footer.php:105
 msgid "Privacy Policy"
@@ -664,7 +665,7 @@ msgstr "سياسة الخصوصية"
 
 #: template-parts/pages/homepage-mockup.php:510
 msgid "Read article"
-msgstr ""
+msgstr "اقرأ المقال"
 
 #: inc/meta.php:14
 msgid "Reading time"
@@ -676,7 +677,7 @@ msgstr "مقال ذو صلة"
 
 #: inc/live-coverage.php:112 inc/live-coverage.php:133
 msgid "Remove"
-msgstr ""
+msgstr "يزيل"
 
 #: inc/widgets.php:40
 msgid ""
@@ -725,7 +726,7 @@ msgstr "نتائج البحث عن: %s"
 
 #: template-parts/pages/homepage-mockup.php:1024
 msgid "Secondary podcast platform"
-msgstr ""
+msgstr "منصة بودكاست ثانوية"
 
 #. Name of the template
 #: inc/template-routing.php:72 page-templates/section-landing.php:2
@@ -814,7 +815,7 @@ msgstr "قائمة روابط التواصل الاجتماعي"
 
 #: template-parts/pages/homepage-mockup.php:1032
 msgid "SoundCloud"
-msgstr ""
+msgstr "ساوند كلاود"
 
 #: inc/meta.php:18
 msgid "Source name"
@@ -835,15 +836,15 @@ msgstr "علامة تجارية برعاية"
 #: template-parts/components/newsletter.php:25
 #: template-parts/pages/homepage-mockup.php:1113
 msgid "Subscribe"
-msgstr "يشترك"
+msgstr "اشترك"
 
 #: inc/newsletter.php:48
 msgid "Subscription failed. Please try again later."
-msgstr ""
+msgstr "فشلت عملية الاشتراك. يرجى المحاولة مرة أخرى لاحقاً."
 
 #: inc/newsletter.php:36
 msgid "Subscription successful. Thank you."
-msgstr ""
+msgstr "تم الاشتراك بنجاح. شكرًا لك."
 
 #: template-parts/content/single-article.php:126
 msgid "Summary"
@@ -865,11 +866,11 @@ msgstr "خيارات القالب"
 
 #: template-parts/pages/homepage-mockup.php:668
 msgid "This month"
-msgstr ""
+msgstr "هذا الشهر"
 
 #: template-parts/pages/homepage-mockup.php:665
 msgid "This week"
-msgstr ""
+msgstr "هذا الاسبوع"
 
 #: inc/redux.php:159
 msgid "TikTok"
@@ -877,7 +878,7 @@ msgstr "تيك توك"
 
 #: inc/live-coverage.php:101 inc/live-coverage.php:130
 msgid "Timestamp"
-msgstr ""
+msgstr "الطابع الزمني"
 
 #: inc/widgets.php:71
 msgid "Title"
@@ -885,7 +886,7 @@ msgstr "عنوان"
 
 #: template-parts/pages/homepage-mockup.php:662
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #: template-parts/content/none.php:12
 msgid "Try another search or browse the latest news."
@@ -905,7 +906,7 @@ msgstr "يكتب"
 
 #: inc/live-coverage.php:105 inc/live-coverage.php:131
 msgid "Update text"
-msgstr ""
+msgstr "تحديث النص"
 
 #: inc/guest-authors.php:90
 msgid "Use the featured image as this guest author avatar."

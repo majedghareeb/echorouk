@@ -43,6 +43,14 @@ function echorouk_enqueue_assets() {
 		file_exists( get_stylesheet_directory() . '/style.css' ) ? (string) filemtime( get_stylesheet_directory() . '/style.css' ) : ECHOROUK_THEME_VERSION
 	);
 
+	$theme_primary_color = sanitize_hex_color( (string) echorouk_get_option( 'echorouk_primary_color', '#b42318' ) );
+	if ( $theme_primary_color ) {
+		wp_add_inline_style(
+			'echorouk-theme',
+			sprintf( ':root{--echorouk-primary:%s;}', $theme_primary_color )
+		);
+	}
+
 	if ( ! echorouk_get_option( 'disable_bootstrap_js', false ) ) {
 		$bootstrap_js = 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js';
 		if ( file_exists( ECHOROUK_THEME_DIR . '/' . $bootstrap_js ) ) {

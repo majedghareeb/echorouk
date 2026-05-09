@@ -297,6 +297,12 @@
       multi: true
     }));
 
+    $wrap.append(renderPostPicker(section, section.meta, 'left_column_post_ids', {
+      title: i18n('leftColumnArticles', 'Left Column Articles (No Live Coverage)'),
+      max: 5,
+      multi: true
+    }));
+
     $wrap.append(renderPostPicker(section, section.meta, 'fallback_post_ids', {
       title: i18n('fallbackArticles', 'Fallback Articles'),
       max: 5,

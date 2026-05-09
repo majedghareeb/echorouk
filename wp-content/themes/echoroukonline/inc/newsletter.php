@@ -23,6 +23,38 @@ function echorouk_newsletter_form_action_url() {
 	return $external ? $external : admin_url( 'admin-post.php' );
 }
 
+function echorouk_newsletter_copy() {
+	$title = trim( (string) echorouk_get_option( 'newsletter_title', 'النشرة البريدية' ) );
+	$intro = trim( (string) echorouk_get_option( 'newsletter_intro', 'تقدم الشروق خدمة إخبارية حصرية لمشتركي القائمة البريدية، ستصلك أخبارنا وتحليلاتنا وأخبارنا العاجلة أولا بأول لحظة وقوعها. اشترك في القائمة البريدية الآن' ) );
+	$disclaimer = trim( (string) echorouk_get_option( 'newsletter_disclaimer', 'يرجى العلم أن الاشتراك في قائمتنا البريدية يعني الموافقة على الشروط والأحكام المتعلقة بمعالجة البيانات الشخصية' ) );
+	$placeholder = trim( (string) echorouk_get_option( 'newsletter_placeholder', 'أدخل بريدك الإلكتروني هنا' ) );
+	$button_label = trim( (string) echorouk_get_option( 'newsletter_button_label', '+' ) );
+
+	if ( '' === $title ) {
+		$title = 'النشرة البريدية';
+	}
+	if ( '' === $intro ) {
+		$intro = 'تقدم الشروق خدمة إخبارية حصرية لمشتركي القائمة البريدية، ستصلك أخبارنا وتحليلاتنا وأخبارنا العاجلة أولا بأول لحظة وقوعها. اشترك في القائمة البريدية الآن';
+	}
+	if ( '' === $disclaimer ) {
+		$disclaimer = 'يرجى العلم أن الاشتراك في قائمتنا البريدية يعني الموافقة على الشروط والأحكام المتعلقة بمعالجة البيانات الشخصية';
+	}
+	if ( '' === $placeholder ) {
+		$placeholder = 'أدخل بريدك الإلكتروني هنا';
+	}
+	if ( '' === $button_label ) {
+		$button_label = '+';
+	}
+
+	return array(
+		'title'       => $title,
+		'intro'       => $intro,
+		'disclaimer'  => $disclaimer,
+		'placeholder' => $placeholder,
+		'button'      => $button_label,
+	);
+}
+
 function echorouk_newsletter_get_feedback() {
 	$status = isset( $_GET['echorouk_newsletter'] ) ? sanitize_key( wp_unslash( $_GET['echorouk_newsletter'] ) ) : '';
 
