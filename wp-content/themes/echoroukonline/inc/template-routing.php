@@ -32,6 +32,7 @@ function echorouk_route_single_templates( $template ) {
 		'document'     => 'single-templates/document.php',
 		'gallery'      => 'single-templates/gallery.php',
 		'guest_author' => 'single-templates/guest-author.php',
+		'live_coverage' => 'single-templates/live-coverage.php',
 		'video'        => 'single-templates/video.php',
 	);
 

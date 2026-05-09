@@ -22,6 +22,7 @@ $echorouk_includes = array(
 	'inc/performance.php',
 	'inc/cpts.php',
 	'inc/meta.php',
+	'inc/live-coverage.php',
 	'inc/guest-authors.php',
 	'inc/template-tags.php',
 	'inc/widgets.php',

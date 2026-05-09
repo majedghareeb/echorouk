@@ -287,7 +287,8 @@
     $wrap.append($liveToggle);
 
     $wrap.append(renderSinglePostPicker(section, section.meta, 'live_post_id', {
-      title: 'Live Coverage Article'
+      title: 'Live Coverage Article',
+      postTypes: ['live_coverage']
     }));
 
     $wrap.append(renderPostPicker(section, section.meta, 'side_post_ids', {
@@ -369,7 +370,8 @@
     var $picker = renderPostPicker(section, { __proxy: current }, '__proxy', {
       title: (options && options.title) ? options.title : 'Article',
       max: 1,
-      multi: false
+      multi: false,
+      postTypes: (options && Array.isArray(options.postTypes)) ? options.postTypes : null
     });
 
     $picker.on('ehp:selectionChanged', function(event, selectedIds) {
@@ -383,8 +385,10 @@
     var opts = $.extend({
       title: 'Posts',
       max: 30,
-      multi: true
+      multi: true,
+      postTypes: null
     }, options || {});
+    var pickerLatestPosts = [];
 
     if (!Array.isArray(target[key])) {
       target[key] = ensureArray(target[key]);
@@ -444,12 +448,22 @@
       $wrap.trigger('ehp:selectionChanged', [target[key]]);
     }
 
+    function isAllowedPostType(item) {
+      if (!item || !opts.postTypes || !opts.postTypes.length) {
+        return true;
+      }
+      return opts.postTypes.indexOf(item.post_type) !== -1;
+    }
+
     function renderLatestPreset() {
       $presetSelect.empty();
       $presetSelect.append($('<option value="" />').text('Latest 10 Posts'));
 
-      ensureArray(appState.latestPosts).forEach(function(item) {
+      ensureArray(pickerLatestPosts.length ? pickerLatestPosts : appState.latestPosts).forEach(function(item) {
         if (!item || !item.id) {
+          return;
+        }
+        if (!isAllowedPostType(item)) {
           return;
         }
         appState.postCache[String(item.id)] = item;
@@ -520,7 +534,8 @@
         ajaxRequest('echorouk_homepage_search_posts', {
           q: term,
           per_page: 12,
-          recent_hours: 48
+          recent_hours: 48,
+          post_types: opts.postTypes && opts.postTypes.length ? opts.postTypes.join(',') : ''
         }, 'GET').done(function(response) {
           if (!response || !response.success || !response.data || !Array.isArray(response.data.items)) {
             drawSearchResults([]);
@@ -546,7 +561,25 @@
       $presetSelect.val('');
     });
 
-    renderLatestPreset();
+    if (opts.postTypes && opts.postTypes.length) {
+      ajaxRequest('echorouk_homepage_latest_posts', {
+        per_page: 20,
+        post_types: opts.postTypes.join(',')
+      }, 'GET').done(function(response) {
+        if (response && response.success && response.data && Array.isArray(response.data.items)) {
+          pickerLatestPosts = response.data.items;
+          pickerLatestPosts.forEach(function(item) {
+            if (item && item.id) {
+              appState.postCache[String(item.id)] = item;
+            }
+          });
+        }
+      }).always(function() {
+        renderLatestPreset();
+      });
+    } else {
+      renderLatestPreset();
+    }
     drawSelected();
     return $wrap;
   }

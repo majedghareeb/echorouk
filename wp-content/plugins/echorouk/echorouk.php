@@ -20,6 +20,7 @@ require_once ECHOROUK_HOMEPAGE_PATH . 'includes/class-echorouk-homepage-settings
 require_once ECHOROUK_HOMEPAGE_PATH . 'includes/class-echorouk-homepage-ajax.php';
 require_once ECHOROUK_HOMEPAGE_PATH . 'admin/class-echorouk-homepage-admin.php';
 require_once ECHOROUK_HOMEPAGE_PATH . 'includes/class-echorouk-homepage-manager.php';
+require_once ECHOROUK_HOMEPAGE_PATH . 'includes/post-meta.php';
 require_once ECHOROUK_HOMEPAGE_PATH . 'includes/template-tags.php';
 
 register_activation_hook(ECHOROUK_HOMEPAGE_FILE, ['Echorouk_Homepage_Settings', 'activate']);

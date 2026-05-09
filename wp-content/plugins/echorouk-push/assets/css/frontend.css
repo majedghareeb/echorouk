@@ -15,7 +15,7 @@
 
 /* Subscribed: green accent */
 .echorouk-alert-link.ep-state-subscribed {
-    color: #22c55e !important;
+    color: #9BACBF !important;
     opacity: 1;
 }
 
@@ -39,8 +39,13 @@
 }
 
 @keyframes ep-pulse {
-    from { opacity: 0.6; }
-    to   { opacity: 1;   }
+    from {
+        opacity: 0.6;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* ---- Permission Banner ---- */
@@ -82,11 +87,27 @@
 }
 
 @keyframes ep-ring {
-    0%, 100% { transform: rotate(0deg); }
-    10%       { transform: rotate(15deg); }
-    20%       { transform: rotate(-10deg); }
-    30%       { transform: rotate(8deg); }
-    40%       { transform: rotate(0deg); }
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    10% {
+        transform: rotate(15deg);
+    }
+
+    20% {
+        transform: rotate(-10deg);
+    }
+
+    30% {
+        transform: rotate(8deg);
+    }
+
+    40% {
+        transform: rotate(0deg);
+    }
 }
 
 .ep-banner__text {
@@ -162,7 +183,9 @@
     flex-shrink: 0;
 }
 
-.ep-btn--close:hover { color: #fff; }
+.ep-btn--close:hover {
+    color: #fff;
+}
 
 /* ---- Subscribed Widget ---- */
 #ep-subscribed-widget {
@@ -181,17 +204,26 @@
     color: #e0e6ef;
     font-family: 'Cairo', sans-serif;
     font-size: 13px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     direction: rtl;
     animation: ep-fade-in 0.4s ease;
 }
 
 @keyframes ep-fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.ep-widget__icon { font-size: 16px; }
+.ep-widget__icon {
+    font-size: 16px;
+}
 
 .ep-widget__unsub {
     background: none;

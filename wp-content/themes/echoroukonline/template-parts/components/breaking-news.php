@@ -8,42 +8,38 @@
 
 defined('ABSPATH') || exit;
 
-$posts = echorouk_get_cached_posts(
-	'breaking_news_bar',
-	array(
-		'post_type'      => echorouk_news_post_types(),
-		'posts_per_page' => 1,
-		'meta_key'       => 'breaking_news',
-		'meta_value'     => 1,
-	),
-	120
-);
+$ticker_section = function_exists('echorouk_homepage_get_section') ? echorouk_homepage_get_section('news_ticker') : null;
+$ticker_meta    = is_array($ticker_section) && ! empty($ticker_section['meta']) && is_array($ticker_section['meta']) ? $ticker_section['meta'] : array();
+$show_normal    = ! isset($ticker_meta['show_latest']) || ! empty($ticker_meta['show_latest']);
+$show_breaking  = ! isset($ticker_meta['show_breaking']) || ! empty($ticker_meta['show_breaking']);
+$limit          = -1;
 
-if (empty($posts) && (is_front_page() || is_home()) && function_exists('echorouk_homepage_section_posts')) {
-	$posts = echorouk_homepage_section_posts(
-		'news_ticker',
-		1,
-		array(
-			'post_type'      => echorouk_news_post_types(),
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		)
-	);
-}
+$posts = function_exists('echorouk_homepage_get_news_ticker_posts')
+	? echorouk_homepage_get_news_ticker_posts($limit, $show_normal, $show_breaking)
+	: array();
 
-if (empty($posts)) {
+if (empty($posts) || ! is_array($posts)) {
 	return;
 }
 
-$breaking_post = $posts[0];
+$is_rotating = count($posts) > 1;
 ?>
-<div class="breaking-bar" role="region" aria-label="<?php esc_attr_e('Breaking news', 'echoroukonline'); ?>">
+<div class="breaking-bar<?php echo $is_rotating ? ' breaking-bar--rotating' : ''; ?>" role="region" aria-label="<?php esc_attr_e('Breaking news', 'echoroukonline'); ?>">
 	<div class="<?php echo esc_attr(echorouk_container_class()); ?> breaking-bar__inner">
-		<strong class="breaking-bar__label"><?php esc_html_e('Breaking', 'echoroukonline'); ?></strong>
-		<a class="breaking-bar__headline" href="<?php echo esc_url(get_permalink($breaking_post)); ?>">
-			<?php echo esc_html(get_the_title($breaking_post)); ?>
-		</a>
+		<ul class="breaking-bar__list" aria-live="polite" data-news-ticker-list<?php echo $is_rotating ? ' data-ticker-interval="4500"' : ''; ?>>
+			<?php foreach ($posts as $index => $ticker_post) : ?>
+				<?php
+				$type = function_exists('echorouk_homepage_get_news_ticker_type') ? echorouk_homepage_get_news_ticker_type($ticker_post->ID) : 'normal';
+				$is_breaking = 'breaking' === $type;
+				$is_active   = 0 === (int) $index;
+				?>
+				<li class="breaking-bar__item breaking-bar__item--<?php echo esc_attr($type); ?><?php echo $is_active ? ' is-active' : ''; ?>"<?php echo $is_active ? ' aria-hidden="false"' : ' aria-hidden="true"'; ?>>
+					<strong class="breaking-bar__label"><?php echo esc_html($is_breaking ? __('Breaking', 'echoroukonline') : __('Latest news', 'echoroukonline')); ?></strong>
+					<a class="breaking-bar__headline" href="<?php echo esc_url(get_permalink($ticker_post)); ?>">
+						<?php echo esc_html(get_the_title($ticker_post)); ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	</div>
 </div>

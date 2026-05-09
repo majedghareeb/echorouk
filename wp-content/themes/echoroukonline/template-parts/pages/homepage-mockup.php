@@ -131,7 +131,86 @@ if (empty($hero_right)) {
     $hero_right = $fallback_right;
 }
 
-$ticker_posts = $filter_posts($get_section_posts('news_ticker', 6));
+$live_timeline_items = array();
+if ($live_post) {
+    $timeline_raw_keys = array(
+        'echorouk_live_updates',
+        'live_coverage_updates',
+        'live_updates',
+        'live_timeline',
+    );
+
+    foreach ($timeline_raw_keys as $timeline_key) {
+        $timeline_raw = get_post_meta($live_post->ID, $timeline_key, true);
+
+        if (is_string($timeline_raw) && '' !== trim($timeline_raw)) {
+            $decoded = json_decode($timeline_raw, true);
+            if (is_array($decoded)) {
+                $timeline_raw = $decoded;
+            }
+        }
+
+        if (! is_array($timeline_raw) || empty($timeline_raw)) {
+            continue;
+        }
+
+        foreach ($timeline_raw as $timeline_entry) {
+            if (! is_array($timeline_entry)) {
+                continue;
+            }
+
+            $entry_title = '';
+            foreach (array('title', 'text', 'content', 'headline') as $key) {
+                if (! empty($timeline_entry[$key]) && is_string($timeline_entry[$key])) {
+                    $entry_title = sanitize_text_field($timeline_entry[$key]);
+                    break;
+                }
+            }
+
+            if ('' === $entry_title) {
+                continue;
+            }
+
+            $entry_time_raw = '';
+            foreach (array('time', 'timestamp', 'date') as $key) {
+                if (! empty($timeline_entry[$key]) && is_string($timeline_entry[$key])) {
+                    $entry_time_raw = sanitize_text_field($timeline_entry[$key]);
+                    break;
+                }
+            }
+
+            $entry_url = ! empty($timeline_entry['url']) ? esc_url_raw((string) $timeline_entry['url']) : get_permalink($live_post);
+            $entry_ts = $entry_time_raw ? strtotime($entry_time_raw) : false;
+            if (false !== $entry_ts) {
+                $entry_time_display = wp_date('H:i', $entry_ts);
+                $entry_datetime = gmdate(DATE_W3C, $entry_ts);
+            } else {
+                $entry_time_display = $entry_time_raw ? $entry_time_raw : get_the_time('H:i', $live_post);
+                $entry_datetime = get_post_time(DATE_W3C, false, $live_post);
+            }
+
+            $live_timeline_items[] = array(
+                'title'    => $entry_title,
+                'url'      => $entry_url,
+                'time'     => $entry_time_display,
+                'datetime' => $entry_datetime,
+            );
+        }
+
+        if (! empty($live_timeline_items)) {
+            break;
+        }
+    }
+
+    if (empty($live_timeline_items)) {
+        $live_timeline_items[] = array(
+            'title'    => get_the_title($live_post),
+            'url'      => get_permalink($live_post),
+            'time'     => get_the_time('H:i', $live_post),
+            'datetime' => get_post_time(DATE_W3C, false, $live_post),
+        );
+    }
+}
 
 $hero_tag = '';
 if ($hero_main) {
@@ -396,16 +475,22 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <?php if (! empty($hero_right)) : ?>
                             <?php $feature = $hero_right[0]; ?>
                             <article class="hero-latest-feature">
-                                <a href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo echorouk_post_image_html($feature->ID, 'large'); ?></a>
                                 <div class="hero-latest-date"><?php echo esc_html(get_the_date('Y/m/d', $feature)); ?></div>
-                                <h3><a href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a></h3>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($feature)); ?>"><?php echo esc_html(get_the_title($feature)); ?></a>
+                                </h3>
                             </article>
 
                             <?php foreach (array_slice($hero_right, 1, 2) as $hero_side_post) : ?>
                                 <article class="hero-latest-item">
-                                    <a href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo echorouk_post_image_html($hero_side_post->ID, 'thumbnail'); ?></a>
                                     <div>
-                                        <h4><a href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a></h4>
+                                        <h4><a
+                                                href="<?php echo esc_url(get_permalink($hero_side_post)); ?>"><?php echo esc_html(get_the_title($hero_side_post)); ?></a>
+                                        </h4>
                                     </div>
                                 </article>
                             <?php endforeach; ?>
@@ -417,23 +502,32 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                     <?php if ($hero_main) : ?>
                         <article class="hero-lead hero-col-card">
                             <div class="hero-lead-media position-relative">
-                                <span class="tag"><?php echo esc_html($hero_tag ? $hero_tag : __('العالم', 'echoroukonline')); ?></span>
-                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero', '', true); ?></a>
-                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center" aria-label="<?php esc_attr_e('Read article', 'echoroukonline'); ?>">
-                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded-white.svg'); ?>" alt="">
+                                <span
+                                    class="tag"><?php echo esc_html($hero_tag ? $hero_tag : __('العالم', 'echoroukonline')); ?></span>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero', '', true); ?></a>
+                                <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center"
+                                    aria-label="<?php esc_attr_e('Read article', 'echoroukonline'); ?>">
+                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded-white.svg'); ?>"
+                                        alt="">
                                 </a>
 
                                 <?php if ($floating_url) : ?>
-                                    <aside class="hero-floating-video" aria-label="<?php esc_attr_e('Floating video', 'echoroukonline'); ?>">
+                                    <aside class="hero-floating-video"
+                                        aria-label="<?php esc_attr_e('Floating video', 'echoroukonline'); ?>">
                                         <div class="hero-floating-head">
-                                            <button class="hero-floating-close" type="button" aria-label="<?php esc_attr_e('Close floating video', 'echoroukonline'); ?>">×</button>
-                                            <span class="hero-floating-live"><?php esc_html_e('Live Streaming', 'echoroukonline'); ?></span>
+                                            <button class="hero-floating-close" type="button"
+                                                aria-label="<?php esc_attr_e('Close floating video', 'echoroukonline'); ?>">×</button>
+                                            <span
+                                                class="hero-floating-live"><?php esc_html_e('Live Streaming', 'echoroukonline'); ?></span>
                                         </div>
                                         <div class="hero-floating-frame">
                                             <?php if ($floating_embed) : ?>
-                                                <?php echo $floating_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                                                <?php echo $floating_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+                                                ?>
                                             <?php else : ?>
-                                                <a href="<?php echo esc_url($floating_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($floating_url); ?></a>
+                                                <a href="<?php echo esc_url($floating_url); ?>" target="_blank"
+                                                    rel="noopener noreferrer"><?php echo esc_html($floating_url); ?></a>
                                             <?php endif; ?>
                                         </div>
                                     </aside>
@@ -442,15 +536,27 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
 
                             <div class="hero-lead-box-wrap">
                                 <div class="hero-lead-text-box">
-                                    <h1 class="headline"><a href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a></h1>
+                                    <h1 class="headline"><a
+                                            href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a>
+                                    </h1>
                                     <div class="hero-meta-line"><?php echo esc_html(get_the_date('', $hero_main)); ?></div>
                                     <p class="summary mb-0"><?php echo esc_html($get_excerpt($hero_main, 28)); ?></p>
                                 </div>
-                                <div class="hero-lead-icons-box" aria-label="<?php esc_attr_e('Article actions', 'echoroukonline'); ?>">
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/share-08-stroke-rounded.svg'); ?>" alt=""></a>
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/menu-01-stroke-rounded.svg'); ?>" alt=""></a>
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon is-active"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/headphones-stroke-rounded.svg'); ?>" alt=""></a>
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/bookmark-02-stroke-rounded.svg'); ?>" alt=""></a>
+                                <div class="hero-lead-icons-box"
+                                    aria-label="<?php esc_attr_e('Article actions', 'echoroukonline'); ?>">
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/share-08-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/menu-01-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"
+                                        class="hero-lead-icon is-active"><img
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/headphones-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/bookmark-02-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
                                 </div>
                             </div>
                         </article>
@@ -459,14 +565,22 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
 
                 <aside class="col-lg-4 order-2 order-lg-1 hero-col-left">
                     <div class="hero-live hero-col-card">
-                        <div class="hero-live-title"><span><?php esc_html_e('Live Streaming', 'echoroukonline'); ?></span><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>" alt=""></div>
+                        <div class="hero-live-title">
+                            <span><?php esc_html_e('Live Coverage', 'echoroukonline'); ?></span><img
+                                src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>"
+                                alt="">
+                        </div>
                         <ul class="hero-live-timeline">
-                            <?php foreach ($ticker_posts as $ticker_post) : ?>
-                                <li>
-                                    <time class="hero-live-time" datetime="<?php echo esc_attr(get_post_time(DATE_W3C, false, $ticker_post)); ?>"><?php echo esc_html(get_the_time('H:i', $ticker_post)); ?></time>
-                                    <span><a href="<?php echo esc_url(get_permalink($ticker_post)); ?>"><?php echo esc_html(get_the_title($ticker_post)); ?></a></span>
-                                </li>
-                            <?php endforeach; ?>
+                            <?php if (! empty($live_timeline_items)) : ?>
+                                <?php foreach ($live_timeline_items as $timeline_item) : ?>
+                                    <li>
+                                        <time class="hero-live-time"
+                                            datetime="<?php echo esc_attr($timeline_item['datetime']); ?>"><?php echo esc_html($timeline_item['time']); ?></time>
+                                        <span><a
+                                                href="<?php echo esc_url($timeline_item['url']); ?>"><?php echo esc_html($timeline_item['title']); ?></a></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </aside>
@@ -483,11 +597,15 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <?php foreach ($world_left as $world_post) : ?>
                             <article class="world-mini-card">
                                 <div class="world-mini-media">
-                                    <a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
-                                    <span class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
+                                    <span
+                                        class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
                                 </div>
                                 <div class="world-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $world_post)); ?></div>
-                                <h3><a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a></h3>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a>
+                                </h3>
                             </article>
                         <?php endforeach; ?>
                     </aside>
@@ -495,12 +613,17 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                     <section class="col-lg-6">
                         <article class="world-feature-card">
                             <div class="world-feature-media">
-                                <a href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo echorouk_post_image_html($world_main->ID, 'large'); ?></a>
-                                <span class="world-feature-tag"><?php echo esc_html(echorouk_get_primary_category($world_main->ID) ? echorouk_get_primary_category($world_main->ID)->name : __('العالم', 'echoroukonline')); ?></span>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo echorouk_post_image_html($world_main->ID, 'large'); ?></a>
+                                <span
+                                    class="world-feature-tag"><?php echo esc_html(echorouk_get_primary_category($world_main->ID) ? echorouk_get_primary_category($world_main->ID)->name : __('العالم', 'echoroukonline')); ?></span>
                             </div>
                             <div class="world-feature-body">
-                                <div class="world-feature-date"><?php echo esc_html(get_the_date('Y/m/d', $world_main)); ?></div>
-                                <h3><a href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo esc_html(get_the_title($world_main)); ?></a></h3>
+                                <div class="world-feature-date"><?php echo esc_html(get_the_date('Y/m/d', $world_main)); ?>
+                                </div>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($world_main)); ?>"><?php echo esc_html(get_the_title($world_main)); ?></a>
+                                </h3>
                                 <p><?php echo esc_html($get_excerpt($world_main, 30)); ?></p>
                             </div>
                         </article>
@@ -510,11 +633,15 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <?php foreach ($world_right as $world_post) : ?>
                             <article class="world-mini-card">
                                 <div class="world-mini-media">
-                                    <a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
-                                    <span class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo echorouk_post_image_html($world_post->ID, 'medium'); ?></a>
+                                    <span
+                                        class="world-mini-tag"><?php echo esc_html(echorouk_get_primary_category($world_post->ID) ? echorouk_get_primary_category($world_post->ID)->name : __('العالم', 'echoroukonline')); ?></span>
                                 </div>
                                 <div class="world-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $world_post)); ?></div>
-                                <h3><a href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a></h3>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($world_post)); ?>"><?php echo esc_html(get_the_title($world_post)); ?></a>
+                                </h3>
                             </article>
                         <?php endforeach; ?>
                     </aside>
@@ -528,10 +655,17 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 <header class="most-read-header">
                     <h5 class="section-title"><span><?php esc_html_e('Most read', 'echoroukonline'); ?></span></h5>
                     <h5 class="most-read-tabs">
-                        <ul class="most-read-time-filters" role="tablist" aria-label="<?php esc_attr_e('Most read filters', 'echoroukonline'); ?>">
-                            <li role="presentation"><button type="button" class="most-read-time-filter" data-time-range="day" role="tab" aria-selected="false" aria-pressed="false"><?php esc_html_e('Today', 'echoroukonline'); ?></button></li>
-                            <li role="presentation"><button type="button" class="most-read-time-filter" data-time-range="week" role="tab" aria-selected="false" aria-pressed="false"><?php esc_html_e('This week', 'echoroukonline'); ?></button></li>
-                            <li role="presentation"><button type="button" class="most-read-time-filter is-active" data-time-range="month" role="tab" aria-selected="true" aria-pressed="true"><?php esc_html_e('This month', 'echoroukonline'); ?></button></li>
+                        <ul class="most-read-time-filters" role="tablist"
+                            aria-label="<?php esc_attr_e('Most read filters', 'echoroukonline'); ?>">
+                            <li role="presentation"><button type="button" class="most-read-time-filter"
+                                    data-time-range="day" role="tab" aria-selected="false"
+                                    aria-pressed="false"><?php esc_html_e('Today', 'echoroukonline'); ?></button></li>
+                            <li role="presentation"><button type="button" class="most-read-time-filter"
+                                    data-time-range="week" role="tab" aria-selected="false"
+                                    aria-pressed="false"><?php esc_html_e('This week', 'echoroukonline'); ?></button></li>
+                            <li role="presentation"><button type="button" class="most-read-time-filter is-active"
+                                    data-time-range="month" role="tab" aria-selected="true"
+                                    aria-pressed="true"><?php esc_html_e('This month', 'echoroukonline'); ?></button></li>
                         </ul>
                     </h5>
                 </header>
@@ -539,9 +673,13 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                     <?php foreach ($most_read_posts as $most_read_post) : ?>
                         <div class="col-6 col-md-3">
                             <article class="news-card">
-                                <a href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo echorouk_post_image_html($most_read_post->ID, 'medium'); ?></a>
-                                <div class="most-read-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $most_read_post)); ?></div>
-                                <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo esc_html(get_the_title($most_read_post)); ?></a></h3>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo echorouk_post_image_html($most_read_post->ID, 'medium'); ?></a>
+                                <div class="most-read-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $most_read_post)); ?>
+                                </div>
+                                <h3 class="small-headline mt-2"><a
+                                        href="<?php echo esc_url(get_permalink($most_read_post)); ?>"><?php echo esc_html(get_the_title($most_read_post)); ?></a>
+                                </h3>
                             </article>
                         </div>
                     <?php endforeach; ?>
@@ -606,24 +744,39 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <div class="video-side-most">
                             <div class="video-side-title-wrap">
                                 <h3 class="video-side-title"><?php esc_html_e('Most viewed', 'echoroukonline'); ?></h3>
-                                <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-double-stroke-rounded.svg'); ?>" alt="">
+                                <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-double-stroke-rounded.svg'); ?>"
+                                    alt="">
                             </div>
 
                             <article class="video-side-feature">
-                                <a class="video-side-thumb" href="<?php echo esc_url(get_permalink($video_side_feature)); ?>">
+                                <a class="video-side-thumb"
+                                    href="<?php echo esc_url(get_permalink($video_side_feature)); ?>">
                                     <?php echo echorouk_post_image_html($video_side_feature->ID, 'medium'); ?>
-                                    <span class="video-thumb-play" aria-hidden="true"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>" alt=""></span>
+                                    <span class="video-thumb-play" aria-hidden="true"><img
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>"
+                                            alt=""></span>
                                 </a>
-                                <div class="video-side-date"><?php echo esc_html(get_the_date('Y/m/d', $video_side_feature)); ?></div>
-                                <h4><a href="<?php echo esc_url(get_permalink($video_side_feature)); ?>"><?php echo esc_html(get_the_title($video_side_feature)); ?></a></h4>
+                                <div class="video-side-date">
+                                    <?php echo esc_html(get_the_date('Y/m/d', $video_side_feature)); ?></div>
+                                <h4><a
+                                        href="<?php echo esc_url(get_permalink($video_side_feature)); ?>"><?php echo esc_html(get_the_title($video_side_feature)); ?></a>
+                                </h4>
                             </article>
 
                             <div class="video-side-list">
                                 <?php foreach ($video_side_list as $video_side_item) : ?>
                                     <article class="video-side-item">
-                                        <a href="<?php echo esc_url(get_permalink($video_side_item)); ?>"><?php echo echorouk_post_image_html($video_side_item->ID, 'thumbnail', 'video-side-thumb-img'); ?></a>
+                                        <a class="video-side-thumb"
+                                            href="<?php echo esc_url(get_permalink($video_side_item)); ?>">
+                                            <?php echo echorouk_post_image_html($video_side_item->ID, 'thumbnail', 'video-side-thumb-img'); ?>
+                                            <span class="video-thumb-play" aria-hidden="true"><img
+                                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>"
+                                                    alt=""></span>
+                                        </a>
                                         <div>
-                                            <h5><a href="<?php echo esc_url(get_permalink($video_side_item)); ?>"><?php echo esc_html(get_the_title($video_side_item)); ?></a></h5>
+                                            <h5><a
+                                                    href="<?php echo esc_url(get_permalink($video_side_item)); ?>"><?php echo esc_html(get_the_title($video_side_item)); ?></a>
+                                            </h5>
                                         </div>
                                     </article>
                                 <?php endforeach; ?>
@@ -637,16 +790,25 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                                 <div class="video-main-kicker"><?php esc_html_e('Videos', 'echoroukonline'); ?></div>
                                 <div class="video-main-logo" id="echorouk-logo-white"></div>
                             </div>
-                            <a href="<?php echo esc_url(get_post_type_archive_link('video') ? get_post_type_archive_link('video') : home_url('/')); ?>" class="video-main-all"><?php esc_html_e('All videos', 'echoroukonline'); ?><span aria-hidden="true"><img style="transform: matrix(-1, 0, 0, -1, 0, 0);" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded.svg'); ?>" alt=""></span></a>
+                            <a href="<?php echo esc_url(get_post_type_archive_link('video') ? get_post_type_archive_link('video') : home_url('/')); ?>"
+                                class="video-main-all"><?php esc_html_e('All videos', 'echoroukonline'); ?><span
+                                    aria-hidden="true"><img style="transform: matrix(-1, 0, 0, -1, 0, 0);"
+                                        src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded.svg'); ?>"
+                                        alt=""></span></a>
                         </header>
 
                         <article class="video-main-feature">
-                            <a href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo echorouk_post_image_html($video_main_feature->ID, 'large'); ?></a>
+                            <a
+                                href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo echorouk_post_image_html($video_main_feature->ID, 'large'); ?></a>
                             <div class="video-main-overlay">
-                                <div class="video-main-feature-date"><?php echo esc_html(get_the_date('d/m/Y', $video_main_feature)); ?></div>
+                                <div class="video-main-feature-date">
+                                    <?php echo esc_html(get_the_date('d/m/Y', $video_main_feature)); ?></div>
                                 <div class="video-main-feature-title">
-                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded.svg'); ?>" alt="">
-                                    <h3><a href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo esc_html(get_the_title($video_main_feature)); ?></a></h3>
+                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded.svg'); ?>"
+                                        alt="">
+                                    <h3><a
+                                            href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo esc_html(get_the_title($video_main_feature)); ?></a>
+                                    </h3>
                                 </div>
                             </div>
                         </article>
@@ -655,9 +817,13 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                             <div class="video-main-bottom">
                                 <?php foreach ($video_bottom_cards as $video_bottom_post) : ?>
                                     <article class="video-bottom-card">
-                                        <a href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo echorouk_post_image_html($video_bottom_post->ID, 'medium_large'); ?></a>
-                                        <div class="video-bottom-date"><?php echo esc_html(get_the_date('d/m/Y', $video_bottom_post)); ?></div>
-                                        <h4><a href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo esc_html(get_the_title($video_bottom_post)); ?></a></h4>
+                                        <a
+                                            href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo echorouk_post_image_html($video_bottom_post->ID, 'medium_large'); ?></a>
+                                        <div class="video-bottom-date">
+                                            <?php echo esc_html(get_the_date('d/m/Y', $video_bottom_post)); ?></div>
+                                        <h4><a
+                                                href="<?php echo esc_url(get_permalink($video_bottom_post)); ?>"><?php echo esc_html(get_the_title($video_bottom_post)); ?></a>
+                                        </h4>
                                     </article>
                                 <?php endforeach; ?>
                             </div>
@@ -675,19 +841,26 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 </div>
                 <div class="row g-4 align-items-center sports-main-grid">
                     <div class="col-lg-4 sports-main-article">
-                        <h3><a href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo esc_html(get_the_title($sport_main)); ?></a></h3>
+                        <h3><a
+                                href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo esc_html(get_the_title($sport_main)); ?></a>
+                        </h3>
                         <p class="summary"><?php echo esc_html($get_excerpt($sport_main, 20)); ?></p>
                     </div>
-                    <div class="col-lg-8 sports-main-media"><a href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo echorouk_post_image_html($sport_main->ID, 'large', 'img-fluid'); ?></a></div>
+                    <div class="col-lg-8 sports-main-media"><a
+                            href="<?php echo esc_url(get_permalink($sport_main)); ?>"><?php echo echorouk_post_image_html($sport_main->ID, 'large', 'img-fluid'); ?></a>
+                    </div>
                 </div>
                 <?php if (! empty($sport_cards)) : ?>
                     <div class="row g-3 mt-2 sports-sub-grid">
                         <?php foreach ($sport_cards as $sport_card) : ?>
                             <div class="col-6 col-md-3">
                                 <article class="news-card">
-                                    <a href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo echorouk_post_image_html($sport_card->ID, 'medium'); ?></a>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo echorouk_post_image_html($sport_card->ID, 'medium'); ?></a>
                                     <div class="mini-date"><?php echo esc_html(get_the_date('Y/m/d', $sport_card)); ?></div>
-                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo esc_html(get_the_title($sport_card)); ?></a></h3>
+                                    <h3 class="small-headline mt-2"><a
+                                            href="<?php echo esc_url(get_permalink($sport_card)); ?>"><?php echo esc_html(get_the_title($sport_card)); ?></a>
+                                    </h3>
                                 </article>
                             </div>
                         <?php endforeach; ?>
@@ -702,19 +875,26 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 <h5 class="section-title"><span><?php esc_html_e('Economy', 'echoroukonline'); ?></span></h5>
                 <div class="row g-4 align-items-center economy-main-grid">
                     <div class="col-lg-4 economy-main-article">
-                        <h3 class="headline"><a href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo esc_html(get_the_title($economy_main)); ?></a></h3>
+                        <h3 class="headline"><a
+                                href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo esc_html(get_the_title($economy_main)); ?></a>
+                        </h3>
                         <p class="summary"><?php echo esc_html($get_excerpt($economy_main, 20)); ?></p>
                     </div>
-                    <div class="col-lg-8 economy-main-media"><a href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo echorouk_post_image_html($economy_main->ID, 'large', 'img-fluid'); ?></a></div>
+                    <div class="col-lg-8 economy-main-media"><a
+                            href="<?php echo esc_url(get_permalink($economy_main)); ?>"><?php echo echorouk_post_image_html($economy_main->ID, 'large', 'img-fluid'); ?></a>
+                    </div>
                 </div>
                 <?php if (! empty($economy_cards)) : ?>
                     <div class="row g-3 mt-2 economy-sub-grid">
                         <?php foreach ($economy_cards as $economy_card) : ?>
                             <div class="col-6 col-md-3">
                                 <article class="news-card">
-                                    <a href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo echorouk_post_image_html($economy_card->ID, 'medium'); ?></a>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo echorouk_post_image_html($economy_card->ID, 'medium'); ?></a>
                                     <div class="mini-date"><?php echo esc_html(get_the_date('Y/m/d', $economy_card)); ?></div>
-                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo esc_html(get_the_title($economy_card)); ?></a></h3>
+                                    <h3 class="small-headline mt-2"><a
+                                            href="<?php echo esc_url(get_permalink($economy_card)); ?>"><?php echo esc_html(get_the_title($economy_card)); ?></a>
+                                    </h3>
                                 </article>
                             </div>
                         <?php endforeach; ?>
@@ -738,17 +918,22 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         ?>
                         <div class="col-lg-3 col-md-6 col-12">
                             <article class="opinion-card">
-                                <a href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo echorouk_post_image_html($opinion_post->ID, 'medium_large', 'opinion-card-thumb'); ?></a>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo echorouk_post_image_html($opinion_post->ID, 'medium_large', 'opinion-card-thumb'); ?></a>
                                 <div class="opinion-card-meta">
                                     <div class="opinion-card-author">
                                         <div class="author-name-date">
                                             <span class="opinion-card-author-name"><?php echo esc_html($author_name); ?></span>
-                                            <div class="opinion-card-date"><?php echo esc_html(get_the_date('Y/m/d', $opinion_post)); ?></div>
+                                            <div class="opinion-card-date">
+                                                <?php echo esc_html(get_the_date('Y/m/d', $opinion_post)); ?></div>
                                         </div>
-                                        <img class="avatar" src="<?php echo esc_url($author_img); ?>" alt="<?php echo esc_attr($author_name); ?>" loading="lazy" decoding="async">
+                                        <img class="avatar" src="<?php echo esc_url($author_img); ?>"
+                                            alt="<?php echo esc_attr($author_name); ?>" loading="lazy" decoding="async">
                                     </div>
                                 </div>
-                                <h3 class="opinion-card-title"><a href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo esc_html(get_the_title($opinion_post)); ?></a></h3>
+                                <h3 class="opinion-card-title"><a
+                                        href="<?php echo esc_url(get_permalink($opinion_post)); ?>"><?php echo esc_html(get_the_title($opinion_post)); ?></a>
+                                </h3>
                             </article>
                         </div>
                     <?php endforeach; ?>
@@ -762,14 +947,18 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 <div class="row g-0 align-items-start diplomacy-spotlight-top">
                     <div class="col-lg-3 col-12 diplomacy-top-col diplomacy-top-main">
                         <article class="diplomacy-main-story">
-                            <h3><a href="<?php echo esc_url(get_permalink($diplomacy_main)); ?>"><?php echo esc_html(get_the_title($diplomacy_main)); ?></a></h3>
-                            <div class="diplomacy-main-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_main)); ?></div>
+                            <h3><a
+                                    href="<?php echo esc_url(get_permalink($diplomacy_main)); ?>"><?php echo esc_html(get_the_title($diplomacy_main)); ?></a>
+                            </h3>
+                            <div class="diplomacy-main-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_main)); ?>
+                            </div>
                         </article>
                     </div>
                     <div class="col-lg-6 col-12 diplomacy-top-col diplomacy-top-feature">
                         <?php if ($diplomacy_feature) : ?>
                             <article class="diplomacy-feature-media">
-                                <a href="<?php echo esc_url(get_permalink($diplomacy_feature)); ?>"><?php echo echorouk_post_image_html($diplomacy_feature->ID, 'large'); ?></a>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($diplomacy_feature)); ?>"><?php echo echorouk_post_image_html($diplomacy_feature->ID, 'large'); ?></a>
                             </article>
                         <?php endif; ?>
                     </div>
@@ -778,8 +967,11 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                             <aside class="diplomacy-side-list">
                                 <?php foreach ($diplomacy_side as $diplomacy_side_post) : ?>
                                     <article class="diplomacy-side-item">
-                                        <div class="diplomacy-side-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_side_post)); ?></div>
-                                        <h4><a href="<?php echo esc_url(get_permalink($diplomacy_side_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_side_post)); ?></a></h4>
+                                        <div class="diplomacy-side-date">
+                                            <?php echo esc_html(get_the_date('Y/m/d', $diplomacy_side_post)); ?></div>
+                                        <h4><a
+                                                href="<?php echo esc_url(get_permalink($diplomacy_side_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_side_post)); ?></a>
+                                        </h4>
                                     </article>
                                 <?php endforeach; ?>
                             </aside>
@@ -792,8 +984,11 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <?php foreach ($diplomacy_bottom as $diplomacy_bottom_post) : ?>
                             <div class="col-lg-4 col-12 diplomacy-bottom-col">
                                 <article class="diplomacy-bottom-item">
-                                    <div class="diplomacy-bottom-date"><?php echo esc_html(get_the_date('Y/m/d', $diplomacy_bottom_post)); ?></div>
-                                    <h4><a href="<?php echo esc_url(get_permalink($diplomacy_bottom_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_bottom_post)); ?></a></h4>
+                                    <div class="diplomacy-bottom-date">
+                                        <?php echo esc_html(get_the_date('Y/m/d', $diplomacy_bottom_post)); ?></div>
+                                    <h4><a
+                                            href="<?php echo esc_url(get_permalink($diplomacy_bottom_post)); ?>"><?php echo esc_html(get_the_title($diplomacy_bottom_post)); ?></a>
+                                    </h4>
                                 </article>
                             </div>
                         <?php endforeach; ?>
@@ -811,20 +1006,39 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 <div class="row g-3 podcast-grid align-items-stretch">
                     <div class="col-lg-3 col-12">
                         <aside class="podcast-follow-card">
-                            <p class="podcast-follow-title"><?php esc_html_e('Follow Echourouk podcasts on our platforms', 'echoroukonline'); ?></p>
-                            <div class="podcast-follow-platforms" aria-label="<?php esc_attr_e('Podcast platforms', 'echoroukonline'); ?>">
+                            <p class="podcast-follow-title">
+                                <?php esc_html_e('Follow Echourouk podcasts on our platforms', 'echoroukonline'); ?></p>
+                            <div class="podcast-follow-platforms"
+                                aria-label="<?php esc_attr_e('Podcast platforms', 'echoroukonline'); ?>">
                                 <?php if ($podcast_primary_url) : ?>
-                                    <a href="<?php echo esc_url($podcast_primary_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Primary podcast platform', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/music-note-04-stroke-rounded.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url($podcast_primary_url); ?>" target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label="<?php esc_attr_e('Primary podcast platform', 'echoroukonline'); ?>"><img
+                                            class="podcast-follow-platforms-icon"
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/music-note-04-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
                                 <?php endif; ?>
                                 <?php if ($podcast_secondary_url) : ?>
-                                    <a href="<?php echo esc_url($podcast_secondary_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('Secondary podcast platform', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url($podcast_secondary_url); ?>" target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label="<?php esc_attr_e('Secondary podcast platform', 'echoroukonline'); ?>"><img
+                                            class="podcast-follow-platforms-icon"
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
+                                            alt=""></a>
                                 <?php endif; ?>
                                 <?php if ($podcast_soundcloud_url) : ?>
-                                    <a href="<?php echo esc_url($podcast_soundcloud_url); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e('SoundCloud', 'echoroukonline'); ?>"><img class="podcast-follow-platforms-icon" src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/soundcloud-stroke-rounded.svg'); ?>" alt=""></a>
+                                    <a href="<?php echo esc_url($podcast_soundcloud_url); ?>" target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label="<?php esc_attr_e('SoundCloud', 'echoroukonline'); ?>"><img
+                                            class="podcast-follow-platforms-icon"
+                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/soundcloud-stroke-rounded.svg'); ?>"
+                                            alt=""></a>
                                 <?php endif; ?>
                             </div>
                             <div class="podcast-box-link">
-                                <a href="<?php echo esc_url($podcast_archive_url); ?>"><?php esc_html_e('More', 'echoroukonline'); ?> <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></a>
+                                <a href="<?php echo esc_url($podcast_archive_url); ?>"><?php esc_html_e('More', 'echoroukonline'); ?>
+                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
+                                        alt=""></a>
                             </div>
                         </aside>
                     </div>
@@ -834,13 +1048,19 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                             <div class="podcast-list">
                                 <?php foreach ($podcast_list as $podcast_item) : ?>
                                     <article class="podcast-list-item">
-                                        <a href="<?php echo esc_url(get_permalink($podcast_item)); ?>" class="podcast-list-thumb">
+                                        <a href="<?php echo esc_url(get_permalink($podcast_item)); ?>"
+                                            class="podcast-list-thumb">
                                             <?php echo echorouk_post_image_html($podcast_item->ID, 'medium'); ?>
-                                            <span class="podcast-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></span>
+                                            <span class="podcast-icon"><img
+                                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
+                                                    alt=""></span>
                                         </a>
                                         <div class="podcast-list-copy">
-                                            <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_item)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_item)); ?></time>
-                                            <h3><a href="<?php echo esc_url(get_permalink($podcast_item)); ?>"><?php echo esc_html(get_the_title($podcast_item)); ?></a></h3>
+                                            <time
+                                                datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_item)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_item)); ?></time>
+                                            <h3><a
+                                                    href="<?php echo esc_url(get_permalink($podcast_item)); ?>"><?php echo esc_html(get_the_title($podcast_item)); ?></a>
+                                            </h3>
                                         </div>
                                     </article>
                                 <?php endforeach; ?>
@@ -850,11 +1070,17 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
 
                     <div class="col-lg-5 col-12">
                         <article class="podcast-feature">
-                            <a href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo echorouk_post_image_html($podcast_feature->ID, 'large'); ?></a>
-                            <span class="podcast-icon"><img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>" alt=""></span>
+                            <a
+                                href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo echorouk_post_image_html($podcast_feature->ID, 'large'); ?></a>
+                            <span class="podcast-icon"><img
+                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
+                                    alt=""></span>
                             <div class="podcast-feature-body">
-                                <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_feature)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_feature)); ?></time>
-                                <h3><a href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo esc_html(get_the_title($podcast_feature)); ?></a></h3>
+                                <time
+                                    datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_feature)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_feature)); ?></time>
+                                <h3><a
+                                        href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo esc_html(get_the_title($podcast_feature)); ?></a>
+                                </h3>
                             </div>
                         </article>
                     </div>
@@ -867,9 +1093,12 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
             <div class="row align-items-center g-3">
                 <div class="col-lg-5">
                     <h5 class="headline mb-1"><?php esc_html_e('Newsletter subscription', 'echoroukonline'); ?></h5>
-                    <p class="summary mb-0"><?php esc_html_e('Get the top stories and analysis directly in your inbox.', 'echoroukonline'); ?></p>
+                    <p class="summary mb-0">
+                        <?php esc_html_e('Get the top stories and analysis directly in your inbox.', 'echoroukonline'); ?>
+                    </p>
                     <?php if (is_array($newsletter_feedback) && ! empty($newsletter_feedback['message'])) : ?>
-                        <p class="summary mb-0 newsletter-feedback newsletter-feedback--<?php echo esc_attr($newsletter_feedback['type']); ?>" role="status"><?php echo esc_html($newsletter_feedback['message']); ?></p>
+                        <p class="summary mb-0 newsletter-feedback newsletter-feedback--<?php echo esc_attr($newsletter_feedback['type']); ?>"
+                            role="status"><?php echo esc_html($newsletter_feedback['message']); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-7">
@@ -878,8 +1107,10 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <?php if ($newsletter_internal) : ?>
                             <input type="hidden" name="action" value="echorouk_newsletter_subscribe">
                         <?php endif; ?>
-                        <input type="email" class="form-control" name="email" placeholder="<?php esc_attr_e('Email address', 'echoroukonline'); ?>" required>
-                        <button class="btn btn-warning text-white" type="submit"><?php esc_html_e('Subscribe', 'echoroukonline'); ?></button>
+                        <input type="email" class="form-control" name="email"
+                            placeholder="<?php esc_attr_e('Email address', 'echoroukonline'); ?>" required>
+                        <button class="btn btn-warning text-white"
+                            type="submit"><?php esc_html_e('Subscribe', 'echoroukonline'); ?></button>
                     </form>
                 </div>
             </div>
@@ -893,19 +1124,27 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                 </div>
                 <div class="row g-4 align-items-center jawaher-main-grid">
                     <div class="col-lg-4 jawaher-main-article">
-                        <h3><a href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo esc_html(get_the_title($jawaher_main)); ?></a></h3>
+                        <h3><a
+                                href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo esc_html(get_the_title($jawaher_main)); ?></a>
+                        </h3>
                         <p class="summary"><?php echo esc_html($get_excerpt($jawaher_main, 20)); ?></p>
                     </div>
-                    <div class="col-lg-8 jawaher-main-media"><a href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo echorouk_post_image_html($jawaher_main->ID, 'large', 'img-fluid'); ?></a></div>
+                    <div class="col-lg-8 jawaher-main-media"><a
+                            href="<?php echo esc_url(get_permalink($jawaher_main)); ?>"><?php echo echorouk_post_image_html($jawaher_main->ID, 'large', 'img-fluid'); ?></a>
+                    </div>
                 </div>
                 <?php if (! empty($jawaher_cards)) : ?>
                     <div class="row g-3 mt-2 jawaher-sub-grid">
                         <?php foreach ($jawaher_cards as $jawaher_card) : ?>
                             <div class="col-6 col-md-3">
                                 <article class="news-card">
-                                    <a href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo echorouk_post_image_html($jawaher_card->ID, 'medium'); ?></a>
-                                    <div class="jawaher-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $jawaher_card)); ?></div>
-                                    <h3 class="small-headline mt-2"><a href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo esc_html(get_the_title($jawaher_card)); ?></a></h3>
+                                    <a
+                                        href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo echorouk_post_image_html($jawaher_card->ID, 'medium'); ?></a>
+                                    <div class="jawaher-mini-date"><?php echo esc_html(get_the_date('Y/m/d', $jawaher_card)); ?>
+                                    </div>
+                                    <h3 class="small-headline mt-2"><a
+                                            href="<?php echo esc_url(get_permalink($jawaher_card)); ?>"><?php echo esc_html(get_the_title($jawaher_card)); ?></a>
+                                    </h3>
                                 </article>
                             </div>
                         <?php endforeach; ?>
@@ -922,10 +1161,14 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <h3 class="other-lang-title">Français</h3>
                         <?php foreach ($french_posts as $latest_post) : ?>
                             <article class="other-lang-item">
-                                <a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
                                 <div class="other-lang-copy">
-                                    <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
-                                    <h4><a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a></h4>
+                                    <time
+                                        datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
+                                    <h4><a
+                                            href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a>
+                                    </h4>
                                 </div>
                             </article>
                         <?php endforeach; ?>
@@ -934,10 +1177,14 @@ $newsletter_internal = function_exists('echorouk_newsletter_use_internal_endpoin
                         <h3 class="other-lang-title">English</h3>
                         <?php foreach ($english_posts as $latest_post) : ?>
                             <article class="other-lang-item">
-                                <a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
+                                <a
+                                    href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo echorouk_post_image_html($latest_post->ID, 'thumbnail'); ?></a>
                                 <div class="other-lang-copy">
-                                    <time datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
-                                    <h4><a href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a></h4>
+                                    <time
+                                        datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $latest_post)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $latest_post)); ?></time>
+                                    <h4><a
+                                            href="<?php echo esc_url(get_permalink($latest_post)); ?>"><?php echo esc_html(get_the_title($latest_post)); ?></a>
+                                    </h4>
                                 </div>
                             </article>
                         <?php endforeach; ?>

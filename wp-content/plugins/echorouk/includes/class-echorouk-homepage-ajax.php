@@ -12,6 +12,11 @@ class Echorouk_Homepage_Ajax
     protected $settings;
 
     /**
+     * @var array<int, string>|null
+     */
+    protected $selectable_post_types = null;
+
+    /**
      * @param Echorouk_Homepage_Settings $settings Settings service.
      */
     public function __construct(Echorouk_Homepage_Settings $settings)
@@ -118,9 +123,10 @@ class Echorouk_Homepage_Ajax
         $recent_hours = isset($_GET['recent_hours']) ? absint($_GET['recent_hours']) : 48;
         $per_page = max(1, min(20, $per_page));
         $recent_hours = max(1, min(168, $recent_hours));
+        $post_types = $this->resolve_requested_post_types(isset($_GET['post_types']) ? wp_unslash($_GET['post_types']) : '');
 
         $query_args = [
-            'post_type'              => 'post',
+            'post_type'              => $post_types,
             'post_status'            => 'publish',
             'posts_per_page'         => $per_page,
             'ignore_sticky_posts'    => true,
@@ -166,9 +172,10 @@ class Echorouk_Homepage_Ajax
 
         $per_page = isset($_GET['per_page']) ? absint($_GET['per_page']) : 10;
         $per_page = max(1, min(20, $per_page));
+        $post_types = $this->resolve_requested_post_types(isset($_GET['post_types']) ? wp_unslash($_GET['post_types']) : '');
 
         $query = new WP_Query([
-            'post_type'              => 'post',
+            'post_type'              => $post_types,
             'post_status'            => 'publish',
             'posts_per_page'         => $per_page,
             'ignore_sticky_posts'    => true,
@@ -252,7 +259,7 @@ class Echorouk_Homepage_Ajax
         }
 
         $query = new WP_Query([
-            'post_type'              => 'post',
+            'post_type'              => $this->get_selectable_post_types(),
             'post_status'            => 'publish',
             'post__in'               => $post_ids,
             'posts_per_page'         => count($post_ids),
@@ -288,8 +295,65 @@ class Echorouk_Homepage_Ajax
             'id'        => (int) $post->ID,
             'title'     => get_the_title($post->ID),
             'date'      => get_the_date('Y/m/d', $post->ID),
+            'post_type' => get_post_type($post->ID),
             'permalink' => get_permalink($post->ID),
         ];
+    }
+
+    /**
+     * Get post types available in homepage editor selectors.
+     *
+     * @return array<int, string>
+     */
+    protected function get_selectable_post_types()
+    {
+        if (is_array($this->selectable_post_types)) {
+            return $this->selectable_post_types;
+        }
+
+        $types = apply_filters('echorouk_homepage_selectable_post_types', ['post', 'live_coverage']);
+
+        if (! is_array($types) || empty($types)) {
+            $types = ['post'];
+        }
+
+        $clean = [];
+        foreach ($types as $type) {
+            $type = sanitize_key((string) $type);
+            if ($type && post_type_exists($type)) {
+                $clean[] = $type;
+            }
+        }
+
+        $this->selectable_post_types = ! empty($clean) ? array_values(array_unique($clean)) : ['post'];
+
+        return $this->selectable_post_types;
+    }
+
+    /**
+     * Resolve post types from request, constrained to selectable types.
+     *
+     * @param mixed $raw Raw request value.
+     * @return array<int, string>
+     */
+    protected function resolve_requested_post_types($raw)
+    {
+        $allowed = $this->get_selectable_post_types();
+        $requested = [];
+
+        if (is_string($raw) && $raw !== '') {
+            $requested = array_filter(array_map('sanitize_key', array_map('trim', explode(',', $raw))));
+        } elseif (is_array($raw)) {
+            $requested = array_filter(array_map('sanitize_key', $raw));
+        }
+
+        if (empty($requested)) {
+            return $allowed;
+        }
+
+        $filtered = array_values(array_intersect($requested, $allowed));
+
+        return ! empty($filtered) ? $filtered : $allowed;
     }
 
     /**

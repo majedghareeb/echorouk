@@ -20,7 +20,7 @@ defined('ABSPATH') || exit;
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
     <a class="skip-link" href="#primary"><?php esc_html_e('Skip to content', 'echoroukonline'); ?></a>
-    <div class="ad-box container-xl my-4">مساحة إعلانية</div>
+    <div class="ad-box container-xl">مساحة إعلانية</div>
     <header class="site-header echorouk-header" role="banner">
         <?php echorouk_the_ad_slot('header_ad'); ?>
         <div class="<?php echo esc_attr(echorouk_container_class()); ?>">
