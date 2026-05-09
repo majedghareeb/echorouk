@@ -41,26 +41,21 @@ if ( ! empty( $section['enabled'] ) ) {
 }
 
 if ( ! $hero ) {
-	$hero_id = absint( echorouk_get_option( 'hero_post_id', 0 ) );
-	$hero    = $hero_id ? get_post( $hero_id ) : null;
+	$posts = echorouk_homepage_section_posts(
+		'hero',
+		5,
+		array(
+			'post_type'      => echorouk_news_post_types(),
+			'posts_per_page' => 5,
+			'meta_key'       => 'editorial_pick',
+			'meta_value'     => 1,
+			'orderby'        => 'date',
+		)
+	);
+	$hero = ! empty( $posts ) ? $posts[0] : null;
 
-	if ( ! $hero || 'publish' !== $hero->post_status ) {
-		$posts = echorouk_homepage_section_posts(
-			'hero',
-			5,
-			array(
-				'post_type'      => echorouk_news_post_types(),
-				'posts_per_page' => 5,
-				'meta_key'       => 'editorial_pick',
-				'meta_value'     => 1,
-				'orderby'        => 'date',
-			)
-		);
-		$hero = ! empty( $posts ) ? $posts[0] : null;
-
-		if ( empty( $secondary ) && count( $posts ) > 1 ) {
-			$secondary = array_slice( $posts, 1, 4 );
-		}
+	if ( empty( $secondary ) && count( $posts ) > 1 ) {
+		$secondary = array_slice( $posts, 1, 4 );
 	}
 }
 

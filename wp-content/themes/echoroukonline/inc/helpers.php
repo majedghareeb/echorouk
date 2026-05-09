@@ -22,7 +22,6 @@ function echorouk_theme_default_options() {
 		'sidebar_position'             => 'right',
 		'enable_breadcrumbs'           => true,
 		'hero_layout'                  => 'lead-grid',
-		'hero_post_id'                 => 0,
 		'featured_section_enabled'     => true,
 		'latest_news_enabled'          => true,
 		'most_read_enabled'            => true,

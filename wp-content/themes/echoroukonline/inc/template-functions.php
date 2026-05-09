@@ -72,6 +72,25 @@ function echorouk_body_classes( $classes ) {
 }
 add_filter( 'body_class', 'echorouk_body_classes' );
 
+/**
+ * Ensure category archives include all newsroom post types.
+ *
+ * Some environments keep category archives scoped to `post` only, which makes
+ * category pages appear empty when content is published as media CPTs.
+ *
+ * @param WP_Query $query Main query.
+ * @return void
+ */
+function echorouk_expand_category_main_query( $query ) {
+	if ( ! ( $query instanceof WP_Query ) || is_admin() || ! $query->is_main_query() || ! $query->is_category() ) {
+		return;
+	}
+
+	$query->set( 'post_type', echorouk_news_post_types() );
+	$query->set( 'post_status', 'publish' );
+}
+add_action( 'pre_get_posts', 'echorouk_expand_category_main_query', 20 );
+
 function echorouk_pingback_header() {
 	if ( is_singular() && pings_open() ) {
 		printf( '<link rel="pingback" href="%s">' . "\n", esc_url( get_bloginfo( 'pingback_url' ) ) );

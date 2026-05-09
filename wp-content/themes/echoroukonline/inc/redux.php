@@ -70,7 +70,6 @@ function echorouk_register_redux_options() {
 			'id'     => 'homepage',
 			'fields' => array(
 				array( 'id' => 'hero_layout', 'type' => 'select', 'title' => esc_html__( 'Hero layout', 'echoroukonline' ), 'options' => array( 'lead-grid' => esc_html__( 'Lead grid', 'echoroukonline' ), 'single-lead' => esc_html__( 'Single lead', 'echoroukonline' ) ), 'default' => 'lead-grid' ),
-				array( 'id' => 'hero_post_id', 'type' => 'select', 'data' => 'posts', 'title' => esc_html__( 'Hero lead story', 'echoroukonline' ), 'subtitle' => esc_html__( 'Editorial team can choose the homepage lead story.', 'echoroukonline' ) ),
 				array( 'id' => 'featured_section_enabled', 'type' => 'switch', 'title' => esc_html__( 'Featured section', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'latest_news_enabled', 'type' => 'switch', 'title' => esc_html__( 'Latest news section', 'echoroukonline' ), 'default' => true ),
 				array( 'id' => 'most_read_enabled', 'type' => 'switch', 'title' => esc_html__( 'Most read section', 'echoroukonline' ), 'default' => true ),
