@@ -32,7 +32,7 @@ if ( $category_id > 0 ) {
 				),
 			),
 			'paged'               => $current,
-			'posts_per_page'      => (int) get_option( 'posts_per_page' ),
+			'posts_per_page'      => 9,
 			'ignore_sticky_posts' => true,
 			'orderby'             => 'date',
 			'order'               => 'DESC',
