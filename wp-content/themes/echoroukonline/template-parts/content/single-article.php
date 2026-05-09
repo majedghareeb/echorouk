@@ -20,7 +20,6 @@ $reading_time = echorouk_reading_time($post_id);
 $has_rail     = 'none' !== echorouk_get_option('sidebar_position', 'right');
 $show_tts     = echorouk_get_option('show_tts_player', true);
 $show_comments = ! echorouk_get_option('disable_comment_box', true);
-$share_url    = rawurlencode(get_permalink($post_id));
 $deck_text    = has_excerpt($post_id) ? get_the_excerpt($post_id) : wp_trim_words(wp_strip_all_tags(get_post_field('post_content', $post_id)), 25, '...');
 $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
 ?>
@@ -29,11 +28,14 @@ $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
     <div class="<?php echo esc_attr(echorouk_container_class()); ?>">
         <article id="post-<?php the_ID(); ?>" <?php post_class('single-article single-article--feature'); ?> itemscope
             itemtype="<?php echo esc_url($schema_type); ?>">
-            <div class="single-article__lead">
-                <figure class="single-article__media" itemprop="image">
-                    <?php echo echorouk_post_image_html($post_id, 'echorouk-hero', 'single-article__image', true); ?>
-                </figure>
-                <header class="single-article__header">
+            <div class="single-article__lead row g-3 align-items-start">
+                <div class="col-12 col-lg-6">
+                    <figure class="single-article__media" itemprop="image">
+                        <?php echo echorouk_post_image_html($post_id, 'echorouk-hero', 'single-article__image', true); ?>
+                    </figure>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="single-article__headline">
                     <!-- <div class="single-article__badges">
                         <?php //echorouk_the_category_badge($post_id); 
                         ?>
@@ -48,20 +50,21 @@ $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
                     <?php if ($deck_text) : ?>
                         <p class="single-article__deck"><?php echo esc_html($deck_text); ?></p>
                     <?php endif; ?>
-                    <div class="single-article__author-line">
-                        <a class="single-article__author-avatar" href="<?php echo esc_url($author['url']); ?>"
-                            aria-label="<?php echo esc_attr($author['name']); ?>">
-                            <?php echo $author['avatar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-                            ?>
-                        </a>
-                        <div class="single-article__author-copy">
-                            <a class="single-article__author-name"
-                                href="<?php echo esc_url($author['url']); ?>"><?php echo esc_html($author['name']); ?></a>
-                            <time
-                                datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $post_id)); ?>"><?php echo esc_html(get_the_date('', $post_id)); ?></time>
+                        <div class="single-article__author-line">
+                            <a class="single-article__author-avatar" href="<?php echo esc_url($author['url']); ?>"
+                                aria-label="<?php echo esc_attr($author['name']); ?>">
+                                <?php echo $author['avatar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+                                ?>
+                            </a>
+                            <div class="single-article__author-copy">
+                                <a class="single-article__author-name"
+                                    href="<?php echo esc_url($author['url']); ?>"><?php echo esc_html($author['name']); ?></a>
+                                <time
+                                    datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $post_id)); ?>"><?php echo esc_html(get_the_date('', $post_id)); ?></time>
+                            </div>
                         </div>
                     </div>
-                </header>
+                </div>
             </div>
 
             <div class="single-article__divider"></div>
@@ -75,13 +78,7 @@ $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
                     <div class="single-article__actions">
                         <div class="single-article__actions-main">
                             <?php if (echorouk_get_option('show_social_share', true)) : ?>
-                                <a class="single-article__action"
-                                    href="<?php echo esc_url('https://www.facebook.com/sharer/sharer.php?u=' . $share_url); ?>"
-                                    target="_blank" rel="noopener">
-                                    <img class="single-article__action-icon"
-                                        src="<?php echo esc_url($icon_base . 'share-01-stroke-rounded.svg'); ?>" alt="">
-                                    <span><?php esc_html_e('share', 'echoroukonline'); ?></span>
-                                </a>
+                                <?php echorouk_the_post_share_actions($post_id); ?>
                             <?php endif; ?>
                             <?php if ($show_tts) : ?>
                                 <a class="single-article__action" href="#single-article-ai-player-area" data-tts-toggle

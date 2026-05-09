@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 04:00+0000\n"
+"POT-Creation-Date: 2026-05-09 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "%1$s - %2$s"
 msgstr ""
 
-#: inc/template-tags.php:30 template-parts/content/single-article.php:97
+#: inc/template-tags.php:30 template-parts/content/single-article.php:90
 msgid "%d min read"
 msgid_plural "%d min read"
 msgstr[0] ""
@@ -45,13 +45,13 @@ msgstr ""
 msgid "Add update"
 msgstr ""
 
-#: inc/redux.php:124 template-parts/pages/homepage-mockup.php:590
-#: template-parts/pages/homepage-mockup.php:742
-#: template-parts/pages/homepage-mockup.php:1197
+#: inc/redux.php:129 template-parts/pages/homepage-mockup.php:667
+#: template-parts/pages/homepage-mockup.php:819
+#: template-parts/pages/homepage-mockup.php:1251
 msgid "Ads"
 msgstr ""
 
-#: footer.php:111
+#: footer.php:121
 msgid "Advertising"
 msgstr ""
 
@@ -59,15 +59,15 @@ msgstr ""
 msgid "AI summary"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:794
+#: template-parts/pages/homepage-mockup.php:871
 msgid "All videos"
 msgstr ""
 
-#: inc/redux.php:88
+#: inc/redux.php:93
 msgid "Article"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:546
+#: template-parts/pages/homepage-mockup.php:597
 msgid "Article actions"
 msgstr ""
 
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Article fields"
 msgstr ""
 
-#: inc/redux.php:129
+#: inc/redux.php:134
 msgid "Article middle ad"
 msgstr ""
 
@@ -83,8 +83,12 @@ msgstr ""
 msgid "Article Sidebar"
 msgstr ""
 
-#: inc/redux.php:128
+#: inc/redux.php:133
 msgid "Article top ad"
+msgstr ""
+
+#: page-templates/saved-articles.php:18
+msgid "Articles you saved will appear here."
 msgstr ""
 
 #: inc/cpts.php:27 inc/cpts.php:28
@@ -104,6 +108,10 @@ msgstr ""
 msgid "Breaking news"
 msgstr ""
 
+#: template-parts/components/newsletter.php:14
+msgid "By subscribing, you agree to our terms and privacy policy."
+msgstr ""
+
 #: inc/widgets.php:83
 msgid "Category ID"
 msgstr ""
@@ -112,15 +120,19 @@ msgstr ""
 msgid "Category news"
 msgstr ""
 
-#: inc/redux.php:203
+#: category.php:91
+msgid "Category pages"
+msgstr ""
+
+#: inc/redux.php:208
 msgid "Centered"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:520
+#: template-parts/pages/homepage-mockup.php:571
 msgid "Close floating video"
 msgstr ""
 
-#: inc/redux.php:210
+#: inc/redux.php:215
 msgid "Columns"
 msgstr ""
 
@@ -132,19 +144,23 @@ msgid_plural "%1$s comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/redux.php:204 inc/redux.php:211
+#: inc/redux.php:209 inc/redux.php:216
 msgid "Compact"
 msgstr ""
 
-#: footer.php:87
+#: footer.php:89
 msgid "Contact us"
 msgstr ""
 
-#: inc/redux.php:56
+#: inc/redux.php:57
 msgid "Container width"
 msgstr ""
 
-#: footer.php:140
+#: inc/helpers.php:501
+msgid "Copy link"
+msgstr ""
+
+#: footer.php:151
 msgid "Copyright is reserved"
 msgstr ""
 
@@ -156,7 +172,7 @@ msgstr ""
 msgid "Dark logo"
 msgstr ""
 
-#: inc/redux.php:202
+#: inc/redux.php:207
 msgid "Default"
 msgstr ""
 
@@ -164,23 +180,23 @@ msgstr ""
 msgid "Default post image"
 msgstr ""
 
-#: inc/redux.php:116
+#: inc/redux.php:121
 msgid "Disable block library CSS when not needed"
 msgstr ""
 
-#: inc/redux.php:110
+#: inc/redux.php:115
 msgid "Disable Bootstrap JS components not used"
 msgstr ""
 
-#: inc/redux.php:98
+#: inc/redux.php:103
 msgid "Disable comment box"
 msgstr ""
 
-#: inc/redux.php:115
+#: inc/redux.php:120
 msgid "Disable embeds"
 msgstr ""
 
-#: inc/redux.php:114
+#: inc/redux.php:119
 msgid "Disable emojis"
 msgstr ""
 
@@ -210,13 +226,13 @@ msgstr ""
 msgid "Echourouk Online Options"
 msgstr ""
 
-#: inc/redux.php:185
+#: inc/redux.php:190
 msgid ""
 "Echourouk Online uses theme defaults now. Install and activate the Redux "
 "Framework plugin only if you need the Theme Options admin panel."
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:875
+#: template-parts/pages/homepage-mockup.php:952
 msgid "Economy"
 msgstr ""
 
@@ -241,29 +257,24 @@ msgstr ""
 msgid "Editorial recommendations"
 msgstr ""
 
-#: inc/redux.php:72
-msgid "Editorial team can choose the homepage lead story."
-msgstr ""
-
 #: inc/guest-authors.php:13
 msgid "Email"
 msgstr ""
 
-#: template-parts/components/newsletter.php:23
-#: template-parts/components/newsletter.php:24
-#: template-parts/pages/homepage-mockup.php:1111
+#: template-parts/components/newsletter.php:15
+#: template-parts/components/newsletter.php:40
 msgid "Email address"
 msgstr ""
 
-#: inc/redux.php:60
+#: inc/redux.php:61
 msgid "Enable breadcrumbs"
 msgstr ""
 
-#: inc/redux.php:113
+#: inc/redux.php:118
 msgid "Enable critical CSS placeholder"
 msgstr ""
 
-#: inc/redux.php:44
+#: inc/redux.php:45
 msgid "Enable dark mode"
 msgstr ""
 
@@ -271,11 +282,11 @@ msgstr ""
 msgid "enable notifications"
 msgstr ""
 
-#: inc/redux.php:99
+#: inc/redux.php:104
 msgid "Enable sticky ad/sidebar"
 msgstr ""
 
-#: inc/redux.php:45
+#: inc/redux.php:46
 msgid "Enable sticky header"
 msgstr ""
 
@@ -283,7 +294,7 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: inc/guest-authors.php:14 inc/redux.php:155
+#: inc/guest-authors.php:14 inc/redux.php:160 inc/helpers.php:507
 #: template-parts/components/social-share.php:15
 msgid "Facebook"
 msgstr ""
@@ -300,23 +311,27 @@ msgstr ""
 msgid "Featured section"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:517
+#: category.php:104
+msgid "First"
+msgstr ""
+
+#: template-parts/pages/homepage-mockup.php:568
 msgid "Floating video"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1010
+#: template-parts/pages/homepage-mockup.php:1087
 msgid "Follow Echourouk podcasts on our platforms"
 msgstr ""
 
-#: inc/redux.php:139
+#: inc/redux.php:144
 msgid "Footer"
 msgstr ""
 
-#: inc/redux.php:131
+#: inc/redux.php:136
 msgid "Footer ad"
 msgstr ""
 
-#: inc/redux.php:142
+#: inc/redux.php:147
 msgid "Footer address"
 msgstr ""
 
@@ -332,11 +347,11 @@ msgstr ""
 msgid "Footer Column 3"
 msgstr ""
 
-#: inc/redux.php:144
+#: inc/redux.php:149
 msgid "Footer email"
 msgstr ""
 
-#: inc/redux.php:58
+#: inc/redux.php:59
 msgid "Footer layout"
 msgstr ""
 
@@ -344,7 +359,7 @@ msgstr ""
 msgid "Footer menu"
 msgstr ""
 
-#: inc/redux.php:143
+#: inc/redux.php:148
 msgid "Footer phone"
 msgstr ""
 
@@ -358,10 +373,6 @@ msgstr ""
 
 #: inc/redux.php:37
 msgid "General"
-msgstr ""
-
-#: template-parts/pages/homepage-mockup.php:1097
-msgid "Get the top stories and analysis directly in your inbox."
 msgstr ""
 
 #: inc/cpts.php:71
@@ -380,27 +391,23 @@ msgstr ""
 msgid "Guest Authors"
 msgstr ""
 
-#: inc/redux.php:127
+#: inc/redux.php:132
 msgid "Header ad"
 msgstr ""
 
-#: inc/redux.php:57
+#: inc/redux.php:58
 msgid "Header layout"
 msgstr ""
 
-#: inc/redux.php:71
-msgid "Hero layout"
-msgstr ""
-
 #: inc/redux.php:72
-msgid "Hero lead story"
+msgid "Hero layout"
 msgstr ""
 
 #: template-parts/components/breadcrumbs.php:17
 msgid "Home"
 msgstr ""
 
-#: inc/redux.php:68
+#: inc/redux.php:69
 msgid "Homepage"
 msgstr ""
 
@@ -417,16 +424,20 @@ msgstr ""
 msgid "https://www.echoroukonline.com/"
 msgstr ""
 
-#: inc/guest-authors.php:16 inc/redux.php:157
+#: inc/guest-authors.php:16 inc/redux.php:162
 msgid "Instagram"
 msgstr ""
 
-#: inc/newsletter.php:44
+#: inc/newsletter.php:76
 msgid "Invalid request. Please try again."
 msgstr ""
 
 #: inc/guest-authors.php:12
 msgid "Job title"
+msgstr ""
+
+#: category.php:114
+msgid "Last"
 msgstr ""
 
 #: single-templates/guest-author.php:38
@@ -438,7 +449,7 @@ msgstr ""
 msgid "Latest news"
 msgstr ""
 
-#: inc/redux.php:80
+#: inc/redux.php:85
 msgid "Latest news count"
 msgstr ""
 
@@ -446,34 +457,38 @@ msgstr ""
 msgid "Latest news section"
 msgstr ""
 
-#: inc/redux.php:53
+#: inc/redux.php:54
 msgid "Layout"
 msgstr ""
 
-#: inc/redux.php:111
+#: inc/redux.php:116
 msgid "Lazy-load images"
 msgstr ""
 
-#: inc/redux.php:71
+#: inc/redux.php:72
 msgid "Lead grid"
 msgstr ""
 
-#: inc/redux.php:59
+#: inc/redux.php:60
 msgid "Left"
+msgstr ""
+
+#: inc/template-tags.php:177
+msgid "Link copied"
 msgstr ""
 
 #: template-parts/components/tts-player.php:17
 msgid "Listen to article"
 msgstr ""
 
-#: template-parts/content/single-article.php:91
+#: template-parts/content/single-article.php:84
 msgid "Listen to Summary"
 msgstr ""
 
 #: inc/cpts.php:41 inc/cpts.php:42
 #: template-parts/content/single-live-coverage.php:63
 #: template-parts/content/single-live-coverage.php:65
-#: template-parts/pages/homepage-mockup.php:569
+#: template-parts/pages/homepage-mockup.php:621
 msgid "Live Coverage"
 msgstr ""
 
@@ -481,7 +496,7 @@ msgstr ""
 msgid "Live Coverage Updates"
 msgstr ""
 
-#: footer.php:102 template-parts/pages/homepage-mockup.php:522
+#: footer.php:112 template-parts/pages/homepage-mockup.php:573
 msgid "Live Streaming"
 msgstr ""
 
@@ -497,20 +512,20 @@ msgstr ""
 msgid "Main video URL"
 msgstr ""
 
-#: header.php:97
+#: header.php:103
 msgid "Menu"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1039
+#: template-parts/pages/homepage-mockup.php:1116
 msgid "More"
 msgstr ""
 
 #: inc/widgets.php:142 template-parts/components/most-read.php:38
-#: template-parts/pages/homepage-mockup.php:656
+#: template-parts/pages/homepage-mockup.php:733
 msgid "Most read"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:659
+#: template-parts/pages/homepage-mockup.php:736
 msgid "Most read filters"
 msgstr ""
 
@@ -518,7 +533,7 @@ msgstr ""
 msgid "Most read section"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:746
+#: template-parts/pages/homepage-mockup.php:823
 msgid "Most viewed"
 msgstr ""
 
@@ -527,7 +542,7 @@ msgstr ""
 msgid "New %s"
 msgstr ""
 
-#: footer.php:108 template-parts/components/newsletter.php:11
+#: footer.php:118 template-parts/components/newsletter.php:12
 msgid "Newsletter"
 msgstr ""
 
@@ -535,19 +550,39 @@ msgstr ""
 msgid "Newsletter block"
 msgstr ""
 
+#: inc/redux.php:84
+msgid "Newsletter button label"
+msgstr ""
+
+#: inc/redux.php:82
+msgid "Newsletter disclaimer text"
+msgstr ""
+
+#: inc/redux.php:83
+msgid "Newsletter email placeholder"
+msgstr ""
+
 #: inc/redux.php:79
 msgid "Newsletter endpoint URL"
 msgstr ""
 
-#: inc/widgets.php:147 template-parts/pages/homepage-mockup.php:1095
+#: inc/redux.php:81
+msgid "Newsletter intro text"
+msgstr ""
+
+#: inc/widgets.php:147
 msgid "Newsletter subscription"
 msgstr ""
 
-#: inc/template-tags.php:66
+#: inc/redux.php:80
+msgid "Newsletter title"
+msgstr ""
+
+#: category.php:85 inc/template-tags.php:81
 msgid "Next"
 msgstr ""
 
-#: template-parts/content/single-article.php:130
+#: template-parts/content/single-article.php:123
 msgid "No AI summary available at the moment."
 msgstr ""
 
@@ -563,7 +598,11 @@ msgstr ""
 msgid "No live updates yet."
 msgstr ""
 
-#: inc/redux.php:59
+#: page-templates/saved-articles.php:24
+msgid "No saved articles yet."
+msgstr ""
+
+#: inc/redux.php:60
 msgid "None"
 msgstr ""
 
@@ -571,7 +610,7 @@ msgstr ""
 msgid "Nothing found"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:910
+#: template-parts/pages/homepage-mockup.php:987
 msgid "Opinion"
 msgstr ""
 
@@ -582,6 +621,11 @@ msgstr ""
 
 #: inc/live-coverage.php:109 inc/live-coverage.php:132
 msgid "Optional URL"
+msgstr ""
+
+#: category.php:95
+#, php-format
+msgid "Page %1$d of %2$d"
 msgstr ""
 
 #: 404.php:13
@@ -596,63 +640,63 @@ msgstr ""
 msgid "PDF/document list"
 msgstr ""
 
-#: inc/redux.php:107
+#: inc/redux.php:112
 msgid "Performance"
 msgstr ""
 
-#: inc/newsletter.php:40
+#: inc/newsletter.php:72
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1004
+#: template-parts/pages/homepage-mockup.php:1081
 msgid "Podcast"
 msgstr ""
 
-#: inc/redux.php:166
+#: inc/redux.php:171
 msgid "Podcast archive URL"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1012
+#: template-parts/pages/homepage-mockup.php:1089
 msgid "Podcast platforms"
 msgstr ""
 
-#: inc/redux.php:163
+#: inc/redux.php:168
 msgid "Podcast primary URL"
 msgstr ""
 
-#: inc/redux.php:164
+#: inc/redux.php:169
 msgid "Podcast secondary URL"
 msgstr ""
 
-#: inc/redux.php:165
+#: inc/redux.php:170
 msgid "Podcast SoundCloud URL"
 msgstr ""
 
-#: inc/template-tags.php:67
+#: inc/template-tags.php:82
 msgid "Posts navigation"
 msgstr ""
 
-#: inc/redux.php:112
+#: inc/redux.php:117
 msgid "Preload main font"
 msgstr ""
 
-#: inc/template-tags.php:65
+#: category.php:84 inc/template-tags.php:80
 msgid "Previous"
 msgstr ""
 
-#: header.php:101 inc/setup.php:34
+#: header.php:107 inc/setup.php:34
 msgid "Primary menu"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1016
+#: template-parts/pages/homepage-mockup.php:1093
 msgid "Primary podcast platform"
 msgstr ""
 
-#: footer.php:105
+#: footer.php:115
 msgid "Privacy Policy"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:510
+#: template-parts/pages/homepage-mockup.php:561
 msgid "Read article"
 msgstr ""
 
@@ -660,11 +704,12 @@ msgstr ""
 msgid "Reading time"
 msgstr ""
 
-#: template-parts/components/related-articles.php:17
+#: template-parts/components/related-articles.php:18
 msgid "Related articles"
 msgstr ""
 
 #: inc/live-coverage.php:112 inc/live-coverage.php:133
+#: page-templates/saved-articles.php:21
 msgid "Remove"
 msgstr ""
 
@@ -674,11 +719,11 @@ msgid ""
 "block."
 msgstr ""
 
-#: inc/redux.php:59
+#: inc/redux.php:60
 msgid "Right"
 msgstr ""
 
-#: inc/redux.php:162
+#: inc/redux.php:167
 msgid "RSS"
 msgstr ""
 
@@ -687,6 +732,18 @@ msgid ""
 "RTL-first news theme scaffold for Echourouk Online with reusable article "
 "templates, media CPTs, optional Redux plugin options, and native meta "
 "fallbacks."
+msgstr ""
+
+#: inc/helpers.php:525
+msgid "Save article"
+msgstr ""
+
+#: inc/template-tags.php:184
+msgid "Saved"
+msgstr ""
+
+#: header.php:44 page-templates/saved-articles.php:17
+msgid "Saved articles"
 msgstr ""
 
 #: searchform.php:12 searchform.php:15
@@ -708,7 +765,7 @@ msgstr ""
 msgid "Search results for: %s"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1024
+#: template-parts/pages/homepage-mockup.php:1101
 msgid "Secondary podcast platform"
 msgstr ""
 
@@ -721,47 +778,43 @@ msgstr ""
 msgid "Sections"
 msgstr ""
 
-#: template-parts/components/social-share.php:14
+#: inc/template-tags.php:158 template-parts/components/social-share.php:14
 msgid "Share"
 msgstr ""
 
-#: template-parts/content/single-article.php:83
-msgid "share"
-msgstr ""
-
-#: template-parts/components/social-share.php:13
+#: inc/template-tags.php:155 template-parts/components/social-share.php:13
 msgid "Share article"
 msgstr ""
 
-#: inc/redux.php:91
+#: inc/redux.php:96
 msgid "Show AI summary"
 msgstr ""
 
-#: inc/redux.php:94
+#: inc/redux.php:99
 msgid "Show author box"
 msgstr ""
 
-#: inc/redux.php:96
+#: inc/redux.php:101
 msgid "Show Most Read widget in article sidebar"
 msgstr ""
 
-#: inc/redux.php:93
+#: inc/redux.php:98
 msgid "Show reading time"
 msgstr ""
 
-#: inc/redux.php:95
+#: inc/redux.php:100
 msgid "Show related articles"
 msgstr ""
 
-#: inc/redux.php:97
+#: inc/redux.php:102
 msgid "Show social share"
 msgstr ""
 
-#: inc/redux.php:92
+#: inc/redux.php:97
 msgid "Show TTS player"
 msgstr ""
 
-#: template-parts/content/single-article.php:105
+#: template-parts/content/single-article.php:98
 msgid "show_ai_aummary"
 msgstr ""
 
@@ -769,15 +822,15 @@ msgstr ""
 msgid "Sidebar"
 msgstr ""
 
-#: inc/redux.php:130
+#: inc/redux.php:135
 msgid "Sidebar ad"
 msgstr ""
 
-#: inc/redux.php:59
+#: inc/redux.php:60
 msgid "Sidebar position"
 msgstr ""
 
-#: inc/redux.php:71
+#: inc/redux.php:72
 msgid "Single lead"
 msgstr ""
 
@@ -789,7 +842,7 @@ msgstr ""
 msgid "Skip to content"
 msgstr ""
 
-#: inc/redux.php:152
+#: inc/redux.php:157
 msgid "Social"
 msgstr ""
 
@@ -797,7 +850,7 @@ msgstr ""
 msgid "Social links menu"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:1032
+#: template-parts/pages/homepage-mockup.php:1109
 msgid "SoundCloud"
 msgstr ""
 
@@ -809,7 +862,7 @@ msgstr ""
 msgid "Source URL"
 msgstr ""
 
-#: template-parts/content/single-article.php:148
+#: template-parts/content/single-article.php:141
 msgid "Source:"
 msgstr ""
 
@@ -817,24 +870,27 @@ msgstr ""
 msgid "Sponsored label"
 msgstr ""
 
-#: template-parts/components/newsletter.php:25
-#: template-parts/pages/homepage-mockup.php:1113
+#: template-parts/components/newsletter.php:37
 msgid "Subscribe"
 msgstr ""
 
-#: inc/newsletter.php:48
+#: template-parts/components/newsletter.php:13
+msgid "Subscribe to receive our latest news and analysis."
+msgstr ""
+
+#: inc/newsletter.php:80
 msgid "Subscription failed. Please try again later."
 msgstr ""
 
-#: inc/newsletter.php:36
+#: inc/newsletter.php:68
 msgid "Subscription successful. Thank you."
 msgstr ""
 
-#: template-parts/content/single-article.php:126
+#: template-parts/content/single-article.php:119
 msgid "Summary"
 msgstr ""
 
-#: inc/redux.php:161
+#: inc/redux.php:166
 msgid "Telegram"
 msgstr ""
 
@@ -848,15 +904,19 @@ msgstr ""
 msgid "Theme Options"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:668
+#: inc/redux.php:44
+msgid "Theme Primary Color"
+msgstr ""
+
+#: template-parts/pages/homepage-mockup.php:745
 msgid "This month"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:665
+#: template-parts/pages/homepage-mockup.php:742
 msgid "This week"
 msgstr ""
 
-#: inc/redux.php:159
+#: inc/redux.php:164
 msgid "TikTok"
 msgstr ""
 
@@ -868,7 +928,7 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: template-parts/pages/homepage-mockup.php:662
+#: template-parts/pages/homepage-mockup.php:739
 msgid "Today"
 msgstr ""
 
@@ -913,7 +973,7 @@ msgid "Video section"
 msgstr ""
 
 #: inc/cpts.php:14 template-parts/components/video-list.php:24
-#: template-parts/pages/homepage-mockup.php:790
+#: template-parts/pages/homepage-mockup.php:867
 msgid "Videos"
 msgstr ""
 
@@ -926,76 +986,77 @@ msgstr ""
 msgid "Voting module placeholder"
 msgstr ""
 
-#: inc/redux.php:160 template-parts/components/social-share.php:17
+#: inc/redux.php:165 inc/helpers.php:519
+#: template-parts/components/social-share.php:17
 msgid "WhatsApp"
 msgstr ""
 
-#: template-parts/components/social-share.php:16
+#: inc/helpers.php:513 template-parts/components/social-share.php:16
 msgid "X"
 msgstr ""
 
-#: inc/guest-authors.php:15 inc/redux.php:156
+#: inc/guest-authors.php:15 inc/redux.php:161
 msgid "X/Twitter"
 msgstr ""
 
-#: inc/guest-authors.php:17 inc/redux.php:158
+#: inc/guest-authors.php:17 inc/redux.php:163
 msgid "YouTube"
 msgstr ""
 
-#: footer.php:72
+#: footer.php:74
 msgid "اقتصاد"
 msgstr ""
 
-#: header.php:63
+#: header.php:69
 msgid "البث الحي"
 msgstr ""
 
-#: footer.php:70
+#: footer.php:72
 msgid "الجزائر"
 msgstr ""
 
-#: footer.php:76
+#: footer.php:78
 msgid "الرأي"
 msgstr ""
 
-#: footer.php:69
+#: footer.php:71
 msgid "الرئيسية"
 msgstr ""
 
-#: footer.php:71 template-parts/pages/homepage-mockup.php:506
-#: template-parts/pages/homepage-mockup.php:603
-#: template-parts/pages/homepage-mockup.php:619
-#: template-parts/pages/homepage-mockup.php:639
+#: footer.php:73 template-parts/pages/homepage-mockup.php:557
+#: template-parts/pages/homepage-mockup.php:680
+#: template-parts/pages/homepage-mockup.php:696
+#: template-parts/pages/homepage-mockup.php:716
 msgid "العالم"
 msgstr ""
 
-#: footer.php:80
+#: footer.php:82
 msgid "العامة"
 msgstr ""
 
-#: footer.php:28
+#: footer.php:30
 msgid "المزيد"
 msgstr ""
 
-#: footer.php:77
+#: footer.php:79
 msgid "جواهر"
 msgstr ""
 
-#: footer.php:73
+#: footer.php:75
 msgid "رياضة"
 msgstr ""
 
-#: footer.php:79
+#: footer.php:81
 msgid "قناة الشروق"
 msgstr ""
 
-#: footer.php:25
+#: footer.php:27
 msgid ""
 "منذ سنة 2005 أطلقت مؤسسة الشروق للإعلام والنشر واحدا من أولى المواقع "
 "الإخبارية في الجزائر والعالم العربي من أجل توفير تغطية آنية ومستمرّة للأحداث "
 "على مدار الساعة بالعربية والإنجليزية والفرنسية."
 msgstr ""
 
-#: footer.php:78
+#: footer.php:80
 msgid "منوعات"
 msgstr ""

@@ -96,3 +96,66 @@ function echorouk_route_legacy_page_templates( $template ) {
 	return $template;
 }
 add_filter( 'page_template', 'echorouk_route_legacy_page_templates' );
+
+/**
+ * Register a dedicated saved-articles route.
+ *
+ * @return void
+ */
+function echorouk_register_saved_articles_route() {
+	add_rewrite_rule( '^saved-articles/?$', 'index.php?echorouk_saved_articles=1', 'top' );
+}
+add_action( 'init', 'echorouk_register_saved_articles_route' );
+
+/**
+ * Expose custom query vars.
+ *
+ * @param array<int,string> $vars Public query vars.
+ * @return array<int,string>
+ */
+function echorouk_register_custom_query_vars( $vars ) {
+	$vars[] = 'echorouk_saved_articles';
+
+	return $vars;
+}
+add_filter( 'query_vars', 'echorouk_register_custom_query_vars' );
+
+/**
+ * Route saved-articles URL to its template.
+ *
+ * Includes a 404 fallback based on request path so it works before rewrite flush.
+ *
+ * @param string $template Existing template selected by WordPress.
+ * @return string
+ */
+function echorouk_route_saved_articles_template( $template ) {
+	$is_saved_route = (bool) get_query_var( 'echorouk_saved_articles' );
+
+	if ( ! $is_saved_route && is_404() ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+		$path        = trim( wp_parse_url( $request_uri, PHP_URL_PATH ), '/' );
+		$home_path   = trim( wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+
+		if ( $home_path && 0 === strpos( $path, $home_path ) ) {
+			$path = trim( substr( $path, strlen( $home_path ) ), '/' );
+		}
+
+		if ( 'saved-articles' === $path ) {
+			$is_saved_route = true;
+			status_header( 200 );
+			nocache_headers();
+
+			global $wp_query;
+			if ( $wp_query instanceof WP_Query ) {
+				$wp_query->is_404 = false;
+			}
+		}
+	}
+
+	if ( $is_saved_route ) {
+		return echorouk_locate_routed_template( 'page-templates/saved-articles.php', $template );
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'echorouk_route_saved_articles_template', 20 );

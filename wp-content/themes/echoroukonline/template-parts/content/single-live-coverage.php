@@ -31,25 +31,29 @@ if ( ! empty( $updates ) ) {
 	<?php get_template_part( 'template-parts/components/reading-progress' ); ?>
 	<div class="<?php echo esc_attr( echorouk_container_class() ); ?>">
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'single-article single-article--feature single-live-coverage' ); ?>>
-			<div class="single-article__lead">
-				<figure class="single-article__media">
-					<?php echo echorouk_post_image_html( $post_id, 'echorouk-hero', 'single-article__image', true ); ?>
-				</figure>
-				<header class="single-article__header">
-					<h1 class="single-article__title"><?php the_title(); ?></h1>
-					<?php if ( $deck_text ) : ?>
-						<p class="single-article__deck"><?php echo esc_html( $deck_text ); ?></p>
-					<?php endif; ?>
-					<div class="single-article__author-line">
-						<a class="single-article__author-avatar" href="<?php echo esc_url( $author['url'] ); ?>" aria-label="<?php echo esc_attr( $author['name'] ); ?>">
-							<?php echo $author['avatar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						</a>
-						<div class="single-article__author-copy">
-							<a class="single-article__author-name" href="<?php echo esc_url( $author['url'] ); ?>"><?php echo esc_html( $author['name'] ); ?></a>
-							<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C, $post_id ) ); ?>"><?php echo esc_html( get_the_date( '', $post_id ) ); ?></time>
+			<div class="single-article__lead row g-3 align-items-start">
+				<div class="col-12 col-lg-6">
+					<figure class="single-article__media">
+						<?php echo echorouk_post_image_html( $post_id, 'echorouk-hero', 'single-article__image', true ); ?>
+					</figure>
+				</div>
+				<div class="col-12 col-lg-6">
+					<div class="single-article__headline">
+						<h1 class="single-article__title"><?php the_title(); ?></h1>
+						<?php if ( $deck_text ) : ?>
+							<p class="single-article__deck"><?php echo esc_html( $deck_text ); ?></p>
+						<?php endif; ?>
+						<div class="single-article__author-line">
+							<a class="single-article__author-avatar" href="<?php echo esc_url( $author['url'] ); ?>" aria-label="<?php echo esc_attr( $author['name'] ); ?>">
+								<?php echo $author['avatar']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							</a>
+							<div class="single-article__author-copy">
+								<a class="single-article__author-name" href="<?php echo esc_url( $author['url'] ); ?>"><?php echo esc_html( $author['name'] ); ?></a>
+								<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C, $post_id ) ); ?>"><?php echo esc_html( get_the_date( '', $post_id ) ); ?></time>
+							</div>
 						</div>
 					</div>
-				</header>
+				</div>
 			</div>
 
 			<div class="single-article__divider"></div>

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-09 07:43+0000\n"
+"PO-Revision-Date: 2026-05-09 09:31+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -146,7 +146,7 @@ msgstr "صغير الحجم"
 
 #: footer.php:87
 msgid "Contact us"
-msgstr "اتصل بنا"
+msgstr "تواصل معنا"
 
 #: inc/redux.php:56
 msgid "Container width"
@@ -649,7 +649,7 @@ msgstr "قم بتحميل الخط الرئيسي مسبقًا"
 
 #: inc/template-tags.php:65
 msgid "Previous"
-msgstr "سابق"
+msgstr "السابق"
 
 #: header.php:101 inc/setup.php:34
 msgid "Primary menu"
@@ -673,11 +673,11 @@ msgstr "وقت القراءة"
 
 #: template-parts/components/related-articles.php:17
 msgid "Related articles"
-msgstr "مقال ذو صلة"
+msgstr "مقالات ذات صلة"
 
 #: inc/live-coverage.php:112 inc/live-coverage.php:133
 msgid "Remove"
-msgstr "يزيل"
+msgstr "حذف"
 
 #: inc/widgets.php:40
 msgid ""

@@ -40,6 +40,12 @@ defined('ABSPATH') || exit;
                         href="#"><?php esc_html_e('enable notifications', 'echoroukonline'); ?>&nbsp;<object
                             type="image/svg+xml"
                             data="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/notification-off-01-stroke-rounded.svg"></object></a>
+                    <a class="echorouk-saved-link" href="<?php echo esc_url(home_url('/saved-articles/')); ?>"
+                        aria-label="<?php esc_attr_e('Saved articles', 'echoroukonline'); ?>">
+                        <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/bookmark-02-stroke-rounded.svg'); ?>"
+                            alt="">
+                        <span class="echorouk-saved-badge" data-saved-articles-badge hidden>0</span>
+                    </a>
                     <div class="echorouk-footer-social">
                         <?php
                         $social = array(

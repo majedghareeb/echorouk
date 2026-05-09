@@ -134,3 +134,62 @@ function echorouk_news_card( $post_id, $variant = 'default', $is_lcp = false ) {
 		)
 	);
 }
+
+/**
+ * Render share actions for a post.
+ *
+ * @param int $post_id Post ID.
+ * @return void
+ */
+function echorouk_the_post_share_actions( $post_id = 0 ) {
+	$post_id = $post_id ? absint( $post_id ) : get_the_ID();
+	$actions = echorouk_get_post_share_actions( $post_id );
+
+	if ( empty( $actions ) || ! is_array( $actions ) ) {
+		return;
+	}
+
+	$icon_base = trailingslashit( ECHOROUK_THEME_URI . '/assets/icons' );
+	$menu_id   = 'single-article-share-menu-' . $post_id;
+	?>
+	<div class="single-article__share-dropdown" data-share-dropdown aria-label="<?php esc_attr_e( 'Share article', 'echoroukonline' ); ?>">
+		<button type="button" class="single-article__action single-article__action--share-toggle" data-share-toggle aria-expanded="false" aria-haspopup="true" aria-controls="<?php echo esc_attr( $menu_id ); ?>">
+			<img class="single-article__action-icon" src="<?php echo esc_url( $icon_base . 'share-01-stroke-rounded.svg' ); ?>" alt="">
+			<span><?php esc_html_e( 'Share', 'echoroukonline' ); ?></span>
+		</button>
+		<div id="<?php echo esc_attr( $menu_id ); ?>" class="single-article__share-menu" role="menu" hidden>
+			<?php foreach ( $actions as $key => $action ) : ?>
+				<?php
+				$type  = isset( $action['type'] ) ? (string) $action['type'] : 'external';
+				$label = isset( $action['label'] ) ? (string) $action['label'] : '';
+				$url   = isset( $action['url'] ) ? (string) $action['url'] : '';
+				$icon  = isset( $action['icon'] ) ? (string) $action['icon'] : '';
+				$class = 'single-article__share-item single-article__share-item--' . sanitize_html_class( (string) $key );
+				?>
+				<?php if ( 'external' === $type ) : ?>
+					<a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener" role="menuitem">
+						<?php if ( $icon ) : ?>
+							<img class="single-article__action-icon" src="<?php echo esc_url( $icon_base . $icon ); ?>" alt="">
+						<?php endif; ?>
+						<span><?php echo esc_html( $label ); ?></span>
+					</a>
+				<?php elseif ( 'copy' === $type ) : ?>
+					<button type="button" class="<?php echo esc_attr( $class ); ?>" role="menuitem" data-share-copy data-share-url="<?php echo esc_url( $url ); ?>" data-label-default="<?php echo esc_attr( $label ); ?>" data-label-copied="<?php echo esc_attr__( 'Link copied', 'echoroukonline' ); ?>">
+						<?php if ( $icon ) : ?>
+							<img class="single-article__action-icon" src="<?php echo esc_url( $icon_base . $icon ); ?>" alt="">
+						<?php endif; ?>
+						<span><?php echo esc_html( $label ); ?></span>
+					</button>
+				<?php elseif ( 'save' === $type ) : ?>
+					<button type="button" class="<?php echo esc_attr( $class ); ?>" role="menuitem" data-save-article data-post-url="<?php echo esc_url( get_permalink( $post_id ) ); ?>" data-label-default="<?php echo esc_attr( $label ); ?>" data-label-saved="<?php echo esc_attr__( 'Saved', 'echoroukonline' ); ?>" aria-pressed="false">
+						<?php if ( $icon ) : ?>
+							<img class="single-article__action-icon" src="<?php echo esc_url( $icon_base . $icon ); ?>" alt="">
+						<?php endif; ?>
+						<span><?php echo esc_html( $label ); ?></span>
+					</button>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+	</div>
+	<?php
+}
