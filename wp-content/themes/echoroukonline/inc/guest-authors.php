@@ -186,6 +186,32 @@ function echorouk_get_post_guest_author_id( $post_id = 0 ) {
 	return $guest_author_id && 'guest_author' === get_post_type( $guest_author_id ) ? $guest_author_id : 0;
 }
 
+function echorouk_get_guest_author_public_url( $guest_author_id ) {
+	$guest_author_id = absint( $guest_author_id );
+
+	if ( ! $guest_author_id || 'guest_author' !== get_post_type( $guest_author_id ) ) {
+		return '';
+	}
+
+	$slug = (string) get_post_field( 'post_name', $guest_author_id );
+	if ( '' === $slug ) {
+		return get_permalink( $guest_author_id );
+	}
+
+	return home_url( user_trailingslashit( 'author/' . $slug ) );
+}
+
+function echorouk_guest_author_post_type_link( $post_link, $post ) {
+	if ( ! ( $post instanceof WP_Post ) || 'guest_author' !== $post->post_type ) {
+		return $post_link;
+	}
+
+	$guest_url = echorouk_get_guest_author_public_url( $post->ID );
+
+	return $guest_url ? $guest_url : $post_link;
+}
+add_filter( 'post_type_link', 'echorouk_guest_author_post_type_link', 10, 2 );
+
 function echorouk_get_post_author_data( $post_id = 0 ) {
 	$post_id         = $post_id ? absint( $post_id ) : get_the_ID();
 	$guest_author_id = echorouk_get_post_guest_author_id( $post_id );
@@ -195,7 +221,7 @@ function echorouk_get_post_author_data( $post_id = 0 ) {
 			'type'      => 'guest',
 			'id'        => $guest_author_id,
 			'name'      => get_the_title( $guest_author_id ),
-			'url'       => get_permalink( $guest_author_id ),
+			'url'       => echorouk_get_guest_author_public_url( $guest_author_id ),
 			'bio'       => get_post_field( 'post_content', $guest_author_id ),
 			'job_title' => get_post_meta( $guest_author_id, 'guest_job_title', true ),
 			'avatar'    => echorouk_post_image_html( $guest_author_id, 'thumbnail', 'author-box__avatar' ),

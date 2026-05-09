@@ -1368,6 +1368,62 @@ body.is-rtl .single-live-coverage .live-coverage-timeline__item {
   object-fit: cover;
 }
 
+.author-profile--single {
+  display: block;
+  margin-block: 1.2rem 1.6rem;
+  padding: 1.25rem;
+}
+
+.author-profile__name {
+  margin: 0 0 .45rem;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  line-height: 1.25;
+}
+
+.author-profile__role {
+  margin: 0 0 .6rem;
+  color: #5f6e7d;
+  font-size: 1.02rem;
+}
+
+.author-profile__bio {
+  margin: 0;
+  color: #12202d;
+}
+
+.author-profile__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .9rem;
+}
+
+.author-profile__social a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .25rem .65rem;
+  border: 1px solid #d8e1ea;
+  border-radius: 999px;
+  color: #1d2a37;
+  text-decoration: none;
+  font-size: .9rem;
+}
+
+.author-profile__social a:hover,
+.author-profile__social a:focus-visible {
+  border-color: var(--echorouk-primary, #b42318);
+  color: var(--echorouk-primary, #b42318);
+}
+
+.author-articles-section {
+  margin-bottom: 1.5rem;
+}
+
+.author-articles-grid {
+  margin-bottom: 1.15rem;
+}
+
 .guest-author-card {
   padding: 1rem;
   border: 1px solid var(--echorouk-border);

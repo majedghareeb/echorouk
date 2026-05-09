@@ -159,3 +159,41 @@ function echorouk_route_saved_articles_template( $template ) {
 	return $template;
 }
 add_filter( 'template_include', 'echorouk_route_saved_articles_template', 20 );
+
+/**
+ * Resolve /author/{slug}/ to guest author profile when no WP user matches.
+ *
+ * @param array<string,mixed> $query_vars Parsed request variables.
+ * @return array<string,mixed>
+ */
+function echorouk_route_guest_author_author_base( $query_vars ) {
+	if ( is_admin() || empty( $query_vars['author_name'] ) ) {
+		return $query_vars;
+	}
+
+	if ( ! empty( $query_vars['feed'] ) || ! empty( $query_vars['paged'] ) ) {
+		return $query_vars;
+	}
+
+	$author_slug = sanitize_title_for_query( (string) $query_vars['author_name'] );
+	if ( '' === $author_slug ) {
+		return $query_vars;
+	}
+
+	$user = get_user_by( 'slug', $author_slug );
+	if ( $user instanceof WP_User ) {
+		return $query_vars;
+	}
+
+	$guest_author = get_page_by_path( $author_slug, OBJECT, 'guest_author' );
+	if ( ! ( $guest_author instanceof WP_Post ) || 'publish' !== $guest_author->post_status ) {
+		return $query_vars;
+	}
+
+	unset( $query_vars['author_name'] );
+	$query_vars['post_type'] = 'guest_author';
+	$query_vars['name']      = $author_slug;
+
+	return $query_vars;
+}
+add_filter( 'request', 'echorouk_route_guest_author_author_base', 9 );
