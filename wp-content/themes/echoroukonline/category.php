@@ -6,11 +6,44 @@
  */
 
 get_header();
-$query          = isset( $GLOBALS['wp_query'] ) && $GLOBALS['wp_query'] instanceof WP_Query ? $GLOBALS['wp_query'] : null;
 $category_posts = array();
+$total_pages    = 0;
+$current        = max( 1, (int) get_query_var( 'paged', 1 ), (int) get_query_var( 'page', 1 ) );
+$category_query = null;
+$category_id    = absint( get_query_var( 'cat' ) );
+$queried_term   = get_queried_object();
 
-if ( $query instanceof WP_Query && is_array( $query->posts ) ) {
-	$category_posts = array_values( $query->posts );
+if ( ! $category_id && $queried_term instanceof WP_Term && 'category' === $queried_term->taxonomy ) {
+	$category_id = (int) $queried_term->term_id;
+}
+
+if ( $category_id > 0 ) {
+	$category_query = new WP_Query(
+		array(
+			'post_type'           => echorouk_news_post_types(),
+			'post_status'         => 'publish',
+			'tax_query'           => array(
+				array(
+					'taxonomy'         => 'category',
+					'field'            => 'term_id',
+					'terms'            => array( $category_id ),
+					'include_children' => true,
+					'operator'         => 'IN',
+				),
+			),
+			'paged'               => $current,
+			'posts_per_page'      => (int) get_option( 'posts_per_page' ),
+			'ignore_sticky_posts' => true,
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'suppress_filters'    => false,
+		)
+	);
+
+	if ( is_array( $category_query->posts ) ) {
+		$category_posts = array_values( $category_query->posts );
+		$total_pages    = (int) $category_query->max_num_pages;
+	}
 }
 ?>
 <main id="primary" class="site-main">
@@ -37,14 +70,11 @@ if ( $query instanceof WP_Query && is_array( $query->posts ) ) {
 						?>
 					</div>
 					<?php
-					$total_pages = $query instanceof WP_Query ? (int) $query->max_num_pages : 0;
-					$current     = max( 1, (int) get_query_var( 'paged', 1 ) );
-
 					if ( $total_pages > 1 ) :
 						$links = paginate_links(
 							array(
-								'base'      => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-								'format'    => '',
+								'base'      => trailingslashit( get_category_link( $category_id ) ) . '%_%',
+								'format'    => user_trailingslashit( 'page/%#%/', 'paged' ),
 								'current'   => $current,
 								'total'     => $total_pages,
 								'type'      => 'array',
@@ -99,4 +129,7 @@ if ( $query instanceof WP_Query && is_array( $query->posts ) ) {
 	</div>
 </main>
 <?php
+if ( $category_query instanceof WP_Query ) {
+	wp_reset_postdata();
+}
 get_footer();
