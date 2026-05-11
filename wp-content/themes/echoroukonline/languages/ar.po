@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-09 09:31+0000\n"
+"PO-Revision-Date: 2026-05-09 18:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -756,7 +756,7 @@ msgstr "حفظ المقال"
 
 #: inc/template-tags.php:184
 msgid "Saved"
-msgstr "أنقذ"
+msgstr "محفوظ"
 
 #: header.php:44 page-templates/saved-articles.php:17
 msgid "Saved articles"

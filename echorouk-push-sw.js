@@ -15,21 +15,25 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-    if (!event.data) return;
-
     let data = {};
-    try {
-        data = event.data.json();
-    } catch (e) {
-        data = { title: event.data.text(), body: '', url: '/' };
+
+    // Try to parse payload — if event.data is null (decryption failed or empty push),
+    // show a generic fallback notification instead of silently doing nothing.
+    if (event.data) {
+        try {
+            data = event.data.json();
+        } catch (e) {
+            // data was not JSON (binary or plain text) — treat as title
+            const text = event.data.text ? event.data.text() : '';
+            data = { title: text || 'إشعار جديد', body: '', url: '/' };
+        }
     }
 
-    const title   = data.title  || 'إشعار جديد';
+    const title   = data.title  || 'الشروق';
     const options = {
-        body:    data.body   || '',
-        icon:    data.icon   || '/wp-content/uploads/push-icon.png',
+        body:    data.body   || 'اضغط لمشاهدة آخر الأخبار',
+        icon:    data.icon   || '/wp-content/themes/echoroukonline/assets/icons/notification-01-stroke-rounded.svg',
         badge:   data.badge  || '',
-        image:   data.image  || undefined,
         data:    { url: data.url || '/' },
         dir:     'rtl',
         lang:    'ar',
@@ -39,8 +43,7 @@ self.addEventListener('push', (event) => {
         renotify: true,
     };
 
-    // Remove undefined keys (some browsers are strict)
-    Object.keys(options).forEach(k => options[k] === undefined && delete options[k]);
+    if (data.image) options.image = data.image;
 
     event.waitUntil(
         self.registration.showNotification(title, options)
@@ -50,17 +53,17 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
-    const targetUrl = event.notification.data?.url || '/';
+    const targetUrl = (event.notification.data && event.notification.data.url)
+        ? event.notification.data.url
+        : '/';
 
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-            // Focus existing tab if already open
             for (const client of windowClients) {
                 if (client.url === targetUrl && 'focus' in client) {
                     return client.focus();
                 }
             }
-            // Otherwise open a new tab
             if (clients.openWindow) {
                 return clients.openWindow(targetUrl);
             }

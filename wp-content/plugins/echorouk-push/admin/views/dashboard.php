@@ -80,15 +80,24 @@
             <h2 class="ep-section__title"><?php esc_html_e('آخر الإشعارات المرسلة', 'echorouk-push'); ?></h2>
             <?php if ($log): ?>
                 <div class="ep-log">
-                    <?php foreach (array_slice($log, 0, 10) as $entry): ?>
+                    <?php foreach (array_slice($log, 0, 10) as $entry):
+                        if (! is_array($entry)) continue;
+                        $entry_title   = $entry['title'] ?? '';
+                        $entry_time_ts = ! empty($entry['time']) ? strtotime($entry['time']) : false;
+                        $entry_time    = $entry_time_ts
+                            ? esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), $entry_time_ts))
+                            : '—';
+                        $entry_sent    = (int) ($entry['stats']['sent']   ?? 0);
+                        $entry_failed  = (int) ($entry['stats']['failed'] ?? 0);
+                    ?>
                         <div class="ep-log__item">
-                            <div class="ep-log__title"><?php echo esc_html($entry['title']); ?></div>
+                            <div class="ep-log__title"><?php echo esc_html($entry_title); ?></div>
                             <div class="ep-log__meta">
                                 <?php printf(
                                     esc_html__('تم الإرسال: %1$s | نجح: %2$d | فشل: %3$d', 'echorouk-push'),
-                                    esc_html(wp_date(get_option('date_format') . ' ' . get_option('time_format'), strtotime($entry['time']))),
-                                    (int) ($entry['stats']['sent'] ?? 0),
-                                    (int) ($entry['stats']['failed'] ?? 0)
+                                    $entry_time,
+                                    $entry_sent,
+                                    $entry_failed
                                 ); ?>
                             </div>
                         </div>
@@ -107,5 +116,56 @@
         <a href="<?php echo esc_url(admin_url('admin.php?page=echorouk-push-settings')); ?>" class="ep-btn ep-btn--secondary">
             <?php esc_html_e('الإعدادات', 'echorouk-push'); ?>
         </a>
+        <button id="ep-diag-btn" class="ep-btn ep-btn--secondary" type="button">
+            🔍 <?php esc_html_e('فحص النظام', 'echorouk-push'); ?>
+        </button>
+        <button id="ep-test-send-btn" class="ep-btn ep-btn--secondary" type="button">
+            📨 <?php esc_html_e('اختبار الإرسال', 'echorouk-push'); ?>
+        </button>
     </div>
+
+    <!-- Diagnostics output -->
+    <div id="ep-diag-output" class="ep-section ep-diag-output" style="display:none;margin-top:20px">
+        <h2 class="ep-section__title">🔍 <?php esc_html_e('نتيجة الفحص', 'echorouk-push'); ?></h2>
+        <pre id="ep-diag-pre" style="white-space:pre-wrap;font-size:12px;direction:ltr;background:#f8fafc;padding:14px;border-radius:8px;overflow-x:auto;max-height:400px;overflow-y:auto"></pre>
+    </div>
+
+    <script>
+    (function(){
+        const restUrl = <?php echo json_encode(rest_url('echorouk-push/v1')); ?>;
+        const nonce   = <?php echo json_encode(wp_create_nonce('wp_rest')); ?>;
+
+        document.getElementById('ep-diag-btn')?.addEventListener('click', async function(){
+            this.textContent = '⏳ جاري الفحص...';
+            this.disabled = true;
+            try {
+                const r    = await fetch(restUrl + '/diagnostics', { headers: { 'X-WP-Nonce': nonce } });
+                const data = await r.json();
+                document.getElementById('ep-diag-pre').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('ep-diag-output').style.display = 'block';
+            } catch(e) {
+                document.getElementById('ep-diag-pre').textContent = 'خطأ: ' + e.message;
+                document.getElementById('ep-diag-output').style.display = 'block';
+            }
+            this.textContent = '🔍 فحص النظام';
+            this.disabled = false;
+        });
+
+        document.getElementById('ep-test-send-btn')?.addEventListener('click', async function(){
+            this.textContent = '⏳ جاري الإرسال...';
+            this.disabled = true;
+            try {
+                const r    = await fetch(restUrl + '/test-send', { method:'POST', headers:{ 'X-WP-Nonce': nonce, 'Content-Type':'application/json' }, body:'{}' });
+                const data = await r.json();
+                document.getElementById('ep-diag-pre').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('ep-diag-output').style.display = 'block';
+            } catch(e) {
+                document.getElementById('ep-diag-pre').textContent = 'خطأ: ' + e.message;
+                document.getElementById('ep-diag-output').style.display = 'block';
+            }
+            this.textContent = '📨 اختبار الإرسال';
+            this.disabled = false;
+        });
+    })();
+    </script>
 </div>

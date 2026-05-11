@@ -71,6 +71,7 @@ class Echorouk_Push_Sender {
         }
 
         $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
 
         // Subscription gone — remove it
         if ($code === 404 || $code === 410) {
@@ -79,7 +80,12 @@ class Echorouk_Push_Sender {
         }
 
         if ($code < 200 || $code >= 300) {
-            error_log("[echorouk-push] Push server returned HTTP $code for " . $sub->endpoint);
+            error_log(sprintf(
+                '[echorouk-push] HTTP %d for %s | Response: %s',
+                $code,
+                $sub->endpoint,
+                substr($body, 0, 500)
+            ));
             return false;
         }
 
