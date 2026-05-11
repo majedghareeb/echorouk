@@ -50,7 +50,7 @@ while ( have_posts() ) :
 
 	get_template_part(
 		'template-parts/pages/author-profile',
-		null,
+		'',
 		array(
 			'profile'    => array(
 				'name'        => $guest_name,
@@ -62,7 +62,7 @@ while ( have_posts() ) :
 			'query'      => $guest_posts_query,
 			'pagination' => array(
 				'current' => $current_page,
-				'base'    => esc_url_raw( add_query_arg( 'author_page', '%#%' ) ),
+				'base'    => esc_url_raw( add_query_arg( 'author_page', '%#%', home_url( '/' ) ) ),
 				'format'  => '',
 			),
 		)

@@ -198,7 +198,7 @@ function echorouk_get_guest_author_public_url( $guest_author_id ) {
 		return get_permalink( $guest_author_id );
 	}
 
-	return home_url( user_trailingslashit( 'author/' . $slug ) );
+	return get_author_posts_url( 0, $slug );
 }
 
 function echorouk_guest_author_post_type_link( $post_link, $post ) {

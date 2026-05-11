@@ -21,6 +21,54 @@ function echorouk_locate_routed_template( $relative_path, $fallback ) {
 }
 
 /**
+ * Resolve the active author base path from rewrite settings.
+ *
+ * @return string
+ */
+function echorouk_get_author_base_path() {
+	global $wp_rewrite;
+
+	$author_base = 'author';
+
+	if ( isset( $wp_rewrite->author_base ) && is_string( $wp_rewrite->author_base ) && '' !== trim( $wp_rewrite->author_base ) ) {
+		$author_base = trim( $wp_rewrite->author_base );
+	}
+
+	return trim( $author_base, '/' );
+}
+
+/**
+ * Resolve a guest author post by raw author slug, including Arabic slugs.
+ *
+ * @param string $author_slug_raw Raw author slug from URL/query.
+ * @return WP_Post|null
+ */
+function echorouk_find_guest_author_by_slug( $author_slug_raw ) {
+	$author_slug_raw = (string) $author_slug_raw;
+	if ( '' === $author_slug_raw ) {
+		return null;
+	}
+
+	$candidates = array(
+		$author_slug_raw,
+		rawurldecode( $author_slug_raw ),
+		sanitize_title( $author_slug_raw ),
+		sanitize_title( rawurldecode( $author_slug_raw ) ),
+	);
+
+	$candidates = array_values( array_unique( array_filter( array_map( 'trim', $candidates ) ) ) );
+
+	foreach ( $candidates as $candidate ) {
+		$guest = get_page_by_path( $candidate, OBJECT, 'guest_author' );
+		if ( $guest instanceof WP_Post && 'publish' === $guest->post_status ) {
+			return $guest;
+		}
+	}
+
+	return null;
+}
+
+/**
  * Route single CPT templates out of the theme root.
  *
  * @param string $template Existing template selected by WordPress.
@@ -31,7 +79,7 @@ function echorouk_route_single_templates( $template ) {
 		'audio'        => 'single-templates/audio.php',
 		'document'     => 'single-templates/document.php',
 		'gallery'      => 'single-templates/gallery.php',
-		'guest_author' => 'single-templates/guest-author.php',
+		'guest_author' => 'author.php',
 		'live_coverage' => 'single-templates/live-coverage.php',
 		'video'        => 'single-templates/video.php',
 	);
@@ -175,25 +223,104 @@ function echorouk_route_guest_author_author_base( $query_vars ) {
 		return $query_vars;
 	}
 
-	$author_slug = sanitize_title_for_query( (string) $query_vars['author_name'] );
-	if ( '' === $author_slug ) {
+	$author_slug_raw = (string) $query_vars['author_name'];
+	if ( '' === trim( $author_slug_raw ) ) {
 		return $query_vars;
 	}
 
-	$user = get_user_by( 'slug', $author_slug );
-	if ( $user instanceof WP_User ) {
-		return $query_vars;
+	$user_candidates = array(
+		$author_slug_raw,
+		rawurldecode( $author_slug_raw ),
+		sanitize_title( $author_slug_raw ),
+		sanitize_title( rawurldecode( $author_slug_raw ) ),
+	);
+
+	foreach ( array_values( array_unique( array_filter( array_map( 'trim', $user_candidates ) ) ) ) as $user_slug ) {
+		$user = get_user_by( 'slug', $user_slug );
+		if ( $user instanceof WP_User ) {
+			return $query_vars;
+		}
 	}
 
-	$guest_author = get_page_by_path( $author_slug, OBJECT, 'guest_author' );
-	if ( ! ( $guest_author instanceof WP_Post ) || 'publish' !== $guest_author->post_status ) {
+	$guest_author = echorouk_find_guest_author_by_slug( $author_slug_raw );
+	if ( ! ( $guest_author instanceof WP_Post ) ) {
 		return $query_vars;
 	}
-
-	unset( $query_vars['author_name'] );
-	$query_vars['post_type'] = 'guest_author';
-	$query_vars['name']      = $author_slug;
 
 	return $query_vars;
 }
 add_filter( 'request', 'echorouk_route_guest_author_author_base', 9 );
+
+/**
+ * Force /author/{guest-slug}/ to load author.php when slug belongs to guest author.
+ *
+ * @param string $template Existing template selected by WordPress.
+ * @return string
+ */
+function echorouk_route_guest_author_to_author_template( $template ) {
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+	$path        = trim( (string) wp_parse_url( $request_uri, PHP_URL_PATH ), '/' );
+	$home_path   = trim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+
+	if ( $home_path && 0 === strpos( $path, $home_path ) ) {
+		$path = trim( substr( $path, strlen( $home_path ) ), '/' );
+	}
+
+	$author_slug_raw = '';
+	$author_base     = echorouk_get_author_base_path();
+
+	if ( '' !== $path && preg_match( '#^' . preg_quote( $author_base, '#' ) . '/([^/]+)/?$#u', $path, $matches ) ) {
+		$author_slug_raw = rawurldecode( (string) $matches[1] );
+	} elseif ( is_singular( 'guest_author' ) ) {
+		$author_slug_raw = (string) get_post_field( 'post_name', get_queried_object_id() );
+	} elseif ( get_query_var( 'author_name' ) ) {
+		$author_slug_raw = (string) get_query_var( 'author_name' );
+	}
+
+	if ( '' === $author_slug_raw ) {
+		return $template;
+	}
+
+	$decoded_slug = rawurldecode( $author_slug_raw );
+	if ( '' === trim( $decoded_slug ) && '' === trim( $author_slug_raw ) ) {
+		return $template;
+	}
+
+	$user_candidates = array(
+		$author_slug_raw,
+		$decoded_slug,
+		sanitize_title( $author_slug_raw ),
+		sanitize_title( $decoded_slug ),
+	);
+
+	foreach ( array_values( array_unique( array_filter( array_map( 'trim', $user_candidates ) ) ) ) as $user_slug ) {
+		$user = get_user_by( 'slug', $user_slug );
+		if ( $user instanceof WP_User ) {
+			return $template;
+		}
+	}
+
+	$guest_author = echorouk_find_guest_author_by_slug( $author_slug_raw );
+	if ( ! ( $guest_author instanceof WP_Post ) ) {
+		return $template;
+	}
+
+	$author_slug = (string) $guest_author->post_name;
+
+	if ( is_404() ) {
+		status_header( 200 );
+		nocache_headers();
+	}
+
+	global $wp_query;
+	if ( $wp_query instanceof WP_Query ) {
+		$wp_query->is_404    = false;
+		$wp_query->is_author = true;
+		$wp_query->is_single = false;
+		$wp_query->is_singular = false;
+		$wp_query->set( 'author_name', $author_slug );
+	}
+
+	return echorouk_locate_routed_template( 'author.php', $template );
+}
+add_filter( 'template_include', 'echorouk_route_guest_author_to_author_template', 30 );

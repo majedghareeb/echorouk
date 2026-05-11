@@ -18,7 +18,7 @@ $social = isset( $profile['social'] ) && is_array( $profile['social'] ) ? $profi
 
 $pagination = isset( $args['pagination'] ) && is_array( $args['pagination'] ) ? $args['pagination'] : array();
 $paged      = isset( $pagination['current'] ) ? max( 1, absint( $pagination['current'] ) ) : 1;
-$base       = isset( $pagination['base'] ) ? (string) $pagination['base'] : str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) );
+$base       = isset( $pagination['base'] ) ? (string) $pagination['base'] : '';
 $format     = isset( $pagination['format'] ) ? (string) $pagination['format'] : '';
 ?>
 <main id="primary" class="site-main">
@@ -73,21 +73,60 @@ $format     = isset( $pagination['format'] ) ? (string) $pagination['format'] : 
 					?>
 				</div>
 				<?php
-				echo wp_kses_post(
-					paginate_links(
+				$pagination_base = $base ? $base : esc_url_raw( add_query_arg( 'paged', '%#%', home_url( '/' ) ) );
+				$total_pages     = max( 1, (int) $query->max_num_pages );
+
+				if ( $total_pages > 1 ) :
+					$pagination_links = paginate_links(
 						array(
-							'base'      => $base,
+							'base'      => $pagination_base,
 							'format'    => $format,
 							'current'   => $paged,
-							'total'     => max( 1, (int) $query->max_num_pages ),
-							'type'      => 'plain',
+							'total'     => $total_pages,
+							'type'      => 'array',
 							'mid_size'  => 1,
 							'end_size'  => 1,
+							'prev_next' => true,
 							'prev_text' => esc_html__( 'Previous', 'echoroukonline' ),
 							'next_text' => esc_html__( 'Next', 'echoroukonline' ),
 						)
-					)
-				);
+					);
+
+					if ( is_array( $pagination_links ) && ! empty( $pagination_links ) ) :
+						$first_page_url = str_replace( '%#%', '1', $pagination_base );
+						$last_page_url  = str_replace( '%#%', (string) $total_pages, $pagination_base );
+						?>
+						<nav class="category-pagination-wrap" aria-label="<?php esc_attr_e( 'Author pages', 'echoroukonline' ); ?>">
+							<div class="category-pagination-meta">
+								<?php
+								printf(
+									esc_html__( 'Page %1$d of %2$d', 'echoroukonline' ),
+									(int) $paged,
+									(int) $total_pages
+								);
+								?>
+							</div>
+							<ul class="category-pagination">
+								<?php if ( $paged > 1 ) : ?>
+									<li class="category-pagination__item category-pagination__item--jump">
+										<a href="<?php echo esc_url( $first_page_url ); ?>"><?php esc_html_e( 'First', 'echoroukonline' ); ?></a>
+									</li>
+								<?php endif; ?>
+
+								<?php foreach ( $pagination_links as $link ) : ?>
+									<li class="category-pagination__item"><?php echo wp_kses_post( $link ); ?></li>
+								<?php endforeach; ?>
+
+								<?php if ( $paged < $total_pages ) : ?>
+									<li class="category-pagination__item category-pagination__item--jump">
+										<a href="<?php echo esc_url( $last_page_url ); ?>"><?php esc_html_e( 'Last', 'echoroukonline' ); ?></a>
+									</li>
+								<?php endif; ?>
+							</ul>
+						</nav>
+						<?php
+					endif;
+				endif;
 				?>
 			<?php else : ?>
 				<?php get_template_part( 'template-parts/content/none' ); ?>

@@ -126,7 +126,7 @@ function echorouk_get_related_posts( $post_id = 0, $limit = 4 ) {
 function echorouk_news_card( $post_id, $variant = 'default', $is_lcp = false ) {
 	get_template_part(
 		'template-parts/components/news-card',
-		null,
+		'',
 		array(
 			'post_id' => absint( $post_id ),
 			'variant' => sanitize_key( $variant ),
