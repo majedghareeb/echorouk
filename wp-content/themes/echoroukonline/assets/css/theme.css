@@ -1129,7 +1129,7 @@ body.is-rtl .single-article__body {
 .single-article__share-menu {
   position: absolute;
   top: calc(100% + .5rem);
-  right: 0;
+  inset-inline-end: 0;
   z-index: 20;
   min-width: 14rem;
   max-width: calc(100vw - 1rem);
@@ -1154,6 +1154,17 @@ body.is-rtl .single-article__body {
   text-align: right;
   cursor: pointer;
   font: inherit;
+}
+
+body.is-rtl .single-article__share-menu {
+  direction: rtl;
+  text-align: right;
+}
+
+body.is-rtl .single-article__share-item {
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: right;
 }
 
 .single-article__share-item:hover,
@@ -2312,6 +2323,58 @@ body.is-rtl .single-live-coverage .live-coverage-timeline__item {
 @media (max-width: 575.98px) {
   .echorouk-header-meta {
     font-size: .74rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .45rem;
+    align-items: start;
+  }
+
+  .echorouk-meta-date {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .echorouk-meta-tools {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .45rem .6rem;
+  }
+
+  .echorouk-alert-link {
+    order: 1;
+  }
+
+  .echorouk-live-pill {
+    order: 2;
+  }
+
+  .echorouk-footer-social {
+    order: 3;
+  }
+
+  .echorouk-saved-link {
+    order: 4;
+  }
+
+  .echorouk-meta-tools .echorouk-alert-link,
+  .echorouk-meta-tools .echorouk-live-pill {
+    flex: 0 0 auto;
+  }
+
+  .echorouk-meta-tools .echorouk-footer-social {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: .35rem;
+    flex: 1 1 calc(100% - 2.8rem);
+    min-width: 0;
+  }
+
+  .echorouk-meta-tools .echorouk-saved-link {
+    margin-inline-start: auto;
   }
 
   .echorouk-brand-logo {
