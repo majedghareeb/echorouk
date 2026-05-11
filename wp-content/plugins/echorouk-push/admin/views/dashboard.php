@@ -122,6 +122,11 @@
         <button id="ep-test-send-btn" class="ep-btn ep-btn--secondary" type="button">
             📨 <?php esc_html_e('اختبار الإرسال', 'echorouk-push'); ?>
         </button>
+        <button id="ep-clear-subs-btn" class="ep-btn ep-btn--secondary" type="button"
+                style="border:1px solid #ef4444;color:#ef4444;background:transparent"
+                onclick="return confirm('تحذير: سيتم حذف جميع الاشتراكات. سيقوم المستخدمون بالاشتراك تلقائياً عند زيارة الموقع. هل أنت متأكد؟')">
+            🗑 <?php esc_html_e('مسح الاشتراكات القديمة', 'echorouk-push'); ?>
+        </button>
     </div>
 
     <!-- Diagnostics output -->
@@ -164,6 +169,21 @@
                 document.getElementById('ep-diag-output').style.display = 'block';
             }
             this.textContent = '📨 اختبار الإرسال';
+            this.disabled = false;
+        });
+
+        document.getElementById('ep-clear-subs-btn')?.addEventListener('click', async function(){
+            this.disabled = true;
+            try {
+                const r    = await fetch(restUrl + '/clear-subscriptions', { method:'DELETE', headers:{ 'X-WP-Nonce': nonce } });
+                const data = await r.json();
+                document.getElementById('ep-diag-pre').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('ep-diag-output').style.display = 'block';
+                // Refresh subscriber count
+                setTimeout(() => location.reload(), 1500);
+            } catch(e) {
+                document.getElementById('ep-diag-pre').textContent = 'خطأ: ' + e.message;
+            }
             this.disabled = false;
         });
     })();

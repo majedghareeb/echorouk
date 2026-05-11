@@ -84,6 +84,15 @@ class Echorouk_Push_REST_API {
                 return current_user_can('manage_options');
             },
         ]);
+
+        // DELETE clear all subscriptions (admin only)
+        register_rest_route(self::NAMESPACE, '/clear-subscriptions', [
+            'methods'             => 'DELETE',
+            'callback'            => [$this, 'clear_subscriptions'],
+            'permission_callback' => function () {
+                return current_user_can('manage_options');
+            },
+        ]);
     }
 
     public function get_public_key(): WP_REST_Response {
@@ -264,5 +273,15 @@ class Echorouk_Push_REST_API {
         if (stripos($ua, 'Chrome') !== false)   return 'Chrome';
         if (stripos($ua, 'Safari') !== false)   return 'Safari';
         return 'Unknown';
+    }
+
+    /** DELETE /clear-subscriptions — wipe all stored subscriptions so users re-subscribe fresh */
+    public function clear_subscriptions(): WP_REST_Response {
+        $deleted = Echorouk_Push_Subscription_DB::truncate_all();
+        return new WP_REST_Response([
+            'success' => true,
+            'deleted' => $deleted,
+            'message' => "Deleted $deleted subscriptions. Users will re-subscribe on next page visit.",
+        ], 200);
     }
 }

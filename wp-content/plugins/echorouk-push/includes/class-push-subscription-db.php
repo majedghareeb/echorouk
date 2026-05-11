@@ -124,4 +124,10 @@ class Echorouk_Push_Subscription_DB {
             "SELECT browser, COUNT(*) as total FROM " . self::get_table_name() . " WHERE active = 1 GROUP BY browser ORDER BY total DESC"
         ) ?: [];
     }
+
+    /** Delete ALL subscriptions (use when VAPID key changes or subscriptions are stale). */
+    public static function truncate_all(): int {
+        global $wpdb;
+        return (int) $wpdb->query("DELETE FROM " . self::get_table_name());
+    }
 }
