@@ -172,6 +172,13 @@ class Echorouk_Push_VAPID {
     }
 
     public static function b64u_decode(string $data): string {
-        return base64_decode(strtr($data, '-_', '+/'));
+        $base64 = strtr($data, '-_', '+/');
+        $pad    = strlen($base64) % 4;
+        if ($pad > 0) {
+            $base64 .= str_repeat('=', 4 - $pad);
+        }
+
+        $decoded = base64_decode($base64, true);
+        return false === $decoded ? '' : $decoded;
     }
 }

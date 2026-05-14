@@ -64,9 +64,13 @@ class Echorouk_Push_Crypto {
         $info = "WebPush: info\x00" . $client_public . $server_public_raw;
         $ikm  = self::hkdf($auth_secret, $shared_secret, $info, 32);
 
-        // Derive CEK and nonce from random salt
-        $cek   = self::hkdf($salt, $ikm, "Content-Encryption-Key\x00", 16);
-        $nonce = self::hkdf($salt, $ikm, "Content-Encryption-Nonce\x00", 12);
+        // RFC 8291 / RFC 8188:
+        // PRK = HKDF-Extract(salt, IKM)
+        // CEK = HKDF-Expand(PRK, "Content-Encoding: aes128gcm\x00", 16)
+        // NONCE = HKDF-Expand(PRK, "Content-Encoding: nonce\x00", 12)
+        $prk   = hash_hmac('sha256', $ikm, $salt, true);
+        $cek   = self::hkdf_expand($prk, "Content-Encoding: aes128gcm\x00", 16);
+        $nonce = self::hkdf_expand($prk, "Content-Encoding: nonce\x00", 12);
 
         // Pad plaintext: content || \x02 (delimiter, no padding)
         $padded = $plaintext . "\x02";
@@ -92,7 +96,13 @@ class Echorouk_Push_Crypto {
     private static function hkdf(string $salt, string $ikm, string $info, int $length): string {
         // Extract
         $prk = hash_hmac('sha256', $ikm, $salt, true);
-        // Expand (single block, length <= 32)
+        return self::hkdf_expand($prk, $info, $length);
+    }
+
+    /**
+     * HKDF-Expand for a single block (length <= 32).
+     */
+    private static function hkdf_expand(string $prk, string $info, int $length): string {
         return substr(hash_hmac('sha256', $info . "\x01", $prk, true), 0, $length);
     }
 
@@ -118,6 +128,13 @@ class Echorouk_Push_Crypto {
     }
 
     public static function b64u_decode(string $data): string {
-        return base64_decode(strtr($data, '-_', '+/'));
+        $base64 = strtr($data, '-_', '+/');
+        $pad    = strlen($base64) % 4;
+        if ($pad > 0) {
+            $base64 .= str_repeat('=', 4 - $pad);
+        }
+
+        $decoded = base64_decode($base64, true);
+        return false === $decoded ? '' : $decoded;
     }
 }
