@@ -15,6 +15,7 @@ function echorouk_guest_author_meta_fields() {
 		'guest_twitter'   => array( 'label' => esc_html__( 'X/Twitter', 'echoroukonline' ), 'type' => 'url', 'sanitize' => 'esc_url_raw' ),
 		'guest_instagram' => array( 'label' => esc_html__( 'Instagram', 'echoroukonline' ), 'type' => 'url', 'sanitize' => 'esc_url_raw' ),
 		'guest_youtube'   => array( 'label' => esc_html__( 'YouTube', 'echoroukonline' ), 'type' => 'url', 'sanitize' => 'esc_url_raw' ),
+		'guest_linkedin'  => array( 'label' => esc_html__( 'LinkedIn', 'echoroukonline' ), 'type' => 'url', 'sanitize' => 'esc_url_raw' ),
 	);
 }
 

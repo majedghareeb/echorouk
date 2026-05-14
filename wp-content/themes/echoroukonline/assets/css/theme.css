@@ -1437,26 +1437,33 @@ body.is-rtl .single-live-coverage .live-coverage-timeline__item {
 .author-profile__social {
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
+  gap: .55rem;
   margin-top: .9rem;
 }
 
-.author-profile__social a {
+.author-profile__social .author-profile__social-link {
   display: inline-flex;
   align-items: center;
-  min-height: 2rem;
-  padding: .25rem .65rem;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
   border: 1px solid #d8e1ea;
-  border-radius: 999px;
+  border-radius: 9999px;
   color: #1d2a37;
   text-decoration: none;
-  font-size: .9rem;
 }
 
-.author-profile__social a:hover,
-.author-profile__social a:focus-visible {
+.author-profile__social .author-profile__social-link img {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: block;
+}
+
+.author-profile__social .author-profile__social-link:hover,
+.author-profile__social .author-profile__social-link:focus-visible {
   border-color: var(--echorouk-primary, #b42318);
-  color: var(--echorouk-primary, #b42318);
+  background: rgba(180, 35, 24, 0.06);
 }
 
 .author-articles-section {

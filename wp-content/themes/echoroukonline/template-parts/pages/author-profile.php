@@ -15,6 +15,16 @@ $role   = isset( $profile['role'] ) ? (string) $profile['role'] : '';
 $bio    = isset( $profile['bio'] ) ? (string) $profile['bio'] : '';
 $avatar = isset( $profile['avatar_html'] ) ? (string) $profile['avatar_html'] : '';
 $social = isset( $profile['social'] ) && is_array( $profile['social'] ) ? $profile['social'] : array();
+$icon_base = trailingslashit( ECHOROUK_THEME_URI . '/assets/icons' );
+$social_icon_map = array(
+	'facebook'  => 'facebook-01-stroke-rounded.svg',
+	'twitter'   => 'new-twitter-rectangle-stroke-rounded.svg',
+	'x'         => 'new-twitter-rectangle-stroke-rounded.svg',
+	'instagram' => 'instagram-stroke-rounded.svg',
+	'youtube'   => 'youtube-stroke-rounded.svg',
+	'email'     => 'mail-01-stroke-rounded.svg',
+	'linkedin'  => 'linkedin-stroke-rounded.svg',
+);
 
 $pagination = isset( $args['pagination'] ) && is_array( $args['pagination'] ) ? $args['pagination'] : array();
 $paged      = isset( $pagination['current'] ) ? max( 1, absint( $pagination['current'] ) ) : 1;
@@ -42,16 +52,21 @@ $format     = isset( $pagination['format'] ) ? (string) $pagination['format'] : 
 					<?php endif; ?>
 					<?php if ( ! empty( $social ) ) : ?>
 						<div class="author-profile__social">
-							<?php foreach ( $social as $social_item ) : ?>
+							<?php foreach ( $social as $social_key => $social_item ) : ?>
 								<?php
+								$network = isset( $social_item['key'] ) ? sanitize_key( (string) $social_item['key'] ) : sanitize_key( (string) $social_key );
 								$label = isset( $social_item['label'] ) ? (string) $social_item['label'] : '';
 								$url   = isset( $social_item['url'] ) ? esc_url( (string) $social_item['url'] ) : '';
-								if ( ! $label || ! $url ) {
+								if ( ! $label || ! $url || empty( $social_icon_map[ $network ] ) ) {
 									continue;
 								}
+
+								$icon_file   = (string) $social_icon_map[ $network ];
+								$is_external = 0 !== strpos( $url, 'mailto:' );
 								?>
-								<a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer">
-									<?php echo esc_html( $label ); ?>
+								<a class="author-profile__social-link author-profile__social-link--<?php echo esc_attr( sanitize_html_class( $network ) ); ?>" href="<?php echo esc_url( $url ); ?>"<?php echo $is_external ? ' target="_blank" rel="noopener noreferrer"' : ''; ?> aria-label="<?php echo esc_attr( $label ); ?>">
+									<img src="<?php echo esc_url( $icon_base . $icon_file ); ?>" alt="" loading="lazy" decoding="async">
+									<span class="screen-reader-text"><?php echo esc_html( $label ); ?></span>
 								</a>
 							<?php endforeach; ?>
 						</div>

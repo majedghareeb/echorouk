@@ -18,22 +18,50 @@ while ( have_posts() ) :
 	$current_page  = isset( $_GET['author_page'] ) ? max( 1, absint( wp_unslash( $_GET['author_page'] ) ) ) : 1;
 
 	$social_map = array(
-		'guest_facebook'  => esc_html__( 'Facebook', 'echoroukonline' ),
-		'guest_twitter'   => esc_html__( 'X', 'echoroukonline' ),
-		'guest_instagram' => esc_html__( 'Instagram', 'echoroukonline' ),
-		'guest_youtube'   => esc_html__( 'YouTube', 'echoroukonline' ),
+		'facebook'  => array(
+			'meta_key' => 'guest_facebook',
+			'label'    => esc_html__( 'Facebook', 'echoroukonline' ),
+		),
+		'twitter'   => array(
+			'meta_key' => 'guest_twitter',
+			'label'    => esc_html__( 'X', 'echoroukonline' ),
+		),
+		'instagram' => array(
+			'meta_key' => 'guest_instagram',
+			'label'    => esc_html__( 'Instagram', 'echoroukonline' ),
+		),
+		'youtube'   => array(
+			'meta_key' => 'guest_youtube',
+			'label'    => esc_html__( 'YouTube', 'echoroukonline' ),
+		),
+		'linkedin'  => array(
+			'meta_key' => 'guest_linkedin',
+			'label'    => esc_html__( 'LinkedIn', 'echoroukonline' ),
+		),
 	);
 
 	$guest_social = array();
-	foreach ( $social_map as $meta_key => $label ) {
-		$url = esc_url_raw( (string) get_post_meta( $guest_id, $meta_key, true ) );
+	foreach ( $social_map as $network => $social_meta ) {
+		$meta_key = isset( $social_meta['meta_key'] ) ? (string) $social_meta['meta_key'] : '';
+		$label    = isset( $social_meta['label'] ) ? (string) $social_meta['label'] : '';
+		$url      = esc_url_raw( (string) get_post_meta( $guest_id, $meta_key, true ) );
 		if ( ! $url ) {
 			continue;
 		}
 
-		$guest_social[ $meta_key ] = array(
+		$guest_social[ $network ] = array(
+			'key'   => $network,
 			'label' => $label,
 			'url'   => $url,
+		);
+	}
+
+	$guest_email = sanitize_email( (string) get_post_meta( $guest_id, 'guest_email', true ) );
+	if ( $guest_email ) {
+		$guest_social['email'] = array(
+			'key'   => 'email',
+			'label' => esc_html__( 'Email', 'echoroukonline' ),
+			'url'   => 'mailto:' . $guest_email,
 		);
 	}
 

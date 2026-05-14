@@ -35,23 +35,23 @@ if ( $author_id > 0 ) {
 	$author_bio_raw = (string) get_the_author_meta( 'description', $author_id );
 	$author_bio     = wp_trim_words( wp_strip_all_tags( $author_bio_raw ), 60 );
 	$author_role    = (string) get_the_author_meta( 'job_title', $author_id );
-	$author_website = (string) get_the_author_meta( 'user_url', $author_id );
+	$author_email   = sanitize_email( (string) get_the_author_meta( 'user_email', $author_id ) );
 
 	$social_keys = array(
 		'facebook'  => esc_html__( 'Facebook', 'echoroukonline' ),
 		'twitter'   => esc_html__( 'X', 'echoroukonline' ),
 		'instagram' => esc_html__( 'Instagram', 'echoroukonline' ),
 		'youtube'   => esc_html__( 'YouTube', 'echoroukonline' ),
-		'telegram'  => esc_html__( 'Telegram', 'echoroukonline' ),
 		'linkedin'  => esc_html__( 'LinkedIn', 'echoroukonline' ),
 	);
 
 	$author_social = array();
 
-	if ( $author_website ) {
-		$author_social['website'] = array(
-			'label' => esc_html__( 'Website', 'echoroukonline' ),
-			'url'   => esc_url_raw( $author_website ),
+	if ( $author_email ) {
+		$author_social['email'] = array(
+			'key'   => 'email',
+			'label' => esc_html__( 'Email', 'echoroukonline' ),
+			'url'   => 'mailto:' . $author_email,
 		);
 	}
 
@@ -72,6 +72,7 @@ if ( $author_id > 0 ) {
 		}
 
 		$author_social[ $key ] = array(
+			'key'   => $key,
 			'label' => $label,
 			'url'   => $url,
 		);
@@ -127,22 +128,50 @@ if ( $author_id > 0 ) {
 		$current_page  = max( $paged, $query_page );
 
 		$social_map = array(
-			'guest_facebook'  => esc_html__( 'Facebook', 'echoroukonline' ),
-			'guest_twitter'   => esc_html__( 'X', 'echoroukonline' ),
-			'guest_instagram' => esc_html__( 'Instagram', 'echoroukonline' ),
-			'guest_youtube'   => esc_html__( 'YouTube', 'echoroukonline' ),
+			'facebook'  => array(
+				'meta_key' => 'guest_facebook',
+				'label'    => esc_html__( 'Facebook', 'echoroukonline' ),
+			),
+			'twitter'   => array(
+				'meta_key' => 'guest_twitter',
+				'label'    => esc_html__( 'X', 'echoroukonline' ),
+			),
+			'instagram' => array(
+				'meta_key' => 'guest_instagram',
+				'label'    => esc_html__( 'Instagram', 'echoroukonline' ),
+			),
+			'youtube'   => array(
+				'meta_key' => 'guest_youtube',
+				'label'    => esc_html__( 'YouTube', 'echoroukonline' ),
+			),
+			'linkedin'  => array(
+				'meta_key' => 'guest_linkedin',
+				'label'    => esc_html__( 'LinkedIn', 'echoroukonline' ),
+			),
 		);
 
 		$guest_social = array();
-		foreach ( $social_map as $meta_key => $label ) {
-			$url = esc_url_raw( (string) get_post_meta( $guest_id, $meta_key, true ) );
+		foreach ( $social_map as $network => $social_meta ) {
+			$meta_key = isset( $social_meta['meta_key'] ) ? (string) $social_meta['meta_key'] : '';
+			$label    = isset( $social_meta['label'] ) ? (string) $social_meta['label'] : '';
+			$url      = esc_url_raw( (string) get_post_meta( $guest_id, $meta_key, true ) );
 			if ( ! $url ) {
 				continue;
 			}
 
-			$guest_social[ $meta_key ] = array(
+			$guest_social[ $network ] = array(
+				'key'   => $network,
 				'label' => $label,
 				'url'   => $url,
+			);
+		}
+
+		$guest_email = sanitize_email( (string) get_post_meta( $guest_id, 'guest_email', true ) );
+		if ( $guest_email ) {
+			$guest_social['email'] = array(
+				'key'   => 'email',
+				'label' => esc_html__( 'Email', 'echoroukonline' ),
+				'url'   => 'mailto:' . $guest_email,
 			);
 		}
 

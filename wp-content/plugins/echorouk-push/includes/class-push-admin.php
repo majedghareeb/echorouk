@@ -26,23 +26,23 @@ class Echorouk_Push_Admin {
             __('Push Notifications', 'echorouk-push'),
             __('Push Notifications', 'echorouk-push'),
             'edit_posts',
-            'echorouk-push',
-            [$this, 'render_dashboard'],
+            'echorouk-push-send',
+            [$this, 'render_campaigns'],
             'dashicons-bell',
             25
         );
 
         add_submenu_page(
-            'echorouk-push',
+            'echorouk-push-send',
             __('لوحة التحكم', 'echorouk-push'),
             __('لوحة التحكم', 'echorouk-push'),
-            'edit_posts',
-            'echorouk-push',
+            'manage_options',
+            'echorouk-push-dashboard',
             [$this, 'render_dashboard']
         );
 
         add_submenu_page(
-            'echorouk-push',
+            'echorouk-push-send',
             __('إرسال إشعار', 'echorouk-push'),
             __('إرسال إشعار', 'echorouk-push'),
             'edit_posts',
@@ -51,7 +51,7 @@ class Echorouk_Push_Admin {
         );
 
         add_submenu_page(
-            'echorouk-push',
+            'echorouk-push-send',
             __('الإعدادات', 'echorouk-push'),
             __('الإعدادات', 'echorouk-push'),
             'manage_options',
@@ -94,6 +94,10 @@ class Echorouk_Push_Admin {
     }
 
     public function render_dashboard(): void {
+        if (! current_user_can('manage_options')) {
+            wp_die('Forbidden', 403);
+        }
+
         $count         = Echorouk_Push_Subscription_DB::count_active();
         $by_browser    = Echorouk_Push_Subscription_DB::count_by_browser();
         $log           = get_option('echorouk_push_send_log', []);
@@ -103,10 +107,18 @@ class Echorouk_Push_Admin {
     }
 
     public function render_campaigns(): void {
+        if (! current_user_can('edit_posts')) {
+            wp_die('Forbidden', 403);
+        }
+
         include ECHOROUK_PUSH_PATH . 'admin/views/campaigns.php';
     }
 
     public function render_settings(): void {
+        if (! current_user_can('manage_options')) {
+            wp_die('Forbidden', 403);
+        }
+
         $badge_url   = get_option('echorouk_push_badge_url', '');
         $icon_url    = get_option('echorouk_push_icon_url', '');
         $public_key  = Echorouk_Push_VAPID::get_public_key();
@@ -128,7 +140,7 @@ class Echorouk_Push_Admin {
         if (! current_user_can('manage_options')) wp_die('Forbidden', 403);
         check_admin_referer('echorouk_push_deploy_sw');
         Echorouk_Push::deploy_service_worker();
-        wp_redirect(admin_url('admin.php?page=echorouk-push'));
+        wp_redirect(admin_url('admin.php?page=echorouk-push-dashboard'));
         exit;
     }
 }
