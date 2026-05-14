@@ -32,6 +32,12 @@ $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
                 <div class="col-12 col-lg-6">
                     <figure class="single-article__media" itemprop="image">
                         <?php echo echorouk_post_image_html($post_id, 'echorouk-hero', 'single-article__image', true); ?>
+                        <?php
+                        $hero_caption = echorouk_get_post_thumbnail_caption($post_id);
+                        if ($hero_caption) :
+                        ?>
+                            <figcaption class="single-article__media-caption"><?php echo esc_html($hero_caption); ?></figcaption>
+                        <?php endif; ?>
                     </figure>
                 </div>
                 <div class="col-12 col-lg-6">
@@ -61,6 +67,16 @@ $icon_base    = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
                                     href="<?php echo esc_url($author['url']); ?>"><?php echo esc_html($author['name']); ?></a>
                                 <time
                                     datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $post_id)); ?>"><?php echo esc_html(get_the_date('', $post_id)); ?></time>
+                                <?php if (get_the_modified_time('U', $post_id) > get_the_time('U', $post_id)) : ?>
+                                    <time datetime="<?php echo esc_attr(get_the_modified_date(DATE_W3C, $post_id)); ?>">
+                                        <?php
+                                        printf(
+                                            esc_html__('Updated: %s', 'echoroukonline'),
+                                            esc_html(get_the_modified_date('', $post_id))
+                                        );
+                                        ?>
+                                    </time>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

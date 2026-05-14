@@ -425,6 +425,50 @@ function echorouk_get_cached_posts($cache_key, $args, $ttl = 300)
 	);
 }
 
+function echorouk_maybe_get_local_webp_url($url)
+{
+	$url = esc_url_raw((string) $url);
+	if (! $url) {
+		return '';
+	}
+
+	$parsed_path = (string) wp_parse_url($url, PHP_URL_PATH);
+	$extension   = strtolower((string) pathinfo($parsed_path, PATHINFO_EXTENSION));
+
+	if (! in_array($extension, array('jpg', 'jpeg', 'png'), true)) {
+		return '';
+	}
+
+	$upload_dir = wp_get_upload_dir();
+	if (
+		empty($upload_dir['basedir'])
+		|| empty($upload_dir['baseurl'])
+		|| 0 !== strpos($url, (string) $upload_dir['baseurl'])
+	) {
+		return '';
+	}
+
+	$relative_path = ltrim((string) substr($url, strlen((string) $upload_dir['baseurl'])), '/');
+	$source_path   = trailingslashit((string) $upload_dir['basedir']) . $relative_path;
+	$webp_path     = preg_replace('/\.(jpe?g|png)$/i', '.webp', $source_path);
+
+	if (! $webp_path || ! file_exists($webp_path)) {
+		return '';
+	}
+
+	$webp_relative = ltrim((string) substr($webp_path, strlen((string) $upload_dir['basedir'])), '/');
+	return trailingslashit((string) $upload_dir['baseurl']) . str_replace('\\', '/', $webp_relative);
+}
+
+function echorouk_get_post_thumbnail_caption($post_id = 0)
+{
+	$post_id       = $post_id ? absint($post_id) : get_the_ID();
+	$thumbnail_id  = get_post_thumbnail_id($post_id);
+	$thumbnail_cap = $thumbnail_id ? wp_get_attachment_caption($thumbnail_id) : '';
+
+	return $thumbnail_cap ? trim((string) $thumbnail_cap) : '';
+}
+
 function echorouk_post_image_html($post_id = 0, $size = 'medium_large', $class = '', $is_lcp = false)
 {
 	$post_id = $post_id ? absint($post_id) : get_the_ID();
@@ -452,12 +496,19 @@ function echorouk_post_image_html($post_id = 0, $size = 'medium_large', $class =
 
 	$default_url = echorouk_get_media_option_url('default_post_image');
 	if ($default_url) {
+		$default_attachment_id = attachment_url_to_postid($default_url);
+		if ($default_attachment_id) {
+			return wp_get_attachment_image($default_attachment_id, $size, false, $attr);
+		}
+
+		$webp_url = echorouk_maybe_get_local_webp_url($default_url);
+		$src_url  = $webp_url ? $webp_url : $default_url;
 		$loading = ! empty($attr['loading']) ? ' loading="' . esc_attr($attr['loading']) . '"' : '';
 		$fetch   = ! empty($attr['fetchpriority']) ? ' fetchpriority="' . esc_attr($attr['fetchpriority']) . '"' : '';
 
 		return sprintf(
 			'<img src="%1$s" class="%2$s" width="1200" height="675" alt="%3$s" decoding="async"%4$s%5$s>',
-			esc_url($default_url),
+			esc_url($src_url),
 			esc_attr($class),
 			esc_attr(get_the_title($post_id)),
 			$loading,
@@ -473,12 +524,19 @@ function echorouk_post_image_html($post_id = 0, $size = 'medium_large', $class =
 	}
 
 	if ($content_image_url) {
+		$content_attachment_id = attachment_url_to_postid($content_image_url);
+		if ($content_attachment_id) {
+			return wp_get_attachment_image($content_attachment_id, $size, false, $attr);
+		}
+
+		$webp_url = echorouk_maybe_get_local_webp_url($content_image_url);
+		$src_url  = $webp_url ? $webp_url : $content_image_url;
 		$loading = ! empty($attr['loading']) ? ' loading="' . esc_attr($attr['loading']) . '"' : '';
 		$fetch   = ! empty($attr['fetchpriority']) ? ' fetchpriority="' . esc_attr($attr['fetchpriority']) . '"' : '';
 
 		return sprintf(
 			'<img src="%1$s" class="%2$s" width="1200" height="675" alt="%3$s" decoding="async"%4$s%5$s>',
-			esc_url($content_image_url),
+			esc_url($src_url),
 			esc_attr($class),
 			esc_attr(get_the_title($post_id)),
 			$loading,

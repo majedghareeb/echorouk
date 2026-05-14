@@ -20,6 +20,7 @@ $echorouk_includes = array(
 	'inc/redux.php',
 	'inc/enqueue.php',
 	'inc/performance.php',
+	'inc/seo.php',
 	'inc/cpts.php',
 	'inc/meta.php',
 	'inc/live-coverage.php',

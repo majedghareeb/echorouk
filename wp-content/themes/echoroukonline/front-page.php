@@ -11,12 +11,22 @@ get_header();
 $front_page_id   = (int) get_option( 'page_on_front' );
 $front_template  = $front_page_id ? get_page_template_slug( $front_page_id ) : '';
 $is_mockup_front = 'page-templates/homepage-mockup.php' === $front_template;
+$home_h1         = $front_page_id ? get_the_title( $front_page_id ) : '';
+
+if ( '' === trim( (string) $home_h1 ) ) {
+	$home_h1 = get_bloginfo( 'name' );
+}
 
 if ( $is_mockup_front ) :
+	printf(
+		'<h1 class="screen-reader-text">%s</h1>',
+		esc_html( $home_h1 )
+	);
 	get_template_part( 'template-parts/pages/homepage-mockup' );
 else :
 	?>
 	<main id="primary" class="site-main">
+		<h1 class="screen-reader-text"><?php echo esc_html( $home_h1 ); ?></h1>
 		<?php get_template_part( 'template-parts/components/hero-lead' ); ?>
 
 		<div class="<?php echo esc_attr( echorouk_container_class() ); ?>">

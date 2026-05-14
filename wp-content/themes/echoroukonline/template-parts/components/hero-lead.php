@@ -84,7 +84,7 @@ if ( empty( $secondary ) ) {
 				</a>
 				<div class="hero-lead__content">
 					<?php echorouk_the_category_badge( $hero->ID ); ?>
-					<h1><a href="<?php echo esc_url( get_permalink( $hero ) ); ?>"><?php echo esc_html( get_the_title( $hero ) ); ?></a></h1>
+					<h2><a href="<?php echo esc_url( get_permalink( $hero ) ); ?>"><?php echo esc_html( get_the_title( $hero ) ); ?></a></h2>
 					<p><?php echo esc_html( wp_trim_words( get_the_excerpt( $hero ), 28 ) ); ?></p>
 				</div>
 			</article>

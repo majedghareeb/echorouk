@@ -45,6 +45,10 @@ if ( $category_id > 0 ) {
 		$total_pages    = (int) $category_query->max_num_pages;
 	}
 }
+
+if ( function_exists( 'echorouk_set_listing_schema_post_ids' ) ) {
+	echorouk_set_listing_schema_post_ids( wp_list_pluck( $category_posts, 'ID' ) );
+}
 ?>
 <main id="primary" class="site-main">
 	<div class="<?php echo esc_attr( echorouk_container_class() ); ?>">

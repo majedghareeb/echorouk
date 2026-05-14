@@ -11,31 +11,30 @@ defined('ABSPATH') || exit;
 if (is_front_page() || ! echorouk_get_option('enable_breadcrumbs', true)) {
 	return;
 }
+
+$breadcrumb_items = function_exists('echorouk_get_breadcrumb_items') ? echorouk_get_breadcrumb_items() : array();
+if (empty($breadcrumb_items)) {
+	return;
+}
 ?>
 <nav class="breadcrumbs" aria-label="<?php esc_attr_e('Breadcrumbs', 'echoroukonline'); ?>">
 	<ol>
-		<li><a href="<?php echo esc_url(home_url('/')); ?>"><?php esc_html_e('Home', 'echoroukonline'); ?></a>
-		</li>
-		<?php if (is_singular()) : ?>
-			<?php $category = echorouk_get_primary_category(); ?>
-			<?php if ($category) : ?>
-				<li><a
-						href="<?php echo esc_url(get_category_link($category)); ?>"><?php echo esc_html($category->name); ?></a>
-				</li>
-			<?php elseif ('post' !== get_post_type()) : ?>
-				<li><a
-						href="<?php echo esc_url(get_post_type_archive_link(get_post_type())); ?>"><?php echo esc_html(get_post_type_object(get_post_type())->labels->name); ?></a>
-				</li>
-			<?php endif; ?>
-			<li aria-current="page"><?php the_title(); ?></li>
-		<?php elseif (is_category() || is_tag() || is_tax()) : ?>
-			<li aria-current="page"><?php single_term_title(); ?></li>
-		<?php elseif (is_search()) : ?>
-			<li aria-current="page"><?php esc_html_e('Search', 'echoroukonline'); ?></li>
-		<?php elseif (is_post_type_archive()) : ?>
-			<li aria-current="page"><?php post_type_archive_title(); ?></li>
-		<?php else : ?>
-			<li aria-current="page"><?php echorouk_archive_title(); ?></li>
-		<?php endif; ?>
+		<?php foreach ($breadcrumb_items as $index => $item) : ?>
+			<?php
+			$name       = isset($item['name']) ? (string) $item['name'] : '';
+			$url        = isset($item['url']) ? (string) $item['url'] : '';
+			$is_current = $index === (count($breadcrumb_items) - 1);
+			if ('' === trim($name)) {
+				continue;
+			}
+			?>
+			<li<?php echo $is_current ? ' aria-current="page"' : ''; ?>>
+				<?php if (! $is_current && $url) : ?>
+					<a href="<?php echo esc_url($url); ?>"><?php echo esc_html($name); ?></a>
+				<?php else : ?>
+					<?php echo esc_html($name); ?>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
 	</ol>
 </nav>

@@ -587,9 +587,9 @@ if (! $podcast_archive_url) {
 
                             <div class="hero-lead-box-wrap">
                                 <div class="hero-lead-text-box">
-                                    <h1 class="headline"><a
+                                    <h2 class="headline"><a
                                             href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo esc_html(get_the_title($hero_main)); ?></a>
-                                    </h1>
+                                    </h2>
                                     <div class="hero-meta-line"><?php echo esc_html(get_the_date('', $hero_main)); ?></div>
                                     <p class="summary mb-0"><?php echo esc_html($get_excerpt($hero_main, 28)); ?></p>
                                 </div>
