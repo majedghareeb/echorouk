@@ -16,7 +16,6 @@ $role   = isset($profile['role']) ? (string) $profile['role'] : '';
 $bio    = isset($profile['bio']) ? (string) $profile['bio'] : '';
 $avatar = isset($profile['avatar_html']) ? (string) $profile['avatar_html'] : '';
 $social = isset($profile['social']) && is_array($profile['social']) ? $profile['social'] : array();
-$icon_base = trailingslashit(ECHOROUK_THEME_URI . '/assets/icons');
 $social_icon_map = array(
 	'facebook'  => 'facebook-01-stroke-rounded.svg',
 	'twitter'   => 'new-twitter-rectangle-stroke-rounded.svg',
@@ -72,8 +71,7 @@ $format     = isset($pagination['format']) ? (string) $pagination['format'] : ''
 								href="<?php echo esc_url($url); ?>"
 								<?php echo $is_external ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>
 								aria-label="<?php echo esc_attr($label); ?>">
-								<img src="<?php echo esc_url($icon_base . $icon_file); ?>" alt="" loading="lazy"
-									decoding="async">
+								<?php echo echorouk_inline_svg_icon($icon_file); ?>
 								<span class="screen-reader-text"><?php echo esc_html($label); ?></span>
 							</a>
 						<?php endforeach; ?>

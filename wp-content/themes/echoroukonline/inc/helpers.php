@@ -662,3 +662,224 @@ function echorouk_svg_icon($name, $class = '')
 		$icons[$name]
 	);
 }
+
+/**
+ * Render an SVG file from assets/icons as inline markup.
+ *
+ * @param string $filename Icon filename with or without .svg extension.
+ * @param string $class    Optional CSS class(es) for the root svg tag.
+ * @param array  $args     Optional arguments.
+ * @return string
+ */
+function echorouk_inline_svg_icon($filename, $class = '', $args = array())
+{
+	$defaults = array(
+		'force_current_color' => true,
+		'aria_label'          => '',
+	);
+	$args = wp_parse_args($args, $defaults);
+
+	$icons_dir = ECHOROUK_THEME_DIR . '/assets/icons';
+	$filename  = basename((string) $filename);
+	if ('' === $filename) {
+		return '';
+	}
+
+	if (! preg_match('/\.svg$/i', $filename)) {
+		$filename .= '.svg';
+	}
+
+	$icon_path = $icons_dir . '/' . $filename;
+	if (! file_exists($icon_path) || ! is_readable($icon_path)) {
+		return '';
+	}
+
+	$real_icons_dir = realpath($icons_dir);
+	$real_icon_path = realpath($icon_path);
+	if (! $real_icons_dir || ! $real_icon_path || 0 !== strpos($real_icon_path, $real_icons_dir)) {
+		return '';
+	}
+
+	static $svg_cache = array();
+	if (! isset($svg_cache[$real_icon_path])) {
+		$svg_content = file_get_contents($real_icon_path);
+		$svg_cache[$real_icon_path] = false !== $svg_content ? $svg_content : '';
+	}
+
+	$svg = (string) $svg_cache[$real_icon_path];
+	if ('' === $svg) {
+		return '';
+	}
+
+	$svg = preg_replace('/<\?xml[^>]*\?>/i', '', $svg);
+	$svg = preg_replace('/<!DOCTYPE[^>]*>/i', '', $svg);
+	$svg = trim((string) $svg);
+
+	if (true === (bool) $args['force_current_color']) {
+		$svg = preg_replace_callback(
+			'/\s(fill|stroke|color)\s*=\s*([\'"])(.*?)\2/i',
+			static function ($matches) {
+				$attr_name  = strtolower((string) $matches[1]);
+				$attr_quote = (string) $matches[2];
+				$attr_value = trim((string) $matches[3]);
+				$raw_value  = strtolower($attr_value);
+
+				if ('' === $raw_value || in_array($raw_value, array('none', 'currentcolor', 'inherit', 'transparent'), true) || 0 === strpos($raw_value, 'url(')) {
+					return ' ' . $attr_name . '=' . $attr_quote . $attr_value . $attr_quote;
+				}
+
+				return ' ' . $attr_name . '=' . $attr_quote . 'currentColor' . $attr_quote;
+			},
+			$svg
+		);
+	}
+
+	$classes = preg_split('/\s+/', trim((string) $class));
+	$classes = array_filter(array_map('sanitize_html_class', is_array($classes) ? $classes : array()));
+	$class_string = implode(' ', $classes);
+
+	$aria_label = trim((string) $args['aria_label']);
+	$svg        = preg_replace_callback(
+		'/<svg\b([^>]*)>/i',
+		static function ($matches) use ($class_string, $aria_label) {
+			$attrs = (string) $matches[1];
+
+			if ($class_string) {
+				if (preg_match('/\bclass=(["\'])(.*?)\1/i', $attrs, $class_match)) {
+					$updated_classes = trim($class_match[2] . ' ' . $class_string);
+					$attrs = preg_replace('/\bclass=(["\'])(.*?)\1/i', 'class="' . esc_attr($updated_classes) . '"', $attrs, 1);
+				} else {
+					$attrs .= ' class="' . esc_attr($class_string) . '"';
+				}
+			}
+
+			if ('' !== $aria_label) {
+				$attrs .= ' role="img" aria-label="' . esc_attr($aria_label) . '"';
+			} else {
+				$attrs .= ' aria-hidden="true"';
+			}
+
+			if (! preg_match('/\bfocusable\s*=/i', $attrs)) {
+				$attrs .= ' focusable="false"';
+			}
+
+			return '<svg' . $attrs . '>';
+		},
+		$svg,
+		1
+	);
+
+	$allowed_tags = array(
+		'svg'            => array(
+			'xmlns'               => true,
+			'viewbox'             => true,
+			'width'               => true,
+			'height'              => true,
+			'fill'                => true,
+			'stroke'              => true,
+			'stroke-width'        => true,
+			'stroke-linecap'      => true,
+			'stroke-linejoin'     => true,
+			'stroke-miterlimit'   => true,
+			'stroke-dasharray'    => true,
+			'stroke-dashoffset'   => true,
+			'fill-rule'           => true,
+			'clip-rule'           => true,
+			'preserveaspectratio' => true,
+			'class'               => true,
+			'role'                => true,
+			'aria-hidden'         => true,
+			'aria-label'          => true,
+			'focusable'           => true,
+		),
+		'g'              => array(
+			'fill'            => true,
+			'stroke'          => true,
+			'stroke-width'    => true,
+			'stroke-linecap'  => true,
+			'stroke-linejoin' => true,
+			'fill-rule'       => true,
+			'clip-rule'       => true,
+			'clip-path'       => true,
+			'transform'       => true,
+		),
+		'path'           => array(
+			'd'                => true,
+			'fill'             => true,
+			'stroke'           => true,
+			'stroke-width'     => true,
+			'stroke-linecap'   => true,
+			'stroke-linejoin'  => true,
+			'stroke-miterlimit' => true,
+			'stroke-dasharray' => true,
+			'stroke-dashoffset' => true,
+			'fill-rule'        => true,
+			'clip-rule'        => true,
+		),
+		'circle'         => array(
+			'cx'            => true,
+			'cy'            => true,
+			'r'             => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+			'stroke-linecap' => true,
+			'stroke-linejoin' => true,
+		),
+		'ellipse'        => array(
+			'cx'            => true,
+			'cy'            => true,
+			'rx'            => true,
+			'ry'            => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+		),
+		'rect'           => array(
+			'x'             => true,
+			'y'             => true,
+			'width'         => true,
+			'height'        => true,
+			'rx'            => true,
+			'ry'            => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+		),
+		'line'           => array(
+			'x1'            => true,
+			'y1'            => true,
+			'x2'            => true,
+			'y2'            => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+			'stroke-linecap' => true,
+			'stroke-linejoin' => true,
+		),
+		'polyline'       => array(
+			'points'        => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+			'stroke-linecap' => true,
+			'stroke-linejoin' => true,
+		),
+		'polygon'        => array(
+			'points'        => true,
+			'fill'          => true,
+			'stroke'        => true,
+			'stroke-width'  => true,
+			'stroke-linecap' => true,
+			'stroke-linejoin' => true,
+		),
+		'defs'           => array(),
+		'clippath'       => array(
+			'id' => true,
+		),
+		'title'          => array(),
+		'desc'           => array(),
+	);
+
+	return wp_kses($svg, $allowed_tags);
+}

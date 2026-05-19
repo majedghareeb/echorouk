@@ -130,12 +130,12 @@ $footer_contact_email   = sanitize_email((string) echorouk_get_option('footer_co
                 <div class="echorouk-footer-social">
                     <?php
                     $social = array(
-                        'facebook'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/facebook-01-stroke-rounded.svg"></object>',
-                        'twitter'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/new-twitter-rectangle-stroke-rounded.svg"></object>',
-                        'instagram'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/instagram-stroke-rounded.svg"></object>',
-                        'youtube'  => '<img src="' . ECHOROUK_THEME_URI . '/assets/icons/youtube-stroke-rounded.svg"></object>',
+                        'facebook'  => 'facebook-01-stroke-rounded.svg',
+                        'twitter'   => 'new-twitter-rectangle-stroke-rounded.svg',
+                        'instagram' => 'instagram-stroke-rounded.svg',
+                        'youtube'   => 'youtube-stroke-rounded.svg',
                     );
-                    foreach ($social as $network => $label) :
+                    foreach ($social as $network => $icon_file) :
                         $url = echorouk_get_option($network, '');
                         if (! $url) {
                             continue;
@@ -144,7 +144,7 @@ $footer_contact_email   = sanitize_email((string) echorouk_get_option('footer_co
                         <a class="echorouk-social-link echorouk-social-link--<?php echo esc_attr($network); ?>"
                             href="<?php echo esc_url($url); ?>" rel="me noopener" target="_blank"
                             aria-label="<?php echo esc_attr(ucfirst(str_replace('twitter', 'x', $network))); ?>">
-                            <?php echo $label; ?></a>
+                            <?php echo echorouk_inline_svg_icon($icon_file); ?></a>
                     <?php endforeach; ?>
                 </div>
                 <div class="echorouk-footer-copy">

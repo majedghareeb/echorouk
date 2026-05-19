@@ -559,8 +559,8 @@ if (! $podcast_archive_url) {
                                     href="<?php echo esc_url(get_permalink($hero_main)); ?>"><?php echo echorouk_post_image_html($hero_main->ID, 'echorouk-hero', '', true); ?></a>
                                 <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-play-center"
                                     aria-label="<?php esc_attr_e('Read article', 'echoroukonline'); ?>">
-                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded-white.svg'); ?>"
-                                        alt="">
+                                    <?php echo echorouk_inline_svg_icon('play-circle-stroke-rounded-white.svg'); ?>
+
                                 </a>
 
                                 <?php if ($floating_url) : ?>
@@ -595,19 +595,14 @@ if (! $podcast_archive_url) {
                                 </div>
                                 <div class="hero-lead-icons-box"
                                     aria-label="<?php esc_attr_e('Article actions', 'echoroukonline'); ?>">
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/share-08-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/menu-01-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
                                     <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"
-                                        class="hero-lead-icon is-active"><img
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/headphones-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
-                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>" class="hero-lead-icon"><img
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/bookmark-02-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
+                                        class="hero-lead-icon"><?php echo echorouk_inline_svg_icon('share-08-stroke-rounded.svg'); ?></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"
+                                        class="hero-lead-icon"><?php echo echorouk_inline_svg_icon('menu-01-stroke-rounded.svg'); ?></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"
+                                        class="hero-lead-icon is-active"><?php echo echorouk_inline_svg_icon('headphones-stroke-rounded.svg'); ?></a>
+                                    <a href="<?php echo esc_url(get_permalink($hero_main)); ?>"
+                                        class="hero-lead-icon"><?php echo echorouk_inline_svg_icon('bookmark-02-stroke-rounded.svg'); ?></a>
                                 </div>
                             </div>
                         </article>
@@ -618,9 +613,8 @@ if (! $podcast_archive_url) {
                     <?php if ($has_live_coverage && ! empty($live_timeline_items)) : ?>
                         <div class="hero-live hero-col-card">
                             <div class="hero-live-title">
-                                <span><?php esc_html_e('Live Coverage', 'echoroukonline'); ?></span><img
-                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-01-stroke-rounded.svg'); ?>"
-                                    alt="">
+                                <span><?php esc_html_e('Live Coverage', 'echoroukonline'); ?></span>
+                                <?php echo echorouk_inline_svg_icon('arrow-left-01-stroke-rounded.svg'); ?>
                             </div>
                             <ul class="hero-live-timeline">
                                 <?php foreach ($live_timeline_items as $timeline_item) : ?>
@@ -821,17 +815,15 @@ if (! $podcast_archive_url) {
                         <div class="video-side-most">
                             <div class="video-side-title-wrap">
                                 <h3 class="video-side-title"><?php esc_html_e('Most viewed', 'echoroukonline'); ?></h3>
-                                <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/arrow-left-double-stroke-rounded.svg'); ?>"
-                                    alt="">
+                                <?php echo echorouk_inline_svg_icon('arrow-left-double-stroke-rounded.svg'); ?>
                             </div>
 
                             <article class="video-side-feature">
                                 <a class="video-side-thumb"
                                     href="<?php echo esc_url(get_permalink($video_side_feature)); ?>">
                                     <?php echo echorouk_post_image_html($video_side_feature->ID, 'medium'); ?>
-                                    <span class="video-thumb-play" aria-hidden="true"><img
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>"
-                                            alt=""></span>
+                                    <span class="video-thumb-play"
+                                        aria-hidden="true"><?php echo echorouk_inline_svg_icon('play-stroke-rounded-2.svg'); ?></span>
                                 </a>
                                 <div class="video-side-date">
                                     <?php echo esc_html(get_the_date('Y/m/d', $video_side_feature)); ?></div>
@@ -846,9 +838,8 @@ if (! $podcast_archive_url) {
                                         <a class="video-side-thumb"
                                             href="<?php echo esc_url(get_permalink($video_side_item)); ?>">
                                             <?php echo echorouk_post_image_html($video_side_item->ID, 'thumbnail', 'video-side-thumb-img'); ?>
-                                            <span class="video-thumb-play" aria-hidden="true"><img
-                                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded-2.svg'); ?>"
-                                                    alt=""></span>
+                                            <span class="video-thumb-play"
+                                                aria-hidden="true"><?php echo echorouk_inline_svg_icon('play-stroke-rounded-2.svg', 'white-icon'); ?></span>
                                         </a>
                                         <div>
                                             <h5><a
@@ -869,9 +860,7 @@ if (! $podcast_archive_url) {
                             </div>
                             <a href="<?php echo esc_url(get_post_type_archive_link('video') ? get_post_type_archive_link('video') : home_url('/')); ?>"
                                 class="video-main-all"><?php esc_html_e('All videos', 'echoroukonline'); ?><span
-                                    aria-hidden="true"><img style="transform: matrix(-1, 0, 0, -1, 0, 0);"
-                                        src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-stroke-rounded.svg'); ?>"
-                                        alt=""></span></a>
+                                    aria-hidden="true"><?php echo echorouk_inline_svg_icon('play-stroke-rounded-2.svg', 'all-videos-icon'); ?></span></a>
                         </header>
 
                         <article class="video-main-feature">
@@ -881,8 +870,7 @@ if (! $podcast_archive_url) {
                                 <div class="video-main-feature-date">
                                     <?php echo esc_html(get_the_date('d/m/Y', $video_main_feature)); ?></div>
                                 <div class="video-main-feature-title">
-                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/play-circle-stroke-rounded.svg'); ?>"
-                                        alt="">
+                                    <?php echo echorouk_inline_svg_icon('play-circle-stroke-rounded.svg'); ?>
                                     <h3><a
                                             href="<?php echo esc_url(get_permalink($video_main_feature)); ?>"><?php echo esc_html(get_the_title($video_main_feature)); ?></a>
                                     </h3>
@@ -979,6 +967,64 @@ if (! $podcast_archive_url) {
                 <?php endif; ?>
             </section>
         <?php endif; ?>
+
+        <section class="daily-boxes grid-border">
+            <div class="row g-3 daily-boxes-grid">
+                <div class="col-12 col-lg-6">
+                    <article class="daily-box daily-print-box">
+                        <header class="daily-box-header">
+                            <h3>الشروق اليومي - النسخة المطبوعة</h3>
+                            <div class="daily-box-link">
+                                <a href="#"> الأرشيف<img
+                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/archive-02-stroke-rounded.svg"></img></a>
+                            </div>
+
+                        </header>
+                        <div class="daily-box-divider"></div>
+                        <div class="daily-print-content">
+                            <div class="daily-print-meta">
+                                <div class="daily-print-date">الخميس 16 أفريل 2026</div>
+                                <div class="daily-print-downloads">تحميل 1569</div>
+                            </div>
+                            <div class="daily-print-cover-wrap">
+                                <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80"
+                                    alt="newspaper cover" loading="lazy" decoding="async">
+                            </div>
+                        </div>
+                        <a href="#" class="daily-print-download" aria-label="تحميل النسخة"><i
+                                class="bi bi-download"></i></a>
+                    </article>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <article class="daily-box daily-poll-box">
+                        <header class="daily-box-header">
+                            <h3>تصويت اليوم</h3>
+                            <div class="daily-box-link">
+                                <a href="#"> كل التصويتات<img
+                                        src="<?php echo ECHOROUK_THEME_URI; ?>/assets/icons/check-list-stroke-rounded.svg"></img></a>
+                            </div>
+                        </header>
+                        <div class="daily-box-divider"></div>
+                        <form class="daily-poll-form" action="#" method="post">
+                            <p class="daily-poll-question">من هو أفضل لاعب كرة قدم لعب للمنتخب الوطني</p>
+                            <label class="daily-poll-option">
+                                <span>رياض محرز</span>
+                                <input type="radio" name="poll_player" value="riyad-mahrez">
+                            </label>
+                            <label class="daily-poll-option">
+                                <span>لخضر بلومي</span>
+                                <input type="radio" name="poll_player" value="lakhdar-belloumi">
+                            </label>
+                            <label class="daily-poll-option">
+                                <span>رابح ماجر</span>
+                                <input type="radio" name="poll_player" value="rabah-madjer">
+                            </label>
+                            <button class="daily-poll-submit" type="submit">تصويت</button>
+                        </form>
+                    </article>
+                </div>
+            </div>
+        </section>
 
         <?php if (! empty($opinion_posts)) : ?>
             <hr class="section-divider my-4">
@@ -1090,32 +1136,25 @@ if (! $podcast_archive_url) {
                                 <?php if ($podcast_primary_url) : ?>
                                     <a href="<?php echo esc_url($podcast_primary_url); ?>" target="_blank"
                                         rel="noopener noreferrer"
-                                        aria-label="<?php esc_attr_e('Primary podcast platform', 'echoroukonline'); ?>"><img
-                                            class="podcast-follow-platforms-icon"
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/music-note-04-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
+                                        aria-label="<?php esc_attr_e('Primary podcast platform', 'echoroukonline'); ?>">
+                                        <?php echo echorouk_inline_svg_icon('music-note-04-stroke-rounded.svg'); ?>
+                                    </a>
                                 <?php endif; ?>
                                 <?php if ($podcast_secondary_url) : ?>
                                     <a href="<?php echo esc_url($podcast_secondary_url); ?>" target="_blank"
                                         rel="noopener noreferrer"
-                                        aria-label="<?php esc_attr_e('Secondary podcast platform', 'echoroukonline'); ?>"><img
-                                            class="podcast-follow-platforms-icon"
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
-                                            alt=""></a>
+                                        aria-label="<?php esc_attr_e('Secondary podcast platform', 'echoroukonline'); ?>"><?php echo echorouk_inline_svg_icon('podcast-stroke-rounded-2.svg'); ?></a>
                                 <?php endif; ?>
                                 <?php if ($podcast_soundcloud_url) : ?>
                                     <a href="<?php echo esc_url($podcast_soundcloud_url); ?>" target="_blank"
                                         rel="noopener noreferrer"
-                                        aria-label="<?php esc_attr_e('SoundCloud', 'echoroukonline'); ?>"><img
-                                            class="podcast-follow-platforms-icon"
-                                            src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/soundcloud-stroke-rounded.svg'); ?>"
-                                            alt=""></a>
+                                        aria-label="<?php esc_attr_e('SoundCloud', 'echoroukonline'); ?>"><?php echo echorouk_inline_svg_icon('soundcloud-stroke-rounded.svg'); ?></a>
                                 <?php endif; ?>
                             </div>
                             <div class="podcast-box-link">
-                                <a href="<?php echo esc_url($podcast_archive_url); ?>"><?php esc_html_e('More', 'echoroukonline'); ?>
-                                    <img src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
-                                        alt=""></a>
+                                <a class="podcast-all-link"
+                                    href="<?php echo esc_url($podcast_archive_url); ?>"><?php esc_html_e('More', 'echoroukonline'); ?>
+                                    <?php echo echorouk_inline_svg_icon('podcast-stroke-rounded-2.svg'); ?></a>
                             </div>
                         </aside>
                     </div>
@@ -1127,10 +1166,9 @@ if (! $podcast_archive_url) {
                                     <article class="podcast-list-item">
                                         <a href="<?php echo esc_url(get_permalink($podcast_item)); ?>"
                                             class="podcast-list-thumb">
-                                            <?php echo echorouk_post_image_html($podcast_item->ID, 'medium'); ?>
-                                            <span class="podcast-icon"><img
-                                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
-                                                    alt=""></span>
+                                            <?php echo echorouk_post_image_html($podcast_item->ID, 'medium', 'podcast-list-thumb-img'); ?>
+                                            <span
+                                                class="podcast-icon"><?php echo echorouk_inline_svg_icon('podcast-stroke-rounded-2.svg'); ?></span>
                                         </a>
                                         <div class="podcast-list-copy">
                                             <time
@@ -1147,11 +1185,10 @@ if (! $podcast_archive_url) {
 
                     <div class="col-lg-5 col-12">
                         <article class="podcast-feature">
-                            <a
-                                href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo echorouk_post_image_html($podcast_feature->ID, 'large'); ?></a>
-                            <span class="podcast-icon"><img
-                                    src="<?php echo esc_url(ECHOROUK_THEME_URI . '/assets/icons/podcast-stroke-rounded-2.svg'); ?>"
-                                    alt=""></span>
+                            <a class="podcast-feature-img"
+                                href="<?php echo esc_url(get_permalink($podcast_feature)); ?>"><?php echo echorouk_post_image_html($podcast_feature->ID, 'large', 'podcast-feature-img'); ?></a>
+                            <span
+                                class="podcast-icon"><?php echo echorouk_inline_svg_icon('podcast-stroke-rounded-2.svg'); ?></span>
                             <div class="podcast-feature-body">
                                 <time
                                     datetime="<?php echo esc_attr(get_the_date(DATE_W3C, $podcast_feature)); ?>"><?php echo esc_html(get_the_date('d/m/Y', $podcast_feature)); ?></time>

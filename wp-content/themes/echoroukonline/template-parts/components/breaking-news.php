@@ -33,12 +33,12 @@ $is_rotating = count($posts) > 1;
 				$is_breaking = 'breaking' === $type;
 				$is_active   = 0 === (int) $index;
 				?>
-				<li class="breaking-bar__item breaking-bar__item--<?php echo esc_attr($type); ?><?php echo $is_active ? ' is-active' : ''; ?>"<?php echo $is_active ? ' aria-hidden="false"' : ' aria-hidden="true"'; ?>>
-					<strong class="breaking-bar__label"><?php echo esc_html($is_breaking ? __('Breaking', 'echoroukonline') : __('Latest news', 'echoroukonline')); ?></strong>
-					<a class="breaking-bar__headline" href="<?php echo esc_url(get_permalink($ticker_post)); ?>">
-						<?php echo esc_html(get_the_title($ticker_post)); ?>
-					</a>
-				</li>
+					<li class="breaking-bar__item breaking-bar__item--<?php echo esc_attr($type); ?><?php echo $is_active ? ' is-active' : ''; ?>"<?php echo $is_active ? ' aria-hidden="false"' : ' aria-hidden="true"'; ?>>
+						<strong class="breaking-bar__label"><span class="breaking-bar__label-text"><?php echo esc_html($is_breaking ? __('Breaking', 'echoroukonline') : __('Latest news', 'echoroukonline')); ?></span></strong>
+						<a class="breaking-bar__headline" href="<?php echo esc_url(get_permalink($ticker_post)); ?>">
+							<span class="breaking-bar__headline-text"><?php echo esc_html(get_the_title($ticker_post)); ?></span>
+						</a>
+					</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>

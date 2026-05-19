@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Echourouk Online\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 03:15+0000\n"
-"PO-Revision-Date: 2026-05-09 18:26+0000\n"
+"PO-Revision-Date: 2026-05-19 02:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
@@ -65,7 +65,7 @@ msgstr "المخلص"
 
 #: template-parts/pages/homepage-mockup.php:871
 msgid "All videos"
-msgstr "جميع الفيديوهات"
+msgstr "كل الفيديوهات"
 
 #: inc/redux.php:93
 msgid "Article"
@@ -622,7 +622,7 @@ msgstr "لم يتم العثور على شيء"
 
 #: template-parts/pages/homepage-mockup.php:987
 msgid "Opinion"
-msgstr "رأي"
+msgstr "أقلام"
 
 #: inc/redux.php:79
 msgid ""
@@ -991,7 +991,7 @@ msgstr "قسم الفيديو"
 #: inc/cpts.php:14 template-parts/components/video-list.php:24
 #: template-parts/pages/homepage-mockup.php:867
 msgid "Videos"
-msgstr "مقاطع فيديو"
+msgstr "فيديوهات"
 
 #: inc/cpts.php:93
 #, php-format
